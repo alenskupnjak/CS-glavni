@@ -1,12 +1,15 @@
 ﻿
+using API.Entities;
+using Microsoft.EntityFrameworkCore;
+
 namespace API.Data
 {
-  public class StoreContext : Microsoft.EntityFrameworkCore.DbContext
+  public class StoreContext : DbContext
   {
-    public StoreContext(Microsoft.EntityFrameworkCore.DbContextOptions options) : base(options)
+    public StoreContext(DbContextOptions options) : base(options)
     {
     }
 
-    public Microsoft.EntityFrameworkCore.DbSet<API.Entities.Product> ProductsTBL { get; set; }
+    public DbSet<Product> ProductsTBL { get; set; }
   }
 }
