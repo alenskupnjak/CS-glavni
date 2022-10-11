@@ -31,7 +31,7 @@ namespace API
       //Spajanje na bazu
       services.AddDbContext<StoreContext>(opt =>
       {
-        opt.UseSqlite(Configuration.GetConnectionString("SpajanjeNaAQLite"));
+        opt.UseSqlite(Configuration.GetConnectionString("SpajanjeSQLite"));
       }
       );
     }
