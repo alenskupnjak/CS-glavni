@@ -1,25 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import './App.css';
+import { Container, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+import { useState } from 'react';
+import Catalog from '../../features/catalog/Catalog';
+import Header from './Header';
 
 function App() {
-	const [product, setProduct] = useState([]);
+	const [darkMode, setDarkMode] = useState(false);
+	const paletteType = darkMode ? 'dark' : 'light';
+	const theme = createTheme({
+		palette: {
+			mode: paletteType,
+			background: {
+				default: paletteType === 'light' ? '#eaeaea' : '#93c47d',
+			},
+		},
+	});
 
-	useEffect(() => {
-		fetch('http://localhost:5030/api/products').then(res => res.json().then(data => setProduct(data)));
-	}, []);
-
-	console.log('%c 00 ', 'color:green', product);
+	function handleThemeChange() {
+		setDarkMode(!darkMode);
+	}
 
 	return (
-		<div className="App">
-			<header className="App-header">
-				<p>Ajmooooooo</p>
-
-				<a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-					Learn React
-				</a>
-			</header>
-		</div>
+		<ThemeProvider theme={theme}>
+			<CssBaseline />
+			<Header darkMode={darkMode} handleThemeChange={handleThemeChange} />
+			<Container>
+				<Catalog />
+			</Container>
+		</ThemeProvider>
 	);
 }
 

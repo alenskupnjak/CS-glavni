@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './app/layout/App';
 // import ReactDOM from 'react-dom/client';    verzija 18
-import './app/layout/index.css';
+import './app/layout/styles.css';
 
 ReactDOM.render(
 	<React.StrictMode>
