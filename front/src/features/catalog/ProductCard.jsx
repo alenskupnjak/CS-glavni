@@ -1,4 +1,5 @@
 import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 export default function ProductCard({ product }) {
 	return (
@@ -25,8 +26,8 @@ export default function ProductCard({ product }) {
 			</CardContent>
 			<CardActions>
 				<Button size="small">Dodaj to chart</Button>
-				<Button variant="outlined" size="small">
-					Pogled
+				<Button variant="contained" component={Link} to={`/catalog/${product.id}`} size="big" color="success">
+					Pogledaj
 				</Button>
 			</CardActions>
 		</Card>
