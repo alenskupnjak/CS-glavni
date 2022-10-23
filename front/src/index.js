@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import App from './app/layout/App';
 // import ReactDOM from 'react-dom/client';    verzija 18
 import './app/layout/styles.css';
-import { BrowserRouter, Router } from 'react-router-dom';
+// import { BrowserRouter, Router } from 'react-router-dom';
+import { Router } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 
 export const history = createBrowserHistory();

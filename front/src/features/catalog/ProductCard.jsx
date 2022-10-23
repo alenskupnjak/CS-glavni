@@ -1,7 +1,20 @@
+import { LoadingButton } from '@mui/lab';
 import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Typography } from '@mui/material';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import agent from '../../app/api/agent';
 
 export default function ProductCard({ product }) {
+	const [loading, setLoading] = useState(false);
+	// const { setBasket } = useStoreContext();
+
+	function handleAddItem(productId) {
+		setLoading(true);
+		agent.Basket.addItem(productId)
+			// .then(basket => setBasket(basket))
+			.catch(error => console.log(error))
+			.finally(() => setLoading(false));
+	}
 	return (
 		<Card>
 			<CardHeader
@@ -25,7 +38,9 @@ export default function ProductCard({ product }) {
 				</Typography>
 			</CardContent>
 			<CardActions>
-				<Button size="small">Dodaj to chart</Button>
+				<LoadingButton loading={loading} onClick={() => handleAddItem(product.id)} size="small">
+					Add to cart
+				</LoadingButton>
 				<Button variant="contained" component={Link} to={`/catalog/${product.id}`} size="big" color="success">
 					Pogledaj
 				</Button>

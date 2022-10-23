@@ -61,7 +61,8 @@ namespace API
       // CORS
       app.UseCors(opt =>
       {
-        opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5031");
+        //opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5031");
+        opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:5031");
       });
 
 

@@ -28,7 +28,7 @@ namespace API.Controllers
       return MapBasketToDto(basket);
     }
 
-    // POST POST
+    // POST POST Kladimseja17!
     [HttpPost]
     public async Task<ActionResult> AddItemToBasket(int productId, int quantity)
     {
@@ -44,7 +44,7 @@ namespace API.Controllers
 
       var result = await _context.SaveChangesAsync() > 0;
 
-      if (result) return StatusCode(201);
+      //if (result) return StatusCode(201);
 
       if (result) return CreatedAtRoute("GetBasket", MapBasketToDto(basket));
 
