@@ -11,5 +11,6 @@ namespace API.Data
     }
 
     public DbSet<Product> ProductsTBL { get; set; }
+    public DbSet<Basket> BasketsTBL { get; set; }
   }
 }
