@@ -81,6 +81,7 @@ namespace API.Controllers
       var buyerId = Guid.NewGuid().ToString();
       var cookieOptions = new CookieOptions { IsEssential = true, Expires = DateTime.Now.AddDays(30) };
       Response.Cookies.Append("buyerId", buyerId, cookieOptions);
+      Response.Cookies.Append("pokusno", "Ajmoo", cookieOptions);
       var basket = new Basket { BuyerId = buyerId };
       _context.BasketsTBL.Add(basket);
       return basket;
