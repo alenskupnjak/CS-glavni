@@ -1,14 +1,18 @@
 import { Grid } from '@mui/material';
+import { observer } from 'mobx-react';
 import ProductCard from './ProductCard';
 
-export default function ProductList({ products }) {
+function ProductList({ listaProdukata }) {
 	return (
 		<Grid container spacing={2}>
-			{products.map(product => (
-				<Grid item xs={3} key={product.id}>
-					<ProductCard product={product} />
-				</Grid>
-			))}
+			{listaProdukata &&
+				listaProdukata.map(product => (
+					<Grid item xs={3} key={product.id}>
+						<ProductCard product={product} />
+					</Grid>
+				))}
 		</Grid>
 	);
 }
+
+export default observer(ProductList);

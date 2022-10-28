@@ -1,7 +1,8 @@
 import { ShoppingCart } from '@mui/icons-material';
+import { observer } from 'mobx-react';
 import { AppBar, Badge, Box, IconButton, List, ListItem, Switch, Toolbar, Typography } from '@mui/material';
 import { Link, NavLink } from 'react-router-dom';
-import { useStoreContext } from '../context/StoreContext';
+import { useStore } from '../stores/store';
 
 const midLinks = [
 	{ title: 'catalog', path: '/catalog' },
@@ -26,9 +27,9 @@ const navStyles = {
 	},
 };
 
-export default function Header({ darkMode, handleThemeChange }) {
-	const { basket } = useStoreContext();
-	const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
+function Header({ darkMode, handleThemeChange }) {
+	const { productStore } = useStore();
+	const { itemCount } = productStore;
 	return (
 		<AppBar position="static" sx={{ mb: 4 }}>
 			<Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -63,3 +64,5 @@ export default function Header({ darkMode, handleThemeChange }) {
 		</AppBar>
 	);
 }
+
+export default observer(Header);

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { history } from '../..';
 
-const sleep = () => new Promise(resolve => setTimeout(resolve, 1000));
+const sleep = () => new Promise(resolve => setTimeout(resolve, 200));
 
 axios.defaults.baseURL = 'http://localhost:5030/api/';
 axios.defaults.withCredentials = true;
@@ -12,7 +12,7 @@ axios.defaults.withCredentials = true;
 axios.interceptors.response.use(
 	async response => {
 		await sleep();
-		console.log(response);
+		console.log('%c axios.interceptors', 'color:gold', response);
 		return response;
 	},
 	error => {
@@ -59,6 +59,7 @@ const requests = {
 	delete: url => axios.delete(url).then(response => response.data),
 };
 
+// povlačenje svih podataka
 const Catalog = {
 	list: () => requests.get('products'),
 	details: id => requests.get(`products/${id}`),
@@ -77,6 +78,7 @@ const Basket = {
 	addItem: (productId, quantity = 1) => requests.post(`basket?productId=${productId}&quantity=${quantity}`, {}),
 	removeItem: (productId, quantity = 1) => requests.delete(`basket?productId=${productId}&quantity=${quantity}`),
 };
+
 const agent = {
 	Catalog,
 	TestErrors,

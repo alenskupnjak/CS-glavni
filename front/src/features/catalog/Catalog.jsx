@@ -1,24 +1,20 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
-import agent from '../../app/api/agent';
+import { observer } from 'mobx-react';
 import LoadingComponent from '../../app/layout/LoadingComponent';
+import { useStore } from '../../app/stores/store';
 import ProductList from './ProductList';
 
-export default function Catalog() {
-	const [products, setProducts] = useState([]);
-	const [loading, setLoading] = useState(true);
-
-	useEffect(() => {
-		agent.Catalog.list()
-			.then(res => setProducts(res.data))
-			.finally(() => setLoading(false));
-	}, []);
+function Catalog(props) {
+	const { productStore } = useStore();
+	const { listaProdukata, loading } = productStore;
 
 	if (loading) return <LoadingComponent message="Loading products..." />;
 
 	return (
 		<React.Fragment>
-			<ProductList products={products} />
+			<ProductList listaProdukata={listaProdukata} />
 		</React.Fragment>
 	);
 }
+
+export default observer(Catalog);

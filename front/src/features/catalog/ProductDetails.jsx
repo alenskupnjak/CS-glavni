@@ -1,4 +1,5 @@
 import { LoadingButton } from '@mui/lab';
+import { observer } from 'mobx-react';
 import {
 	Divider,
 	Grid,
@@ -10,58 +11,14 @@ import {
 	TextField,
 	Typography,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
-import agent from '../../app/api/agent';
-import { useStoreContext } from '../../app/context/StoreContext';
 import NotFound from '../../app/errors/NotFound';
-import LoadingComponent from '../../app/layout/LoadingComponent';
+import { useStore } from '../../app/stores/store';
+// import { useHistory, useParams } from 'react-router-dom';
 
-export default function ProductDetails() {
-	const { basket, setBasket, removeItem } = useStoreContext();
-	const { id } = useParams();
-	const [product, setProduct] = useState(null);
-	const [loading, setLoading] = useState(true);
-	const [quantity, setQuantity] = useState(0);
-	const [submitting, setSubmitting] = useState(false);
-	console.log('%c 10 basket ', 'color:blue', basket);
+function ProductDetails() {
+	const { productStore } = useStore();
+	const { product, handleInputChange, quantity, handleUpdateCart, item, loading } = productStore;
 
-	const item = basket.items.find(i => i.productId === product?.id);
-
-	useEffect(() => {
-		// axios.get(`http://localhost:5030/api/products/${id}`)
-		if (item) setQuantity(item.quantity);
-		agent.Catalog.details(id)
-			.then(res => setProduct(res.data))
-			.catch(error => console.log(error))
-			.finally(() => setLoading(false));
-	}, [id, item]);
-
-	function handleInputChange(event) {
-		if (event.target.value >= 0) {
-			setQuantity(parseInt(event.target.value));
-		}
-	}
-
-	function handleUpdateCart() {
-		console.log('%c 00 item ', 'color:red', item);
-		setSubmitting(true);
-		if (!item || quantity > item.quantity) {
-			const updatedQuantity = item ? quantity - item.quantity : quantity;
-			agent.Basket.addItem(product?.id, updatedQuantity)
-				.then(basket => setBasket(basket))
-				.catch(error => console.log(error))
-				.finally(() => setSubmitting(false));
-		} else {
-			const updatedQuantity = item.quantity - quantity;
-			agent.Basket.removeItem(product?.id, updatedQuantity)
-				.then(() => removeItem(product?.id, updatedQuantity))
-				.catch(error => console.log(error))
-				.finally(() => setSubmitting(false));
-		}
-	}
-
-	if (loading) return <LoadingComponent message="Loading jedan product..." />;
 	if (!product) return <NotFound />;
 	return (
 		<Grid container spacing={6}>
@@ -113,9 +70,9 @@ export default function ProductDetails() {
 					</Grid>
 					<Grid item xs={6}>
 						<LoadingButton
-							disabled={item?.quantity === quantity || (!item && quantity === 0)}
-							loading={submitting}
-							onClick={handleUpdateCart}
+							disabled={item?.quantity === quantity || quantity === 0}
+							loading={loading}
+							onClick={() => handleUpdateCart(product.id, quantity)}
 							sx={{ height: '55px' }}
 							color="primary"
 							size="large"
@@ -130,3 +87,5 @@ export default function ProductDetails() {
 		</Grid>
 	);
 }
+
+export default observer(ProductDetails);

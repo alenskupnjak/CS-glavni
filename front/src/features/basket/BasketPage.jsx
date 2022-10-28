@@ -1,3 +1,5 @@
+import React from 'react';
+import { observer } from 'mobx-react';
 import { Add, Delete, Remove } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {
@@ -13,36 +15,12 @@ import {
 	Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import agent from '../../app/api/agent';
-import { useStoreContext } from '../../app/context/StoreContext';
 import BasketSummary from './BasketSummary';
-
-export default function BasketPage() {
-	const { basket, setBasket, removeItem } = useStoreContext();
-	const [status, setStatus] = useState({
-		loading: false,
-		name: '',
-	});
-
-	function handleAddItem(productId, name) {
-		setStatus({ loading: true, name });
-		agent.Basket.addItem(productId)
-			.then(basket => {
-				return setBasket(basket);
-			})
-			.catch(error => console.log(error))
-			.finally(() => setStatus({ loading: false, name: '' }));
-	}
-
-	function handleRemoveItem(productId, quantity = 1, name) {
-		setStatus({ loading: true, name });
-		agent.Basket.removeItem(productId, quantity)
-			.then(() => removeItem(productId, quantity))
-			.catch(error => console.log(error))
-			.finally(() => setStatus({ loading: false, name: '' }));
-	}
+import { useStore } from '../../app/stores/store';
+import { Link } from 'react-router-dom';
+function BasketPage() {
+	const { productStore } = useStore();
+	const { basket, loading, productName, handleAddItem, handleRemoveItem } = productStore;
 
 	if (!basket) return <Typography variant="h3">Your basket is empty</Typography>;
 
@@ -61,7 +39,7 @@ export default function BasketPage() {
 					</TableHead>
 					<TableBody>
 						{basket.items.map(item => {
-							console.log('%c 01 ', 'color:green', status.loading && status.name === 'rem' + item.productId);
+							// console.log('%c 00 ', 'color:green', item);
 
 							return (
 								<TableRow key={item.productId} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
@@ -74,7 +52,7 @@ export default function BasketPage() {
 									<TableCell align="right">${(item.price / 100).toFixed(2)}</TableCell>
 									<TableCell align="center">
 										<LoadingButton
-											loading={status.loading && status.name === 'rem' + item.productId}
+											loading={loading && productName === 'rem' + item.productId}
 											onClick={() => handleRemoveItem(item.productId, 1, 'rem' + item.productId)}
 											color="error"
 										>
@@ -82,7 +60,7 @@ export default function BasketPage() {
 										</LoadingButton>
 										{item.quantity}
 										<LoadingButton
-											loading={status.loading && status.name === 'add' + item.productId}
+											loading={loading && productName === 'add' + item.productId}
 											onClick={() => handleAddItem(item.productId, 'add' + item.productId)}
 											color="secondary"
 										>
@@ -92,7 +70,7 @@ export default function BasketPage() {
 									<TableCell align="right">${((item.price / 100) * item.quantity).toFixed(2)}</TableCell>
 									<TableCell align="right">
 										<LoadingButton
-											loading={status.loading && status.name === 'del' + item.productId}
+											loading={loading && productName === 'del' + item.productId}
 											onClick={() => handleRemoveItem(item.productId, item.quantity, 'del' + item.productId)}
 											color="error"
 										>
@@ -117,3 +95,5 @@ export default function BasketPage() {
 		</React.Fragment>
 	);
 }
+
+export default observer(BasketPage);

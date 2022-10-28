@@ -6,18 +6,26 @@ import './app/layout/styles.css';
 // import { BrowserRouter, Router } from 'react-router-dom';
 import { Router } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-import { StoreProvider } from './app/context/StoreContext';
+
+//  Neil
+// import { StoreProvider } from './app/context/StoreContext';
+
+// moje
+import { store, StoreContext } from './app/stores/store';
 
 export const history = createBrowserHistory();
+// export const history = createBrowserHistory({ basename: process.env.PUBLIC_URL });
 
 ReactDOM.render(
-	<React.StrictMode>
+	// <React.StrictMode>
+	<StoreContext.Provider value={store}>
 		<Router history={history}>
-			<StoreProvider>
-				<App />
-			</StoreProvider>
+			{/* <StoreProvider> NEIL */}
+			<App />
+			{/* </StoreProvider> NEIL */}
 		</Router>
-	</React.StrictMode>,
+	</StoreContext.Provider>,
+	// </React.StrictMode>,
 	document.getElementById('root')
 );
 

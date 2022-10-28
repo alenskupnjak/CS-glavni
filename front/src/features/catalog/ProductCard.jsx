@@ -1,22 +1,14 @@
 import { LoadingButton } from '@mui/lab';
+import { observer } from 'mobx-react';
 import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Typography } from '@mui/material';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import agent from '../../app/api/agent';
-import { useStoreContext } from '../../app/context/StoreContext';
+import { useHistory } from 'react-router-dom';
 import { currencyFormat } from '../../app/util/util';
+import { useStore } from '../../app/stores/store';
 
-export default function ProductCard({ product }) {
-	const [loading, setLoading] = useState(false);
-	const { setBasket } = useStoreContext();
-
-	function handleAddItem(productId) {
-		setLoading(true);
-		agent.Basket.addItem(productId)
-			.then(basket => setBasket(basket))
-			.catch(error => console.log(error))
-			.finally(() => setLoading(false));
-	}
+function ProductCard({ product }) {
+	const { productStore } = useStore();
+	const { loadOneItem, handleAddItem, loadingAdd, productName } = productStore;
+	const history = useHistory();
 	return (
 		<Card>
 			<CardHeader
@@ -40,13 +32,19 @@ export default function ProductCard({ product }) {
 				</Typography>
 			</CardContent>
 			<CardActions>
-				<LoadingButton loading={loading} onClick={() => handleAddItem(product.id)} size="small">
+				<LoadingButton
+					loading={loadingAdd && productName === product.id}
+					onClick={() => handleAddItem(product.id)}
+					size="small"
+				>
 					Add to cart
 				</LoadingButton>
-				<Button variant="contained" component={Link} to={`/catalog/${product.id}`} size="big" color="success">
+				<Button variant="contained" onClick={() => loadOneItem(product.id, history)} size="big" color="success">
 					Pogledaj
 				</Button>
 			</CardActions>
 		</Card>
 	);
 }
+
+export default observer(ProductCard);

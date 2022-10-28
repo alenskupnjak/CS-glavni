@@ -1,5 +1,5 @@
-import { Container, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Container, CssBaseline, createTheme, ThemeProvider } from '@mui/material';
+import { observer } from 'mobx-react';
 import { Route, Switch } from 'react-router';
 import AboutPage from '../../features/about/AboutPage';
 import Catalog from '../../features/catalog/Catalog';
@@ -12,33 +12,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import ServerError from '../errors/ServerError';
 import NotFound from '../errors/NotFound';
 import BasketPage from '../../features/basket/BasketPage';
-import { useStoreContext } from '../context/StoreContext';
-import { getCookie } from '../util/util';
 import CheckoutPage from '../../features/checkout/CheckoutPage';
-import agent from '../api/agent';
-
-import LoadingComponent from './LoadingComponent';
+import { useStore } from '../../app/stores/store';
 
 function App() {
-	const { setBasket } = useStoreContext();
-	const [loading, setLoading] = useState(true);
-
-	useEffect(() => {
-		const buyerId = getCookie('buyerId');
-		console.log('%c 00 BOOM ', 'color:red');
-		if (buyerId) {
-			agent.Basket.get()
-				.then(basket => setBasket(basket.data))
-				.catch(error => console.log(error))
-				.finally(() => setLoading(false));
-		} else {
-			setLoading(false);
-		}
-	}, [setBasket]);
-
-	// UI interface
-	const [darkMode, setDarkMode] = useState(false);
-	const paletteType = darkMode ? 'dark' : 'light';
+	const { displayStore, productStore } = useStore();
+	const { handleThemeChange, darkMode, paletteType } = displayStore;
 	const theme = createTheme({
 		palette: {
 			mode: paletteType,
@@ -48,12 +27,6 @@ function App() {
 		},
 	});
 
-	function handleThemeChange() {
-		setDarkMode(!darkMode);
-	}
-
-	if (loading) return <LoadingComponent message="Pokrecem applikaciju..." />;
-
 	return (
 		<ThemeProvider theme={theme}>
 			<ToastContainer position="bottom-right" hideProgressBar theme="colored" />
@@ -62,7 +35,7 @@ function App() {
 			<Container>
 				<Switch>
 					<Route exact path="/" component={HomePage} />
-					<Route exact path="/catalog" component={Catalog} />
+					<Route exact path="/catalog" component={Catalog} productStore={productStore} />
 					<Route path="/catalog/:id" component={ProductDetails} />
 					<Route path="/about" component={AboutPage} />
 					<Route path="/contact" component={ContactPage} />
@@ -76,4 +49,4 @@ function App() {
 	);
 }
 
-export default App;
+export default observer(App);
