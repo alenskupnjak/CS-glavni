@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using API.Data;
 using API.Entities;
 using API.Extensions;
+using API.RequestHelpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,14 +20,15 @@ namespace API.Controllers
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Product>>> GetProducts(string orderBy, string searchTerm)
+    public async Task<ActionResult<PagedList<Product>>> GetProducts([FromQuery] ProductParams productParams)
     {
-      // ovo vraca onako kako je u bazi bez sortiranja
+      // ovo vraca sve podatke je u bazi bez sortiranja
       //return await _context.ProductsTBL.ToListAsync();
 
       var query = _context.ProductsTBL
-        .Sort(orderBy)
-        .Search(searchTerm)
+        .Sort(productParams.OrderBy)
+        .Search(productParams.SearchTerm)
+        .Filter(productParams.Brands, productParams.Types)
         .AsQueryable();
 
       //query = orderBy switch
@@ -35,7 +38,19 @@ namespace API.Controllers
       //  _ => query.OrderBy(p => p.Name)
       //};
 
-      return await query.ToListAsync();
+      //return await query.ToListAsync();
+
+      var products = await PagedList<Product>.ToPagedList(query, productParams.PageNumber, productParams.PageSize);
+
+
+
+      //Response.Headers.Add("Pagination", JsonSerializer.Serialize(products.MetaData));
+
+      Response.AddPaginationHeader(products.MetaData);
+
+      return products;
+
+
     }
 
     [HttpGet("{id}")]

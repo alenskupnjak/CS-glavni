@@ -32,7 +32,7 @@ namespace API.Extensions
       return query.Where(p => p.Name.ToLower().Contains(lowerCaseSearchTerm));
     }
 
-    // FILTER FILTER
+    // FILTER FILTER FILTER
     public static IQueryable<Product> Filter(this IQueryable<Product> query, string brands, string types)
     {
       var brandList = new List<string>();
