@@ -2,6 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { Add, Delete, Remove } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
+import { isEmpty } from 'lodash-es';
 import {
 	Button,
 	Grid,
@@ -18,11 +19,15 @@ import { Box } from '@mui/system';
 import BasketSummary from './BasketSummary';
 import { useStore } from '../../app/stores/store';
 import { Link } from 'react-router-dom';
+import LoadingComponent from '../../app/layout/LoadingComponent';
 function BasketPage() {
 	const { productStore } = useStore();
 	const { basket, loading, productName, handleAddItem, handleRemoveItem } = productStore;
 
-	if (!basket) return <Typography variant="h3">Your basket is empty</Typography>;
+	console.log('%c 00 basket ', 'color:green', basket);
+
+	if (loading) return <LoadingComponent message="Loading products..." />;
+	if (isEmpty(basket?.items)) return <Typography variant="h3">Your basket is empty</Typography>;
 
 	return (
 		<React.Fragment>
@@ -38,48 +43,48 @@ function BasketPage() {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{basket.items.map(item => {
-							// console.log('%c 00 ', 'color:green', item);
-
-							return (
-								<TableRow key={item.productId} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-									<TableCell component="th" scope="row">
-										<Box display="flex" alignItems="center">
-											<img src={item.pictureUrl} alt={item.name} style={{ height: 50, marginRight: 20 }} />
-											<span>{item.name}</span>
-										</Box>
-									</TableCell>
-									<TableCell align="right">${(item.price / 100).toFixed(2)}</TableCell>
-									<TableCell align="center">
-										<LoadingButton
-											loading={loading && productName === 'rem' + item.productId}
-											onClick={() => handleRemoveItem(item.productId, 1, 'rem' + item.productId)}
-											color="error"
-										>
-											<Remove />
-										</LoadingButton>
-										{item.quantity}
-										<LoadingButton
-											loading={loading && productName === 'add' + item.productId}
-											onClick={() => handleAddItem(item.productId, 'add' + item.productId)}
-											color="secondary"
-										>
-											<Add />
-										</LoadingButton>
-									</TableCell>
-									<TableCell align="right">${((item.price / 100) * item.quantity).toFixed(2)}</TableCell>
-									<TableCell align="right">
-										<LoadingButton
-											loading={loading && productName === 'del' + item.productId}
-											onClick={() => handleRemoveItem(item.productId, item.quantity, 'del' + item.productId)}
-											color="error"
-										>
-											<Delete />
-										</LoadingButton>
-									</TableCell>
-								</TableRow>
-							);
-						})}
+						{basket &&
+							basket.items.map(item => {
+								// console.log('%c 00 ', 'color:green', item);
+								return (
+									<TableRow key={item.productId} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+										<TableCell component="th" scope="row">
+											<Box display="flex" alignItems="center">
+												<img src={item.pictureUrl} alt={item.name} style={{ height: 50, marginRight: 20 }} />
+												<span>{item.name}</span>
+											</Box>
+										</TableCell>
+										<TableCell align="right">${(item.price / 100).toFixed(2)}</TableCell>
+										<TableCell align="center">
+											<LoadingButton
+												loading={loading && productName === 'rem' + item.productId}
+												onClick={() => handleRemoveItem(item.productId, 1, 'rem' + item.productId)}
+												color="error"
+											>
+												<Remove />
+											</LoadingButton>
+											{item.quantity}
+											<LoadingButton
+												loading={loading && productName === 'add' + item.productId}
+												onClick={() => handleAddItem(item.productId, 'add' + item.productId)}
+												color="secondary"
+											>
+												<Add />
+											</LoadingButton>
+										</TableCell>
+										<TableCell align="right">${((item.price / 100) * item.quantity).toFixed(2)}</TableCell>
+										<TableCell align="right">
+											<LoadingButton
+												loading={loading && productName === 'del' + item.productId}
+												onClick={() => handleRemoveItem(item.productId, item.quantity, 'del' + item.productId)}
+												color="error"
+											>
+												<Delete />
+											</LoadingButton>
+										</TableCell>
+									</TableRow>
+								);
+							})}
 					</TableBody>
 				</Table>
 			</TableContainer>

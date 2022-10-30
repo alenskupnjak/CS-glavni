@@ -43,6 +43,7 @@ export default class ProductStore {
 			this.loading = true;
 			// const response = await agent.Servisi.listSvih(this.axiosParams);
 			const response = await agent.Catalog.list();
+			const responseBasket = await agent.Basket.get();
 			// useEffect(() => {
 			// 	agent.Catalog.list()
 			// 		.then(res => setProducts(res.data))
@@ -51,6 +52,8 @@ export default class ProductStore {
 
 			runInAction(() => {
 				this.listaProdukata = response.data;
+				this.basket = responseBasket.data;
+				this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 				// this.pagingParams.currentPage = response.currentPage;
 				// this.pagingParams.itemsPerPage = response.itemsPerPage;
 				// this.pagingParams.totalItems = response.totalItems;
@@ -111,8 +114,9 @@ export default class ProductStore {
 		try {
 			this.loading = true;
 			this.productName = name;
-			const response = await agent.Basket.addItem(productId);
-			this.basket = response.data;
+			await agent.Basket.addItem(productId);
+			const responseBasket = await agent.Basket.get();
+			this.basket = responseBasket.data;
 			this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 		} catch (err) {
 			console.log('%c err', 'color:red', err);
