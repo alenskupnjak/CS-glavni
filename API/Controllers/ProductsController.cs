@@ -62,5 +62,15 @@ namespace API.Controllers
 
       return product;
     }
+
+    // FILTER 
+    [HttpGet("filters")]
+    public async Task<IActionResult> GetFilters()
+    {
+      var brands = await _context.ProductsTBL.Select(p => p.Brand).Distinct().ToListAsync();
+      var types = await _context.ProductsTBL.Select(p => p.Type).Distinct().ToListAsync();
+
+      return Ok(new { brands, types });
+    }
   }
 }
