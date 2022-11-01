@@ -1,8 +1,8 @@
 import { makeAutoObservable, runInAction, reaction } from 'mobx';
 import agent from '../api/agent';
-import { v4 as uuid } from 'uuid';
-import { find } from 'lodash-es';
-import { store } from './store';
+// import { v4 as uuid } from 'uuid';
+import { find, debounce, isEmpty } from 'lodash-es';
+// import { store } from './store';
 
 export default class ProductStore {
 	listaProdukata = null;
@@ -14,10 +14,17 @@ export default class ProductStore {
 	quantity = 0;
 	item = 0;
 	itemCount = 0;
-	// editMode = false;
-	// loadingInitial = false;
-	// pagingParams = { pageNumber: 1, pageSize: 3 };
-	// predicate = { startDate: new Date() };
+	productParams = {
+		orderBy: 'name',
+		brands: 'Angular',
+		types: 'Boots',
+		searchTerm: '',
+		pageSize: 4,
+		pageNumber: 1,
+	};
+	metaData = {};
+	newCheckedBrands = ['Angular'];
+	newCheckedTypes = ['Boots'];
 
 	constructor() {
 		console.log('%c *** A constructor ProductStore ***', 'color:red');
@@ -26,38 +33,38 @@ export default class ProductStore {
 		reaction(
 			() => this.basket,
 			() => {
-				console.log('%c ****** BOOM ******************', 'color:red');
+				// console.log('%c ****** BOOM ******************', 'color:red');
 				// this.pagingParams = { pageNumber: 1, pageSize: 3 };
 			}
 		);
+		this.filtersFind = debounce(this.fildFilteredItems, 500);
 
-		//Inicijalno startamo usnimavanje
+		//Init application
 		this.loadAllProduct();
 	}
 
-	//  Usnimavanje svih dogadaja, ne iz memorije kako je autor radio
+	//  Usnimavanje svih dogadaja
 	loadAllProduct = async () => {
 		try {
 			// this.loadingInitial = true;
 			this.listaProdukata = null;
 			this.loading = true;
-			// const response = await agent.Servisi.listSvih(this.axiosParams);
-			const response = await agent.Catalog.list();
+			const responseFilters = await agent.Catalog.filters();
+			const response = await agent.Catalog.list(this.productParams);
+			const params = JSON.parse(response.headers.pagination);
 			const responseBasket = await agent.Basket.get();
-			// useEffect(() => {
-			// 	agent.Catalog.list()
-			// 		.then(res => setProducts(res.data))
-			// 		.finally(() => setLoading(false));
-			// }, []);
 
 			runInAction(() => {
+				this.metaData = {
+					currentPage: params.currentPage,
+					totalPages: params.totalPages,
+					pageSize: params.pageSize,
+					totalCount: params.totalCount,
+				};
+				this.filters = responseFilters.data;
 				this.listaProdukata = response.data;
 				this.basket = responseBasket.data;
 				this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
-				// this.pagingParams.currentPage = response.currentPage;
-				// this.pagingParams.itemsPerPage = response.itemsPerPage;
-				// this.pagingParams.totalItems = response.totalItems;
-				// this.pagingParams.totalPages = response.totalPages;
 				// this.activities = _.sortBy(response.data, ['date']);
 				// this.activities = _.chain(this.activities)
 				// Group the elements of Array based on `date` property
@@ -87,19 +94,18 @@ export default class ProductStore {
 		}
 	};
 
+	// LOAD LOAD
 	loadOneItem = async (productId, history) => {
 		try {
 			this.loadingAdd = true;
 			const response = await agent.Catalog.details(productId);
 			const responseBasket = await agent.Basket.get();
-
 			runInAction(() => {
 				this.product = response.data;
 				this.basket = responseBasket.data;
 				this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 				this.quantity = 0;
 				this.item = find(this.basket.items, i => i.productId === this.product.id);
-				console.log('%c 100  this.item', 'color:gold', this?.item);
 				history.push(`/catalog/:${productId}`);
 			});
 		} catch (error) {
@@ -149,6 +155,64 @@ export default class ProductStore {
 		}
 	};
 
+	// FILTER FILTER FILTER
+	handleFilterChange = searchTerm => {
+		this.filtersFind.cancel();
+		this.productParams = {
+			...this.productParams,
+			searchTerm,
+			pageNumber: 1,
+		};
+		this.filtersFind(this.productParams);
+	};
+
+	// BRANDS BRANDS BRANDS BRANDS
+	handleBrands = ({ brands }) => {
+		this.filtersFind.cancel();
+		const tempArray = this.productParams.brands.split(',');
+		const currentIndex = find(tempArray, item => item === brands);
+		const index = this.newCheckedBrands.indexOf(brands);
+		if (currentIndex === -1 || isEmpty(currentIndex)) {
+			this.newCheckedBrands.push(brands);
+		} else {
+			this.newCheckedBrands.splice(index, 1);
+		}
+		this.productParams.brands = this.newCheckedBrands.join(',');
+		this.productParams = {
+			...this.productParams,
+			pageNumber: 1,
+		};
+		this.filtersFind(this.productParams);
+	};
+
+	// TYPES TYPES TYPES TYPES
+	handleTypes = ({ types }) => {
+		this.filtersFind.cancel();
+		const tempArray = this.productParams.types.split(',');
+		const currentIndex = find(tempArray, item => item === types);
+		const index = this.newCheckedTypes.indexOf(types);
+		if (currentIndex === -1 || isEmpty(currentIndex)) {
+			this.newCheckedTypes.push(types);
+		} else {
+			this.newCheckedTypes.splice(index, 1);
+		}
+		this.productParams.types = this.newCheckedTypes.join(',');
+		this.productParams = {
+			...this.productParams,
+			pageNumber: 1,
+		};
+		this.filtersFind(this.productParams);
+	};
+
+	handleRadioButton = ({ orderBy }) => {
+		this.filtersFind.cancel();
+		this.productParams = {
+			...this.productParams,
+			orderBy,
+		};
+		this.filtersFind(this.productParams);
+	};
+
 	// UPDATE chart
 	handleUpdateCart = async (productId, quantity) => {
 		try {
@@ -171,6 +235,41 @@ export default class ProductStore {
 			console.log('%c error', 'color:red', error);
 		} finally {
 			this.loading = false;
+		}
+	};
+
+	fildFilteredItems = async filter => {
+		try {
+			this.loading = true;
+			const response = await agent.Catalog.list(filter);
+			const params = JSON.parse(response.headers.pagination);
+			runInAction(() => {
+				this.listaProdukata = response.data;
+				this.metaData = {
+					...this.metaData,
+					currentPage: params.currentPage,
+					totalPages: params.totalPages,
+					pageSize: params.pageSize,
+					totalCount: params.totalCount,
+				};
+			});
+		} catch (error) {
+			console.log('%c 00', 'color:red', error);
+		} finally {
+			this.loading = false;
+		}
+	};
+
+	handlePaging = async ({ pageNumber }) => {
+		try {
+			this.productParams = {
+				...this.productParams,
+				pageNumber,
+			};
+			this.filtersFind(this.productParams);
+			console.log('%c 00 pageNumber', 'color:pink', pageNumber);
+		} catch (error) {
+			console.log('%c 00', 'color:red', error);
 		}
 	};
 

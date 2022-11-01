@@ -2,12 +2,15 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { history } from '../..';
 
-const sleep = () => new Promise(resolve => setTimeout(resolve, 200));
+const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
 
 axios.defaults.baseURL = 'http://localhost:5030/api/';
 axios.defaults.withCredentials = true;
 
-// const responseBody = response => response.data;
+axios.interceptors.request.use(config => {
+	config.headers.test = 'special get headers';
+	return config;
+});
 
 axios.interceptors.response.use(
 	async response => {
@@ -17,7 +20,6 @@ axios.interceptors.response.use(
 	},
 	error => {
 		console.log('00*', error);
-		console.log('01*', error.response);
 		const { data, status } = error.response;
 		switch (status) {
 			case 400:
@@ -53,7 +55,7 @@ axios.interceptors.response.use(
 );
 
 const requests = {
-	get: url => axios.get(url).then(response => response),
+	get: (url, params) => axios.get(url, { params }).then(response => response),
 	post: (url, body) => axios.post(url, body).then(response => response.data),
 	put: (url, body) => axios.put(url, body).then(response => response.data),
 	delete: url => axios.delete(url).then(response => response.data),
@@ -61,8 +63,9 @@ const requests = {
 
 // povlačenje svih podataka
 const Catalog = {
-	list: () => requests.get('products'),
+	list: params => requests.get('products', params),
 	details: id => requests.get(`products/${id}`),
+	filters: () => requests.get('products/filters'),
 };
 
 const TestErrors = {
