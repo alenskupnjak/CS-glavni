@@ -19,14 +19,11 @@ import { Box } from '@mui/system';
 import BasketSummary from './BasketSummary';
 import { useStore } from '../../app/stores/store';
 import { Link } from 'react-router-dom';
-import LoadingComponent from '../../app/layout/LoadingComponent';
+
 function BasketPage() {
 	const { productStore } = useStore();
 	const { basket, loading, productName, handleAddItem, handleRemoveItem } = productStore;
 
-	console.log('%c 00 basket ', 'color:green', basket);
-
-	if (loading) return <LoadingComponent message="Loading products..." />;
 	if (isEmpty(basket?.items)) return <Typography variant="h3">Your basket is empty</Typography>;
 
 	return (

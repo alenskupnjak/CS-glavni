@@ -15,6 +15,8 @@ import BasketPage from '../../features/basket/BasketPage';
 import CheckoutPage from '../../features/checkout/CheckoutPage';
 import { useStore } from '../../app/stores/store';
 
+//
+
 function App() {
 	const { displayStore, productStore } = useStore();
 	const { handleThemeChange, darkMode, paletteType } = displayStore;
