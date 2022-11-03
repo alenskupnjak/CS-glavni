@@ -61,6 +61,20 @@ const requests = {
 	delete: url => axios.delete(url).then(response => response.data),
 };
 
+function createFormData(item) {
+	let formData = new FormData();
+	for (const key in item) {
+		formData.append(key, item[key]);
+	}
+	return formData;
+}
+
+const Admin = {
+	createProduct: product => requests.postForm('products', createFormData(product)),
+	updateProduct: product => requests.putForm('products', createFormData(product)),
+	deleteProduct: id => requests.delete(`products/${id}`),
+};
+
 // povlačenje svih podataka
 const Catalog = {
 	list: params => requests.get('products', params),
@@ -82,10 +96,31 @@ const Basket = {
 	removeItem: (productId, quantity = 1) => requests.delete(`basket?productId=${productId}&quantity=${quantity}`),
 };
 
+const Account = {
+	login: values => requests.post('account/login', values),
+	register: values => requests.post('account/register', values),
+	currentUser: () => requests.get('account/currentUser'),
+	fetchAddress: () => requests.get('account/savedAddress'),
+};
+
+const Orders = {
+	list: () => requests.get('orders'),
+	fetch: id => requests.get(`orders/${id}`),
+	create: values => requests.post('orders', values),
+};
+
+const Payments = {
+	createPaymentIntent: () => requests.post('payments', {}),
+};
+
 const agent = {
 	Catalog,
 	TestErrors,
 	Basket,
+	Account,
+	Orders,
+	Payments,
+	Admin,
 };
 
 export default agent;
