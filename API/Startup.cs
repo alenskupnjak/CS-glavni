@@ -1,6 +1,7 @@
 using API.Data;
 using API.Entities;
 using API.Middleware;
+using API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -42,13 +43,18 @@ namespace API
       services.AddCors();
 
 
-      services.AddIdentityCore<User>(opt =>{opt.User.RequireUniqueEmail = true;})
+      services.AddIdentityCore<User>(opt =>
+      { // Jedinstveni email
+        opt.User.RequireUniqueEmail = true;}
+      )
               .AddRoles<IdentityRole>()
               .AddEntityFrameworkStores<StoreContext>();
 
       services.AddAuthentication();
 
       services.AddAuthorization();
+
+      services.AddScoped<TokenService>();
 
     }
 

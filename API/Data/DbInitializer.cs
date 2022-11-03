@@ -20,6 +20,12 @@ namespace API.Data
           Email = "bob@test.com"
         };
 
+        //        {
+        //          "username": "tom",
+        //          "password": "Pa$$w0rd",
+        //          "email": "tom@test.com"
+        //        }
+
         await userManager.CreateAsync(user, "Pa$$w0rd");
         await userManager.AddToRoleAsync(user, "Member");
 
