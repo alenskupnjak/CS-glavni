@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import { AppBar, Badge, Box, IconButton, List, ListItem, Switch, Toolbar, Typography } from '@mui/material';
 import { Link, NavLink } from 'react-router-dom';
 import { useStore } from '../stores/store';
+import SignedInMenu from './SignedInMenu';
 
 const midLinks = [
 	{ title: 'catalog', path: '/catalog' },
@@ -28,7 +29,7 @@ const navStyles = {
 };
 
 function Header({ darkMode, handleThemeChange }) {
-	const { productStore } = useStore();
+	const { productStore, userStore } = useStore();
 	const { itemCount } = productStore;
 	return (
 		<AppBar position="static" sx={{ mb: 4 }}>
@@ -52,13 +53,17 @@ function Header({ darkMode, handleThemeChange }) {
 							<ShoppingCart />
 						</Badge>
 					</IconButton>
-					<List sx={{ display: 'flex' }}>
-						{rightLinks.map(({ title, path }) => (
-							<ListItem component={NavLink} to={path} key={path} sx={navStyles}>
-								{title.toUpperCase()}
-							</ListItem>
-						))}
-					</List>
+					{userStore?.user ? (
+						<SignedInMenu />
+					) : (
+						<List sx={{ display: 'flex' }}>
+							{rightLinks.map(({ title, path }) => (
+								<ListItem component={NavLink} to={path} key={path} sx={navStyles}>
+									{title.toUpperCase()}
+								</ListItem>
+							))}
+						</List>
+					)}
 				</Box>
 			</Toolbar>
 		</AppBar>

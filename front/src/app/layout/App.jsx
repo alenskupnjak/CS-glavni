@@ -56,3 +56,22 @@ function App() {
 }
 
 export default observer(App);
+
+// <Link to={{  pathname: "/register",  state: data_you_need_to_pass }}> Register</Link>
+// https://www.folkstalk.com/2022/09/passing-data-in-react-router-historypush-with-code-examples-2.html
+// import { useHistory } from "react-router-dom";
+
+// const FirstPage = props => {
+//     let history = useHistory();
+
+//     const someEventHandler = event => {
+//        history.push({
+//            pathname: '/secondpage',
+//            search: '?query=abc',
+//            state: { detail: 'some_value' }
+//        });
+//     };
+
+// };
+
+// export default FirstPage;

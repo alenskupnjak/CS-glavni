@@ -3,6 +3,7 @@ import agent from '../api/agent';
 // import { v4 as uuid } from 'uuid';
 import { find, debounce, isEmpty } from 'lodash-es';
 // import { store } from './store';
+import { history } from '../..';
 
 export default class ProductStore {
 	listaProdukata = null;
@@ -95,7 +96,7 @@ export default class ProductStore {
 	};
 
 	// LOAD LOAD
-	loadOneItem = async (productId, history) => {
+	loadOneItem = async productId => {
 		try {
 			this.loadingAdd = true;
 			const response = await agent.Catalog.details(productId);
