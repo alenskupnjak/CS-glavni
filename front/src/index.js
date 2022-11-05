@@ -3,26 +3,23 @@ import ReactDOM from 'react-dom';
 import App from './app/layout/App';
 // import ReactDOM from 'react-dom/client';    verzija 18
 import './app/layout/styles.css';
-// import { BrowserRouter, Router } from 'react-router-dom';
 import { Router } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 
-//  Neil
-// import { StoreProvider } from './app/context/StoreContext';
-
-// moje
 import { store, StoreContext } from './app/stores/store';
 
-export const history = createBrowserHistory();
-// export const history = createBrowserHistory({ basename: process.env.PUBLIC_URL });
+console.log('%c process.env= ', 'color:green', process.env);
+// export const history = createBrowserHistory();
+//  https://skryvets.com/blog/2018/09/20/an-elegant-solution-of-deploying-react-app-into-a-subdirectory/
+export const history = createBrowserHistory({ basename: process.env.PUBLIC_URL });
+
+store.userStore.fetchCurrentUser();
 
 ReactDOM.render(
 	// <React.StrictMode>
 	<StoreContext.Provider value={store}>
 		<Router history={history}>
-			{/* <StoreProvider> NEIL */}
 			<App />
-			{/* </StoreProvider> NEIL */}
 		</Router>
 	</StoreContext.Provider>,
 	// </React.StrictMode>,

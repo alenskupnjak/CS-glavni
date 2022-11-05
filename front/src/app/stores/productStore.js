@@ -2,8 +2,9 @@ import { makeAutoObservable, runInAction, reaction } from 'mobx';
 import agent from '../api/agent';
 // import { v4 as uuid } from 'uuid';
 import { find, debounce, isEmpty } from 'lodash-es';
-// import { store } from './store';
+import { store } from './store';
 import { history } from '../..';
+import { getCookie } from '../util/util';
 
 export default class ProductStore {
 	listaProdukata = null;
@@ -11,21 +12,21 @@ export default class ProductStore {
 	loadingAdd = false;
 	product = null;
 	productName = null;
-	basket = null;
+	basket = { buyerId: null, id: null, items: [] };
 	quantity = 0;
 	item = 0;
 	itemCount = 0;
 	productParams = {
-		orderBy: 'name',
-		brands: 'Angular',
-		types: 'Boots',
+		orderBy: 'priceDesc',
+		brands: 'Angular,NetCore',
+		types: 'Boots,Boards,Hats,Gloves',
 		searchTerm: '',
 		pageSize: 4,
 		pageNumber: 1,
 	};
 	metaData = {};
-	newCheckedBrands = ['Angular'];
-	newCheckedTypes = ['Boots'];
+	newCheckedBrands = ['Angular', 'NetCore'];
+	newCheckedTypes = ['Boots', 'Boards', 'Hats', 'Gloves'];
 
 	constructor() {
 		console.log('%c *** A constructor ProductStore ***', 'color:red');
@@ -34,13 +35,14 @@ export default class ProductStore {
 		reaction(
 			() => this.basket,
 			() => {
-				// console.log('%c ****** BOOM ******************', 'color:red');
+				console.log('%c ****** BOOM ******************', 'color:red');
 				// this.pagingParams = { pageNumber: 1, pageSize: 3 };
 			}
 		);
 		this.filtersFind = debounce(this.fildFilteredItems, 500);
 
 		//Init application
+		console.log('%c START ***** START   ******** START  ', 'color:green');
 		this.loadAllProduct();
 	}
 
@@ -53,7 +55,7 @@ export default class ProductStore {
 			const responseFilters = await agent.Catalog.filters();
 			const response = await agent.Catalog.list(this.productParams);
 			const params = JSON.parse(response.headers.pagination);
-			const responseBasket = await agent.Basket.get();
+			// const responseBasket = await agent.Basket.get();
 
 			runInAction(() => {
 				this.metaData = {
@@ -64,8 +66,8 @@ export default class ProductStore {
 				};
 				this.filters = responseFilters.data;
 				this.listaProdukata = response.data;
-				this.basket = responseBasket.data;
-				this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
+				// this.basket = responseBasket.data;
+				// this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 				// this.activities = _.sortBy(response.data, ['date']);
 				// this.activities = _.chain(this.activities)
 				// Group the elements of Array based on `date` property
@@ -100,10 +102,13 @@ export default class ProductStore {
 		try {
 			this.loadingAdd = true;
 			const response = await agent.Catalog.details(productId);
-			const responseBasket = await agent.Basket.get();
+			const cookie = getCookie('buyerId');
+			if (cookie) {
+				const responseBasket = await agent.Basket.get();
+				this.basket = responseBasket.data;
+			}
 			runInAction(() => {
 				this.product = response.data;
-				this.basket = responseBasket.data;
 				this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 				this.quantity = 0;
 				this.item = find(this.basket.items, i => i.productId === this.product.id);
@@ -117,13 +122,29 @@ export default class ProductStore {
 	};
 
 	// ADD ADD ADD ADD ADD ADD
-	handleAddItem = async (productId, name) => {
+	handleAddItem = async (product, name) => {
+		console.log('%c product', 'color:green', product);
+		console.log('%c this.user', 'color:green', store.userStore?.user);
+
 		try {
 			this.loading = true;
 			this.productName = name;
-			await agent.Basket.addItem(productId);
-			const responseBasket = await agent.Basket.get();
-			this.basket = responseBasket.data;
+			if (store.userStore?.user) {
+				await agent.Basket.addItem(product.productId || product.id);
+				const responseBasket = await agent.Basket.get();
+				this.basket = responseBasket.data;
+			} else {
+				const data = find(this.basket?.items, item => item.id === product.id);
+				if (data) {
+					this.basket.items.forEach(data => {
+						if (data.id === product.id) {
+							data.quantity++;
+						}
+					});
+				} else {
+					this.basket.items.push({ ...product, quantity: 1, productId: product.id });
+				}
+			}
 			this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 		} catch (err) {
 			console.log('%c err', 'color:red', err);
@@ -133,16 +154,35 @@ export default class ProductStore {
 	};
 
 	// DELETE DELETE DELETE DELETE DELETE DELETE
-	handleRemoveItem = async (productId, quantity = 1, name) => {
+	handleRemoveItem = async (product, quantity = 1, name) => {
 		try {
 			this.loading = true;
 			this.productName = name;
-			await agent.Basket.removeItem(productId, quantity);
-			const response = await agent.Basket.get();
-			runInAction(async () => {
-				this.basket = response.data;
-				this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
-			});
+			if (store.userStore?.user) {
+				await agent.Basket.removeItem(product.productId || product.id, quantity);
+				const response = await agent.Basket.get();
+				runInAction(async () => {
+					this.basket = response.data;
+					this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
+				});
+			} else {
+				const productBasket = find(this.basket?.items, item => item.id === product.id);
+
+				if (productBasket.quantity > 1) {
+					productBasket.quantity--;
+					this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
+				} else {
+					this.basket.items.forEach((item, idx) => {
+						if (item.id === product.id) {
+							this.basket.items.splice(idx, 1);
+						}
+					});
+					if (isEmpty(this.basket.items)) {
+						store.productStore.basket = { buyerId: null, id: null, items: [] };
+					}
+					this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
+				}
+			}
 		} catch (error) {
 			console.log(error);
 		} finally {

@@ -42,7 +42,7 @@ function BasketPage() {
 					<TableBody>
 						{basket &&
 							basket.items.map(item => {
-								// console.log('%c 00 ', 'color:green', item);
+								// console.log('%c 00 item ', 'color:gold', item);
 								return (
 									<TableRow key={item.productId} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
 										<TableCell component="th" scope="row">
@@ -55,7 +55,7 @@ function BasketPage() {
 										<TableCell align="center">
 											<LoadingButton
 												loading={loading && productName === 'rem' + item.productId}
-												onClick={() => handleRemoveItem(item.productId, 1, 'rem' + item.productId)}
+												onClick={() => handleRemoveItem(item, 1, 'rem' + item.productId)}
 												color="error"
 											>
 												<Remove />
@@ -63,7 +63,7 @@ function BasketPage() {
 											{item.quantity}
 											<LoadingButton
 												loading={loading && productName === 'add' + item.productId}
-												onClick={() => handleAddItem(item.productId, 'add' + item.productId)}
+												onClick={() => handleAddItem(item, 'add' + item.productId)}
 												color="secondary"
 											>
 												<Add />
@@ -73,7 +73,7 @@ function BasketPage() {
 										<TableCell align="right">
 											<LoadingButton
 												loading={loading && productName === 'del' + item.productId}
-												onClick={() => handleRemoveItem(item.productId, item.quantity, 'del' + item.productId)}
+												onClick={() => handleRemoveItem(item, item.quantity, 'del' + item.productId)}
 												color="error"
 											>
 												<Delete />

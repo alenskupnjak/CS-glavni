@@ -34,7 +34,7 @@ function ProductCard({ product }) {
 			<CardActions>
 				<LoadingButton
 					loading={loadingAdd && productName === product.id}
-					onClick={() => handleAddItem(product.id)}
+					onClick={() => handleAddItem(product)}
 					size="small"
 				>
 					Add to cart

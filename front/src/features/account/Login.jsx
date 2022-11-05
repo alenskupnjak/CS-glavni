@@ -6,15 +6,14 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Paper } from '@mui/material';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { LoadingButton } from '@mui/lab';
 import { useStore } from '../../app/stores/store';
 
 export default function Login() {
 	const { userStore } = useStore();
-	const { submitForm, user } = userStore;
-	const history = useHistory();
+	const { loginForm } = userStore;
 	const location = useLocation();
 
 	const {
@@ -24,8 +23,6 @@ export default function Login() {
 	} = useForm({
 		mode: 'all',
 	});
-
-	console.log('%c 00 User ', 'color:green', user);
 
 	return (
 		<Container
@@ -41,7 +38,7 @@ export default function Login() {
 			</Typography>
 			<Box
 				component="form"
-				onSubmit={handleSubmit(formData => submitForm(formData, history, location))}
+				onSubmit={handleSubmit(formData => loginForm(formData, location))}
 				noValidate
 				sx={{ mt: 1 }}
 			>

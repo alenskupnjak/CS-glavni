@@ -16,11 +16,10 @@ import CheckoutPage from '../../features/checkout/CheckoutPage';
 import Login from '../../features/account/Login';
 import Register from '../../features/account/Register';
 import { useStore } from '../../app/stores/store';
-
-//
+import PrivateRoute from './PrivateRoute';
 
 function App() {
-	const { displayStore, productStore } = useStore();
+	const { displayStore } = useStore();
 	const { handleThemeChange, darkMode, paletteType } = displayStore;
 	const theme = createTheme({
 		palette: {
@@ -39,13 +38,13 @@ function App() {
 			<Container>
 				<Switch>
 					<Route exact path="/" component={HomePage} />
-					<Route exact path="/catalog" component={Catalog} productStore={productStore} />
+					<Route exact path="/catalog" component={Catalog} />
 					<Route path="/catalog/:id" component={ProductDetails} />
 					<Route path="/about" component={AboutPage} />
 					<Route path="/contact" component={ContactPage} />
 					<Route path="/server-error" component={ServerError} />
 					<Route path="/basket" component={BasketPage} />
-					<Route path="/checkout" component={CheckoutPage} />
+					<PrivateRoute path="/checkout" component={CheckoutPage} />
 					<Route path="/login" component={Login} />
 					<Route path="/register" component={Register} />
 					<Route component={NotFound} />

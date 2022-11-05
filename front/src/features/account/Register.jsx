@@ -93,8 +93,12 @@ export default function Register() {
 					{...register('password', {
 						required: 'Password is required',
 						pattern: {
-							value:
-								/(?=^.{6,10}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\s).*$/,
+							// Should contain at least a capital letter
+							// Should contain at least a small letter
+							// Should contain at least a number
+							// Should contain at least a special character
+							// And minimum length
+							value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/,
 							message: 'Password is not complex enough',
 						},
 					})}

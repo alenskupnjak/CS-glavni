@@ -7,11 +7,15 @@ const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
 axios.defaults.baseURL = 'http://localhost:5030/api/';
 axios.defaults.withCredentials = true;
 
+// TOKEN TOKEN TOKEN
 axios.interceptors.request.use(config => {
-	config.headers.test = 'special get headers';
+	config.headers.Test = 'special get headers';
+	const token = JSON.parse(localStorage.getItem('user'))?.token;
+	if (token) config.headers.Authorization = `Bearer ${token}`;
 	return config;
 });
 
+// ERORS ERRORS ERRORS
 axios.interceptors.response.use(
 	async response => {
 		await sleep();
@@ -19,8 +23,9 @@ axios.interceptors.response.use(
 		return response;
 	},
 	error => {
-		console.log('00*', error);
-		const { data, status } = error.response;
+		console.log('%c error', 'color:red', error);
+		console.log('%c error?.response', 'color:red', error?.response);
+		const { data, status, statusText } = error.response;
 		switch (status) {
 			case 400:
 				if (data.errors) {
@@ -35,7 +40,7 @@ axios.interceptors.response.use(
 				toast.error(data.title);
 				break;
 			case 401:
-				toast.error(data.title);
+				toast.error(data.title || statusText);
 				break;
 			case 404:
 				toast.error(data.title);
