@@ -43,7 +43,7 @@ namespace API.Data
 
 
 
-
+      // Ako ima ppodataka preskace..
       if (context.ProductsTBL.Any()) return;
 
       var products = new List<Product>
