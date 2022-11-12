@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Menu, Fade, MenuItem } from '@mui/material';
 import { observer } from 'mobx-react';
 import { useStore } from '../stores/store';
+import { Link } from 'react-router-dom';
 
 function SignedInMenu() {
 	const { userStore } = useStore();
@@ -22,7 +23,9 @@ function SignedInMenu() {
 			</Button>
 			<Menu anchorEl={anchorEl} open={open} onClose={handleClose} TransitionComponent={Fade}>
 				<MenuItem onClick={handleClose}>Profile</MenuItem>
-				<MenuItem onClick={handleClose}>My orders</MenuItem>
+				<MenuItem component={Link} to="/orders">
+					My orders
+				</MenuItem>
 				<MenuItem onClick={signOut}>Logout</MenuItem>
 			</Menu>
 		</React.Fragment>

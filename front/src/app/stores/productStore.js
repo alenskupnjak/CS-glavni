@@ -314,6 +314,11 @@ export default class ProductStore {
 		}
 	};
 
+	clearBasket = () => {
+		this.basket = { buyerId: null, id: null, items: [] };
+		this.itemCount = 0;
+	};
+
 	// function handleUpdateCart() {
 	// console.log('%c 00 item ', 'color:red', item);
 	// setSubmitting(true);

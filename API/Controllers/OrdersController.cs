@@ -110,7 +110,8 @@ namespace API.Controllers
         };
         user.Address = address;
 
-        _context.Update(user);
+        // nepotrabno
+        //_context.Update(user);
       }
 
 
