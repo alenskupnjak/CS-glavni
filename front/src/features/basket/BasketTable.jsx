@@ -1,12 +1,16 @@
 import { Remove, Add, Delete } from '@mui/icons-material';
+import { observer } from 'mobx-react';
 import { LoadingButton } from '@mui/lab';
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 import { Box } from '@mui/system';
 import { useStore } from '../../app/stores/store';
 
-export default function BasketTable({ isBasket = true }) {
+function BasketTable({ isBasket = true }) {
 	const { productStore } = useStore();
 	const { basket, loading, productName, handleAddItem, handleRemoveItem } = productStore;
+
+	// console.log('%c 00  loading', 'color:green', loading);
+	// console.log('%c 00 productName ', 'color:green', productName);
 
 	return (
 		<TableContainer component={Paper}>
@@ -74,3 +78,5 @@ export default function BasketTable({ isBasket = true }) {
 		</TableContainer>
 	);
 }
+
+export default observer(BasketTable);

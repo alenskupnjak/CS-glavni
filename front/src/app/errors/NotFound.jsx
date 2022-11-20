@@ -9,7 +9,7 @@ export default function NotFound() {
 			</Typography>
 			<Divider />
 			<Button fullWidth component={Link} to="/catalog">
-				Go back to shop
+				Go back
 			</Button>
 		</Container>
 	);

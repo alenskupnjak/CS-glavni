@@ -4,10 +4,11 @@ import { history } from '../..';
 
 const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
 
-axios.defaults.baseURL = 'http://localhost:5030/api/';
+// axios.defaults.baseURL = 'http://localhost:5030/api/';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.withCredentials = true;
 
-// TOKEN TOKEN TOKEN
+// TOKEN TOKEN TOKEN TOKEN
 axios.interceptors.request.use(config => {
 	config.headers.Test = 'special get headers';
 	const token = JSON.parse(localStorage.getItem('user'))?.token;
@@ -18,7 +19,7 @@ axios.interceptors.request.use(config => {
 // ERORS ERRORS ERRORS
 axios.interceptors.response.use(
 	async response => {
-		await sleep();
+		if (process.env.NODE_ENV === 'development') await sleep();
 		console.log('%c axios.interceptors', 'color:gold', response);
 		return response;
 	},

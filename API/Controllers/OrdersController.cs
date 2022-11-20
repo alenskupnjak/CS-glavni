@@ -19,7 +19,6 @@ namespace API.Controllers
     public OrdersController(StoreContext context)
     {
       _context = context;
-
     }
 
     [HttpGet]
@@ -86,7 +85,8 @@ namespace API.Controllers
         BuyerId = User.Identity.Name,
         ShippingAddress = orderDto.ShippingAddress,
         Subtotal = subtotal,
-        DeliveryFee = deliveryFee
+        DeliveryFee = deliveryFee,
+        PaymentIntentId = basket.PaymentIntentId
       };
 
       _context.OrdersTBL.Add(order);

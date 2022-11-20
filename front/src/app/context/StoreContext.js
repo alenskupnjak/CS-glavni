@@ -11,13 +11,16 @@ export function useStoreContext() {
 	return context;
 }
 
-//
 export function StoreProvider({ children }) {
 	const [basket, setBasket] = useState(null);
+	const [slon, setSlon] = useState('slon');
 	function removeItem(productId, quantity) {
 		if (!basket) return;
 		const items = [...basket.items];
 		const itemIndex = items.findIndex(i => i.productId === productId);
+		const slon = 'slon';
+		console.log('%c 00', 'color:green', slon);
+
 		if (itemIndex >= 0) {
 			items[itemIndex].quantity -= quantity;
 			if (items[itemIndex].quantity === 0) items.splice(itemIndex, 1);
@@ -26,6 +29,6 @@ export function StoreProvider({ children }) {
 			});
 		}
 	}
-
-	return <StoreContext.Provider value={{ basket, setBasket, removeItem }}>{children}</StoreContext.Provider>;
+	// van upotrebem staro
+	return <StoreContext.Provider value={{ basket, setBasket, removeItem, slon }}>{children}</StoreContext.Provider>;
 }

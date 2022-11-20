@@ -5,24 +5,33 @@ import App from './app/layout/App';
 import './app/layout/styles.css';
 import { Router } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
+// Neil
+// import { StoreProvider } from './app/context/StoreContext';
 
 import { store, StoreContext } from './app/stores/store';
 
-console.log('%c process.env= ', 'color:green', process.env);
+// console.log('%c process.env= ', 'color:green', process.env);
 // export const history = createBrowserHistory();
-//  https://skryvets.com/blog/2018/09/20/an-elegant-solution-of-deploying-react-app-into-a-subdirectory/
+// https://skryvets.com/blog/2018/09/20/an-elegant-solution-of-deploying-react-app-into-a-subdirectory/
 export const history = createBrowserHistory({ basename: process.env.PUBLIC_URL });
 
+// usnimi postojeceg usera
 store.userStore.fetchCurrentUser();
 
 ReactDOM.render(
-	// <React.StrictMode>
-	<StoreContext.Provider value={store}>
-		<Router history={history}>
-			<App />
-		</Router>
-	</StoreContext.Provider>,
-	// </React.StrictMode>,
+	<React.StrictMode>
+		<StoreContext.Provider value={store}>
+			<Router history={history}>
+				{/* <StoreProvider> NEIL */}
+				<App />
+				{/* </StoreProvider> NEIL */}
+			</Router>
+		</StoreContext.Provider>
+		,
+	</React.StrictMode>,
 	document.getElementById('root')
 );
 

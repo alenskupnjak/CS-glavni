@@ -57,9 +57,8 @@ export default class UserStore {
 			if (user.data) {
 				localStorage.setItem('user', JSON.stringify(user.data));
 				this.user = user.data;
-				console.log('%c 88888888888888', 'color:green', user.data);
-
-				store.productStore.basket = user.data.basket;
+				// store.productStore.basket = user.data.basket;
+				store.productStore.setBasket(user.data.basket);
 				store.productStore.itemCount = user.data.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 			}
 		} catch (error) {

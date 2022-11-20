@@ -31,8 +31,13 @@ const navStyles = {
 function Header({ darkMode, handleThemeChange }) {
 	const { productStore, userStore } = useStore();
 	const { itemCount } = productStore;
+
+	function pokaziSE(data) {
+		console.log('%c 55 data ', 'color:green', data);
+	}
+
 	return (
-		<AppBar position="static" sx={{ mb: 4 }}>
+		<AppBar position="static">
 			<Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 				<Box display="flex" alignItems="center">
 					<Typography variant="h6" component={NavLink} exact to="/" sx={navStyles}>
@@ -58,7 +63,7 @@ function Header({ darkMode, handleThemeChange }) {
 					) : (
 						<List sx={{ display: 'flex' }}>
 							{rightLinks.map(({ title, path }) => (
-								<ListItem component={NavLink} to={path} key={path} sx={navStyles}>
+								<ListItem component={NavLink} to={path} key={path} sx={navStyles} onClick={e => pokaziSE(e)}>
 									{title.toUpperCase()}
 								</ListItem>
 							))}

@@ -10,6 +10,8 @@
 		"@mui/icons-material": "^5.10.9",
 		"@mui/lab": "^5.0.0-alpha.104",
 		"@mui/material": "^5.10.9",
+		"@stripe/react-stripe-js": "^1.15.0",
+		"@stripe/stripe-js": "^1.44.1",
 		"@testing-library/jest-dom": "^5.16.5",
 		"@testing-library/user-event": "^13.5.0",
 		"axios": "^0.21.4",
@@ -21,13 +23,17 @@
 		"react-hook-form": "^7.13.0",
 		"react-router-dom": "^5.3.0",
 		"react-scripts": "5.0.1",
+		"react-slick": "^0.29.0",
 		"react-toastify": "^8.0.2",
+		"slick-carousel": "^1.8.1",
 		"web-vitals": "^2.1.4",
 		"yup": "^0.32.9"
 	},
 	"scripts": {
 		"start": "set PORT=5031 && react-scripts start",
 		"build": "react-scripts build",
+		"postbuild": "mv build findinmy",
+		"buildcs": "BUILD_PATH='../API/wwwroot' react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject"
 	},

@@ -34,8 +34,8 @@ export default class ProductStore {
 
 		reaction(
 			() => this.basket,
-			() => {
-				console.log('%c ****** BOOM ******************', 'color:red');
+			basket => {
+				console.log('%c ****** BOOM BASKET ******************', 'color:red', basket);
 				// this.pagingParams = { pageNumber: 1, pageSize: 3 };
 			}
 		);
@@ -123,8 +123,9 @@ export default class ProductStore {
 
 	// ADD ADD ADD ADD ADD ADD
 	handleAddItem = async (product, name) => {
-		console.log('%c product', 'color:green', product);
-		console.log('%c this.user', 'color:green', store.userStore?.user);
+		// console.log('%c product', 'color:green', product);
+		// console.log('%c name=', 'color:green', name);
+		// console.log('%c this.user', 'color:green', store.userStore?.user);
 
 		try {
 			this.loading = true;
@@ -317,6 +318,26 @@ export default class ProductStore {
 	clearBasket = () => {
 		this.basket = { buyerId: null, id: null, items: [] };
 		this.itemCount = 0;
+	};
+
+	setBasket = basket => {
+		this.basket = basket;
+	};
+
+	// prelazak na placanje
+	checkout = async () => {
+		try {
+			this.loading = true;
+			const response = await agent.Payments.createPaymentIntent();
+			console.log('%c 01 response', 'color:blue', response);
+			console.log('%c 02 BASKET', 'color:green', this.basket);
+
+			history.push(`/checkout`);
+		} catch (error) {
+			console.log('%c error', 'color:red', error);
+		} finally {
+			this.loading = false;
+		}
 	};
 
 	// function handleUpdateCart() {
