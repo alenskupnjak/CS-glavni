@@ -32,8 +32,7 @@
 	"scripts": {
 		"start": "set PORT=5031 && react-scripts start",
 		"build": "react-scripts build",
-		"postbuild": "mv build findinmy",
-		"buildcs": "BUILD_PATH='../API/wwwroot' react-scripts build",
+		"postbuild": "mv build ../API/wwwroot",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject"
 	},

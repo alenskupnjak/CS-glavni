@@ -12,7 +12,7 @@ export default class ProductStore {
 	loadingAdd = false;
 	product = null;
 	productName = null;
-	basket = { buyerId: null, id: null, items: [] };
+	basket = { buyerId: null, id: null, items: [], clientSecret: null, paymentIntentId: null };
 	quantity = 0;
 	item = 0;
 	itemCount = 0;
@@ -179,7 +179,7 @@ export default class ProductStore {
 						}
 					});
 					if (isEmpty(this.basket.items)) {
-						store.productStore.basket = { buyerId: null, id: null, items: [] };
+						this.clearBasket();
 					}
 					this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 				}
@@ -316,7 +316,7 @@ export default class ProductStore {
 	};
 
 	clearBasket = () => {
-		this.basket = { buyerId: null, id: null, items: [] };
+		this.basket = { buyerId: null, id: null, items: [], clientSecret: null, paymentIntentId: null };
 		this.itemCount = 0;
 	};
 
@@ -329,8 +329,9 @@ export default class ProductStore {
 		try {
 			this.loading = true;
 			const response = await agent.Payments.createPaymentIntent();
-			console.log('%c 01 response', 'color:blue', response);
-			console.log('%c 02 BASKET', 'color:green', this.basket);
+			console.log('%c 120 response', 'color:gold', response);
+			this.basket = { ...this.basket, clientSecret: response.clientSecret, paymentIntentId: response.paymentIntentId };
+			console.log('%c 121 BASKET', 'color:gold', this.basket);
 
 			history.push(`/checkout`);
 		} catch (error) {

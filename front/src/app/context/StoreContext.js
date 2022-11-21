@@ -13,7 +13,6 @@ export function useStoreContext() {
 
 export function StoreProvider({ children }) {
 	const [basket, setBasket] = useState(null);
-	const [slon, setSlon] = useState('slon');
 	function removeItem(productId, quantity) {
 		if (!basket) return;
 		const items = [...basket.items];
@@ -30,5 +29,5 @@ export function StoreProvider({ children }) {
 		}
 	}
 	// van upotrebem staro
-	return <StoreContext.Provider value={{ basket, setBasket, removeItem, slon }}>{children}</StoreContext.Provider>;
+	return <StoreContext.Provider value={{ basket, setBasket, removeItem }}>{children}</StoreContext.Provider>;
 }

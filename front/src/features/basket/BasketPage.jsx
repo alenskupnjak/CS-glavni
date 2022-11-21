@@ -11,6 +11,8 @@ function BasketPage(props) {
 	const { productStore } = useStore();
 	const { basket, checkout } = productStore;
 
+	console.log('%c BasketPage ', 'color:pink', basket);
+
 	if (isEmpty(basket?.items)) return <Typography variant="h3">Your basket is empty</Typography>;
 
 	return (
@@ -21,7 +23,7 @@ function BasketPage(props) {
 				<Grid item xs={6}>
 					<BasketSummary />
 					<Button variant="contained" onClick={() => checkout(basket)} size="large" fullWidth>
-						Pogledaj
+						Cekiraj
 					</Button>
 					{/* <Button component={Link} to="/checkout" variant="contained" size="large" fullWidth>
 						Checkout

@@ -74,13 +74,16 @@ function CheckoutPage() {
 
 	// NEXT NEXT
 	const handleNext = async dataForm => {
+		console.log('%c 31 dataForm', 'color:red', dataForm);
+
 		if (activeStep === 2) {
 			setLoading(true);
 			const { nameOnCard, saveAddress, ...shippingAddress } = dataForm;
 			if (!stripe || !elements) return; // stripe not ready
 			try {
 				const cardElement = elements.getElement(CardNumberElement);
-				console.log('%c 00 cardElement ', 'color:red', cardElement);
+				console.log('%c 32 cardElement ', 'color:red', cardElement);
+				console.log('%c 33 BASKET ', 'color:red', basket);
 
 				const paymentResult = await stripe.confirmCardPayment(basket?.clientSecret, {
 					payment_method: {

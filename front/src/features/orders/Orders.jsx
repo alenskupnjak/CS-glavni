@@ -14,7 +14,6 @@ export default function Orders() {
 		agent.Orders.list()
 			.then(orders => {
 				console.log('%c orders = ', 'color:red', orders);
-
 				setOrders(orders.data);
 				return orders;
 			})

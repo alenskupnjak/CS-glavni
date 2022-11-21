@@ -121,6 +121,10 @@ namespace API
 
       app.UseRouting();
 
+      // Podesavanje za React applikaciju ide u www.root folder tražiti index.js file...
+      app.UseDefaultFiles();
+      app.UseStaticFiles();
+
       // CORS
       app.UseCors(opt =>
       {
@@ -135,6 +139,9 @@ namespace API
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();
+
+        // Ako ne nade endpoint, odlazi na React index file...
+        endpoints.MapFallbackToController("Index", "Fallback");
       });
     }
   }
