@@ -64,8 +64,7 @@ namespace API.Controllers
 
       var charge = (Charge)stripeEvent.Data.Object;
 
-      var order = await _context.OrdersTBL.FirstOrDefaultAsync(x =>
-          x.PaymentIntentId == charge.PaymentIntentId);
+      var order = await _context.OrdersTBL.FirstOrDefaultAsync(x => x.PaymentIntentId == charge.PaymentIntentId);
 
       if (charge.Status == "succeeded") order.OrderStatus = OrderStatus.PaymentReceived;
 

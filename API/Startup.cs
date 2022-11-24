@@ -68,7 +68,10 @@ namespace API
       //Spajanje na bazu
       services.AddDbContext<StoreContext>(opt =>
       {
-        opt.UseSqlite(Configuration.GetConnectionString("SpajanjeSQLite"));
+        //opt.UseSqlite(Configuration.GetConnectionString("SpajanjeSQLite"));
+        //opt.UseNpgsql(Configuration.GetConnectionString("PostgresSQL"));
+        opt.UseSqlServer(Configuration.GetConnectionString("MSSQL"));
+
       }
       );
 

@@ -13,13 +13,6 @@ function CheckoutWrapper() {
 	const { productStore } = useStore();
 	const { loading } = productStore;
 
-	// useEffect(() => {
-	// 	agent.Payments.createPaymentIntent()
-	// 		.then(basket => console.log(basket))
-	// 		.catch(error => console.log(error))
-	// 		.finally(() => setLoading(false));
-	// }, []);
-
 	if (loading) return <LoadingComponent message="Loading checkout..." />;
 
 	return (
