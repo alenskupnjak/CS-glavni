@@ -1,5 +1,5 @@
-import { Card, CardActions, CardContent, CardHeader, Grid, Skeleton } from '@mui/material';
 import React from 'react';
+import { Card, CardActions, CardContent, CardHeader, Grid, Skeleton } from '@mui/material';
 
 export default function ProductCardSkeleton() {
 	return (

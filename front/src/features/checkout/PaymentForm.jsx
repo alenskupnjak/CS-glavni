@@ -1,14 +1,15 @@
+import React from 'react';
 import { observer } from 'mobx-react';
-import Typography from '@mui/material/Typography';
+import { CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js';
 import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { useFormContext } from 'react-hook-form';
+
+import TextField from '@mui/material/TextField';
 import AppTextInput from '../../app/components/AppTextInput';
-import React from 'react';
 import { StripeInput } from './StripeInput';
-import { CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js';
 
 function PaymentForm({ cardState, onCardInputChange }) {
 	const { control } = useFormContext();
