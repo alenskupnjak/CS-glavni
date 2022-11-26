@@ -72,7 +72,10 @@ namespace API.Controllers
 
       await _userManager.AddToRoleAsync(user, "Member");
 
+      HttpContext.Response.Headers.Add("Link","Pokusni i radi!");
+
       return StatusCode(201);
+
     }
 
     [Authorize]

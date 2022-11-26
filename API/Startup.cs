@@ -1,6 +1,7 @@
 using API.Data;
 using API.Entities;
 using API.Middleware;
+using API.RequestHelpers;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -31,6 +32,9 @@ namespace API
     {
 
       services.AddControllers();
+
+      // AutoMaper
+      services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
       // SWAGGER
       services.AddSwaggerGen(c =>
@@ -124,7 +128,7 @@ namespace API
 
       app.UseRouting();
 
-      // Podesavanje za React applikaciju ide u www.root folder tražiti index.js file...
+      // Podesavanje za React applikaciju ide u www.root folder traziti index.js file...
       app.UseDefaultFiles();
       app.UseStaticFiles();
 

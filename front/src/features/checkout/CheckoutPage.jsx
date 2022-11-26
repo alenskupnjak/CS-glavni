@@ -93,7 +93,7 @@ function CheckoutPage() {
 						},
 					},
 				});
-				console.log(paymentResult);
+				console.log('%c 50 paymentResult ', 'color:green', paymentResult);
 				if (paymentResult.paymentIntent?.status === 'succeeded') {
 					const orderNumber = await agent.Orders.create({ saveAddress, shippingAddress });
 					setOrderNumber(orderNumber);

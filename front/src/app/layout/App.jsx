@@ -1,13 +1,14 @@
 import { Container, CssBaseline, createTheme, ThemeProvider } from '@mui/material';
 import { observer } from 'mobx-react';
 import { Route, Switch } from 'react-router';
+import { ToastContainer } from 'react-toastify';
+
 import AboutPage from '../../features/about/AboutPage';
 import Catalog from '../../features/catalog/Catalog';
 import ProductDetails from '../../features/catalog/ProductDetails';
 import ContactPage from '../../features/contact/ContactPage';
 import HomePage from '../../features/home/HomePage';
 import Header from './Header';
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ServerError from '../errors/ServerError';
 import NotFound from '../errors/NotFound';
