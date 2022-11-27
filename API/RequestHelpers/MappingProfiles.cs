@@ -10,7 +10,7 @@ namespace API.RequestHelpers
     {
       //  Od ---> do
       CreateMap<CreateProductDto, Product>();
-      //CreateMap<UpdateProductDto, Product>();
+      CreateMap<UpdateProductDto, Product>();
     }
   }
 }
