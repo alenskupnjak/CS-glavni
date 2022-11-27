@@ -90,13 +90,13 @@ namespace API.Controllers
 
       //if (productDto.File != null)
       //{
-        //var imageResult = await _imageService.AddImageAsync(productDto.File);
+      //var imageResult = await _imageService.AddImageAsync(productDto.File);
 
-        //if (imageResult.Error != null)
-        //  return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
+      //if (imageResult.Error != null)
+      //  return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
 
-        //product.PictureUrl = imageResult.SecureUrl.ToString();
-        //product.PublicId = imageResult.PublicId;
+      //product.PictureUrl = imageResult.SecureUrl.ToString();
+      //product.PublicId = imageResult.PublicId;
       //}
 
       _context.ProductsTBL.Add(product);
@@ -139,6 +139,27 @@ namespace API.Controllers
       if (result) return Ok(product);
 
       return BadRequest(new ProblemDetails { Title = "Problem updating product" });
+    }
+
+    // DELETE DELETE DELETE
+    [Authorize(Roles = "Admin")]
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteProduct(int id)
+    {
+      var product = await _context.ProductsTBL.FindAsync(id);
+
+      if (product == null) return NotFound();
+
+      // if (!string.IsNullOrEmpty(product.PublicId))
+      //  await _imageService.DeleteImageAsync(product.PublicId);
+
+      _context.ProductsTBL.Remove(product);
+
+      var result = await _context.SaveChangesAsync() > 0;
+
+      if (result) return Ok();
+
+      return BadRequest(new ProblemDetails { Title = "Problem deleting product" });
     }
 
   }
