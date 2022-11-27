@@ -11,5 +11,9 @@
     public string Brand { get; set; }
     public int QuantityInStock { get; set; }
 
+    // Cloudinary daje ovaj ID
+    // zbog ovog dodatka moramo obrisati i kreirati bazu ponovno
+    public string PublicId { get; set; }
+
   }
 }

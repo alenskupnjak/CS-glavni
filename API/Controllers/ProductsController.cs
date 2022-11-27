@@ -7,6 +7,7 @@ using API.DTOs;
 using API.Entities;
 using API.Extensions;
 using API.RequestHelpers;
+using API.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,10 +19,10 @@ namespace API.Controllers
   {
     private readonly StoreContext _context;
     private readonly IMapper _mapper;
-    //private readonly ImageService _imageService;
-    public ProductsController(StoreContext context, IMapper mapper)
+    private readonly ImageService _imageService;
+    public ProductsController(StoreContext context, IMapper mapper, ImageService imageService)
     {
-      //_imageService = imageService;
+      _imageService = imageService;
       _mapper = mapper;
       _context = context;
     }
@@ -80,24 +81,21 @@ namespace API.Controllers
       return Ok(new { brands, types });
     }
 
-    //
+    // CREATE CREATE CREATE CREATE CREATE CREATE
     [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<Product>> CreateProduct([FromForm] CreateProductDto productDto)
     {
-      //productDto --->Product
+      //  productDto --->Product
       var product = _mapper.Map<Product>(productDto);
 
-      //if (productDto.File != null)
-      //{
-      //var imageResult = await _imageService.AddImageAsync(productDto.File);
-
-      //if (imageResult.Error != null)
-      //  return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
-
-      //product.PictureUrl = imageResult.SecureUrl.ToString();
-      //product.PublicId = imageResult.PublicId;
-      //}
+      if (productDto.File != null)
+      {
+        var imageResult = await _imageService.AddImageAsync(productDto.File);
+        if (imageResult.Error != null) return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
+        product.PictureUrl = imageResult.SecureUrl.ToString();
+        product.PublicId = imageResult.PublicId;
+      }
 
       _context.ProductsTBL.Add(product);
 
