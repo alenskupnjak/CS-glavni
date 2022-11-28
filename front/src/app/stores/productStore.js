@@ -27,9 +27,9 @@ export default class ProductStore {
 	metaData = {};
 	newCheckedBrands = ['Angular', 'NetCore'];
 	newCheckedTypes = ['Boots', 'Boards', 'Hats', 'Gloves'];
+	targetProduct = null;
 
 	constructor() {
-		console.log('%c *** A constructor ProductStore ***', 'color:red');
 		makeAutoObservable(this);
 
 		reaction(
@@ -39,7 +39,7 @@ export default class ProductStore {
 				// this.pagingParams = { pageNumber: 1, pageSize: 3 };
 			}
 		);
-		this.filtersFind = debounce(this.fildFilteredItems, 500);
+		this.filtersFind = debounce(this.fildFilteredItems, 100);
 
 		//Init application
 		console.log('%c START ***** START   ******** START  ', 'color:green');
@@ -55,7 +55,6 @@ export default class ProductStore {
 			const responseFilters = await agent.Catalog.filters();
 			const response = await agent.Catalog.list(this.productParams);
 			const params = JSON.parse(response.headers.pagination);
-			// const responseBasket = await agent.Basket.get();
 
 			runInAction(() => {
 				this.metaData = {
@@ -97,7 +96,7 @@ export default class ProductStore {
 		}
 	};
 
-	// LOAD LOAD
+	// LOAD ONE    LOAD ONE   LOAD ONE   LOAD ONE
 	loadOneItem = async productId => {
 		try {
 			this.loadingAdd = true;
@@ -296,13 +295,16 @@ export default class ProductStore {
 				};
 			});
 		} catch (error) {
-			console.log('%c 00', 'color:red', error);
+			console.log('%c error', 'color:red', error);
 		} finally {
 			this.loading = false;
 		}
 	};
 
-	handlePaging = async ({ pageNumber }) => {
+	handlePaging = async (pageNumber, page) => {
+		console.log('%c 10 pageNumber=', 'color:orange', pageNumber, page);
+		console.log('%c 11 this.productParams', 'color:orange', this.productParams);
+
 		try {
 			this.productParams = {
 				...this.productParams,
@@ -311,10 +313,11 @@ export default class ProductStore {
 			this.filtersFind(this.productParams);
 			console.log('%c 00 pageNumber', 'color:pink', pageNumber);
 		} catch (error) {
-			console.log('%c 00', 'color:red', error);
+			console.log('%c error', 'color:red', error);
 		}
 	};
 
+	// Izprazni kosaricu
 	clearBasket = () => {
 		this.basket = { buyerId: null, id: null, items: [], clientSecret: null, paymentIntentId: null };
 		this.itemCount = 0;
@@ -322,6 +325,10 @@ export default class ProductStore {
 
 	setBasket = basket => {
 		this.basket = basket;
+	};
+
+	setListaProdukata = () => {
+		return (this.listaProdukata = null);
 	};
 
 	// prelazak na placanje
@@ -338,6 +345,39 @@ export default class ProductStore {
 			console.log('%c error', 'color:red', error);
 		} finally {
 			this.loading = false;
+		}
+	};
+
+	handleDeleteProduct = async id => {
+		try {
+			console.log('%c 00 id', 'color:green', id);
+			this.loading = true;
+			this.targetProduct = id;
+			await agent.Admin.deleteProduct(id);
+			this.loadAllProduct();
+			// .then(() => removeProduct(id))
+		} catch (error) {
+			console.log('%c error', 'color:red', error);
+		} finally {
+			this.loading = false;
+		}
+	};
+
+	goTo = page => {
+		if (page === 'Inventory') {
+			this.listaProdukata = null;
+			this.productParams = {
+				...this.productParams,
+				orderBy: '',
+				brands: '',
+				types: '',
+				searchTerm: '',
+				pageSize: 4,
+				pageNumber: 1,
+			};
+			console.log('%c 11 this.productParams', 'color:orange', this.productParams);
+			this.filtersFind(this.productParams);
+			history.push(`/inventory`);
 		}
 	};
 

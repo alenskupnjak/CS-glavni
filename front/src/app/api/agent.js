@@ -2,7 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { history } from '../..';
 
-const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
+const sleep = () => new Promise(resolve => setTimeout(resolve, 200));
 
 // axios.defaults.baseURL = 'http://localhost:5030/api/';
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;

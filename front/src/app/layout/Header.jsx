@@ -30,7 +30,7 @@ const navStyles = {
 
 function Header({ darkMode, handleThemeChange }) {
 	const { productStore, userStore } = useStore();
-	const { itemCount } = productStore;
+	const { itemCount, goTo, setListaProdukata } = productStore;
 
 	function pokaziSE(data) {
 		console.log('%c 55 data ', 'color:green', data);
@@ -51,6 +51,14 @@ function Header({ darkMode, handleThemeChange }) {
 							{title.toUpperCase()}
 						</ListItem>
 					))}
+					<ListItem
+						onClick={() => {
+							goTo('Inventory');
+						}}
+						sx={navStyles}
+					>
+						INVENTORY
+					</ListItem>
 				</List>
 				<Box display="flex" alignItems="center">
 					<IconButton component={Link} to="/basket" size="large" sx={{ color: 'inherit' }}>

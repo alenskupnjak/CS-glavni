@@ -61,7 +61,7 @@ function Catalog(props) {
 			<Grid item xs={3} />
 			<Grid item xs={9} sx={{ mb: 2 }}>
 				{metaData && !loading && (
-					<AppPagination metaData={metaData} handlePaging={page => handlePaging({ pageNumber: page })} />
+					<AppPagination metaData={metaData} handlePaging={page => handlePaging(page, 'Catalog')} />
 				)}
 			</Grid>
 		</Grid>
