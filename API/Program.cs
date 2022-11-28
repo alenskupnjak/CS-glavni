@@ -37,6 +37,7 @@ namespace API
     }
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
+      //https://www.youtube.com/watch?v=ydR2jd3ZaEA&list=PL6n9fhu94yhVkdrusLaQsfERmL_Jh4XmU&index=6&ab_channel=kudvenkat
         Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(webBuilder =>
             {

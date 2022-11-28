@@ -6,6 +6,7 @@ using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -151,6 +152,15 @@ namespace API
         // Ako ne nade endpoint, odlazi na React index file...
         endpoints.MapFallbackToController("Index", "Fallback");
       });
+
+
+      app.Run(async (context) =>
+      {
+        await context.Response.WriteAsync("Pozdrav!");
+        await context.Response.WriteAsync(System.Diagnostics.Process.GetCurrentProcess().ProcessName);
+      });
+
+
     }
   }
 }

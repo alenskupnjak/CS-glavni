@@ -28,6 +28,7 @@ namespace API.Controllers
     }
 
     [HttpGet]
+    // podaci dolaze u formi promjena format unosa Swagger-a
     public async Task<ActionResult<PagedList<Product>>> GetProducts([FromQuery] ProductParams productParams)
     {
       // ovo vraca sve podatke je u bazi bez sortiranja
@@ -107,7 +108,7 @@ namespace API.Controllers
     }
 
 
-    // UPDATE UPDATE
+    // UPDATE UPDATE UPDATE UPDATE
     [Authorize(Roles = "Admin")]
     [HttpPut]
     public async Task<ActionResult<Product>> UpdateProduct([FromForm] UpdateProductDto productDto)
@@ -118,24 +119,19 @@ namespace API.Controllers
 
       _mapper.Map(productDto, product);
 
-      //if (productDto.File != null)
-      //{
-      //  var imageResult = await _imageService.AddImageAsync(productDto.File);
-
-      //  if (imageResult.Error != null)
-      //    return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
-
-      //  if (!string.IsNullOrEmpty(product.PublicId))
-      //    await _imageService.DeleteImageAsync(product.PublicId);
-
-      //  product.PictureUrl = imageResult.SecureUrl.ToString();
-      //  product.PublicId = imageResult.PublicId;
-      //}
+      if (productDto.File != null)
+      {
+        var imageResult = await _imageService.AddImageAsync(productDto.File);
+        if (imageResult.Error != null)
+          return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
+        if (!string.IsNullOrEmpty(product.PublicId))
+          await _imageService.DeleteImageAsync(product.PublicId);
+        product.PictureUrl = imageResult.SecureUrl.ToString();
+        product.PublicId = imageResult.PublicId;
+      }
 
       var result = await _context.SaveChangesAsync() > 0;
-
       if (result) return Ok(product);
-
       return BadRequest(new ProblemDetails { Title = "Problem updating product" });
     }
 
@@ -148,8 +144,8 @@ namespace API.Controllers
 
       if (product == null) return NotFound();
 
-      // if (!string.IsNullOrEmpty(product.PublicId))
-      //  await _imageService.DeleteImageAsync(product.PublicId);
+      if (!string.IsNullOrEmpty(product.PublicId))
+        await _imageService.DeleteImageAsync(product.PublicId);
 
       _context.ProductsTBL.Remove(product);
 
