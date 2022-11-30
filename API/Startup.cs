@@ -105,7 +105,7 @@ namespace API
           });
 
       services.AddAuthorization();
-      // svaki servis koji se injektira negdje mra se ovdije navesti
+      // svaki servis koji se injektira negdje mora se ovdije navesti
       services.AddScoped<TokenService>();
       services.AddScoped<PaymentService>();
       services.AddScoped<ImageService>();
