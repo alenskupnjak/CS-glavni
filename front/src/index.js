@@ -19,7 +19,10 @@ import { store, StoreContext } from './app/stores/store';
 export const history = createBrowserHistory({ basename: process.env.PUBLIC_URL });
 
 // usnimi postojeceg usera
-store.userStore.fetchCurrentUser();
+const user = JSON.parse(localStorage.getItem('user'));
+if (user) {
+	store.userStore.user = user;
+}
 
 ReactDOM.render(
 	<React.StrictMode>

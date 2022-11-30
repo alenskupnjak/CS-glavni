@@ -6,9 +6,7 @@ import { isEmpty } from 'lodash-es';
 
 export default class UserStore {
 	user = null;
-
 	constructor() {
-		console.log('%c *** AAA constructor DisplayStore ***', 'color:red');
 		makeAutoObservable(this);
 	}
 
@@ -20,8 +18,11 @@ export default class UserStore {
 
 		try {
 			const user = await agent.Account.login(formData);
+			let claims = JSON.parse(atob(user.token.split('.')[1]));
+			let roles = claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
 			this.user = user;
-			console.log('%c LOGIN user', 'color:blue', user);
+			this.user = { ...this.user, roles };
+			console.log('%c LOGIN user', 'color:blue', this.user);
 			localStorage.setItem('user', JSON.stringify(this.user));
 			if (user.basket?.items.length > 0) {
 				store.productStore.basket = user.basket;

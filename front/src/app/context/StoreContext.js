@@ -17,9 +17,6 @@ export function StoreProvider({ children }) {
 		if (!basket) return;
 		const items = [...basket.items];
 		const itemIndex = items.findIndex(i => i.productId === productId);
-		const slon = 'slon';
-		console.log('%c 00', 'color:green', slon);
-
 		if (itemIndex >= 0) {
 			items[itemIndex].quantity -= quantity;
 			if (items[itemIndex].quantity === 0) items.splice(itemIndex, 1);

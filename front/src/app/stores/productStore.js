@@ -98,23 +98,28 @@ export default class ProductStore {
 
 	// LOAD ONE    LOAD ONE   LOAD ONE   LOAD ONE
 	loadOneItem = async productId => {
+		console.log('%c 00', 'color:green', productId);
+
 		try {
 			this.loadingAdd = true;
 			const response = await agent.Catalog.details(productId);
+			console.log('%c response =', 'color:green', response);
+
 			const cookie = getCookie('buyerId');
+			console.log('%c cookie ', 'color:green', cookie);
 			if (cookie) {
 				const responseBasket = await agent.Basket.get();
 				this.basket = responseBasket.data;
+				this.item = find(this.basket.items, i => i.productId === this.product.id);
+				this.quantity = 0;
 			}
 			runInAction(() => {
 				this.product = response.data;
 				this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
-				this.quantity = 0;
-				this.item = find(this.basket.items, i => i.productId === this.product.id);
 				history.push(`/catalog/:${productId}`);
 			});
-		} catch (error) {
-			console.log('%c 00', 'color:red', error);
+		} catch (err) {
+			console.log('%c error', 'color:red', err);
 		} finally {
 			this.loadingAdd = false;
 		}
@@ -301,17 +306,14 @@ export default class ProductStore {
 		}
 	};
 
+	//  promjena vrijednosti tabeli, pagiancija
 	handlePaging = async (pageNumber, page) => {
-		console.log('%c 10 pageNumber=', 'color:orange', pageNumber, page);
-		console.log('%c 11 this.productParams', 'color:orange', this.productParams);
-
 		try {
 			this.productParams = {
 				...this.productParams,
 				pageNumber,
 			};
 			this.filtersFind(this.productParams);
-			console.log('%c 00 pageNumber', 'color:pink', pageNumber);
 		} catch (error) {
 			console.log('%c error', 'color:red', error);
 		}
@@ -350,12 +352,10 @@ export default class ProductStore {
 
 	handleDeleteProduct = async id => {
 		try {
-			console.log('%c 00 id', 'color:green', id);
 			this.loading = true;
 			this.targetProduct = id;
 			await agent.Admin.deleteProduct(id);
 			this.loadAllProduct();
-			// .then(() => removeProduct(id))
 		} catch (error) {
 			console.log('%c error', 'color:red', error);
 		} finally {

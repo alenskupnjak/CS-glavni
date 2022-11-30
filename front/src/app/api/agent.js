@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { history } from '../..';
+// import { store } from '../stores/store';
 
 const sleep = () => new Promise(resolve => setTimeout(resolve, 200));
 
@@ -10,7 +11,10 @@ axios.defaults.withCredentials = true;
 
 // TOKEN TOKEN TOKEN TOKEN
 axios.interceptors.request.use(config => {
+	console.log('%c ----------------------', 'color:green');
+
 	config.headers.Test = 'special get headers';
+
 	const token = JSON.parse(localStorage.getItem('user'))?.token;
 	if (token) config.headers.Authorization = `Bearer ${token}`;
 	return config;
@@ -43,6 +47,9 @@ axios.interceptors.response.use(
 			case 401:
 				toast.error(data.title || statusText);
 				break;
+			case 403:
+				toast.error('Nemate pristup ovoj operaciji!');
+				break;
 			case 404:
 				toast.error(data.title);
 				break;
@@ -65,19 +72,33 @@ const requests = {
 	post: (url, body) => axios.post(url, body).then(response => response.data),
 	put: (url, body) => axios.put(url, body).then(response => response.data),
 	delete: url => axios.delete(url).then(response => response.data),
+	postForm: (url, formData) =>
+		axios
+			.post(url, formData, {
+				headers: { 'Content-type': 'multipart/form-data' },
+			})
+			.then(response => response.data),
+	putForm: (url, formData) =>
+		axios
+			.put(url, formData, {
+				headers: { 'Content-type': 'multipart/form-data' },
+			})
+			.then(response => response.data),
 };
 
 function createFormData(item) {
+	// https://developer.mozilla.org/en-US/docs/Web/API/FormData
 	let formData = new FormData();
 	for (const key in item) {
 		formData.append(key, item[key]);
 	}
+	// console.log('%c 00', 'color:red', formData.getAll('name'));
 	return formData;
 }
 
 const Admin = {
-	createProduct: product => requests.postForm('products', createFormData(product)),
-	updateProduct: product => requests.putForm('products', createFormData(product)),
+	createProduct: item => requests.postForm('products', createFormData(item)),
+	updateProduct: item => requests.putForm('products', createFormData(item)),
 	deleteProduct: id => requests.delete(`products/${id}`),
 };
 

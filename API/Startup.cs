@@ -112,6 +112,8 @@ namespace API
 
     }
 
+
+    // MIDDLEWARE  MIDDLEWARE  Vazan je redosljed !!!
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
@@ -120,7 +122,8 @@ namespace API
 
       if (env.IsDevelopment())
       {
-        //app.UseDeveloperExceptionPage(); orginalni middlw ware od appp mi kreiramo svoju...
+        // https://www.youtube.com/watch?v=UGG2-oV9iQ8&list=PL6n9fhu94yhVkdrusLaQsfERmL_Jh4XmU&index=13&ab_channel=kudvenkat
+        //app.UseDeveloperExceptionPage(); orginalni MIDDLEWARE od applikacije. Mi cemo kreirati svoj...
         app.UseSwagger();
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
       }
@@ -130,8 +133,14 @@ namespace API
 
       app.UseRouting();
 
-      // Podesavanje za React applikaciju ide u www.root folder traziti index.js file...
+    // Podesavanje za React applikaciju ide u WWWROOT folder traziti index.html ili default.html
+    // https://www.youtube.com/watch?v=yt6bzZoovgM&list=PL6n9fhu94yhVkdrusLaQsfERmL_Jh4XmU&index=12&ab_channel=kudvenkat
       app.UseDefaultFiles();
+
+
+      // Omogucijemo pristup static fileovima  u WWWROOT
+      // https://www.youtube.com/watch?v=yt6bzZoovgM&list=PL6n9fhu94yhVkdrusLaQsfERmL_Jh4XmU&index=12&ab_channel=kudvenkat
+      // http://localhost:5031/images/hero1.jpg
       app.UseStaticFiles();
 
       // CORS

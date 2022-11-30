@@ -16,14 +16,13 @@ import { LoadingButton } from '@mui/lab';
 import { Edit, Delete } from '@mui/icons-material';
 import { currencyFormat } from '../../app/util/util';
 import AppPagination from '../../app/components/AppPagination';
-// import ProductForm from './ProductForm';
+import ProductForm from './ProductForm';
 import { useStore } from '../../app/stores/store';
 import LoadingComponent from '../../app/layout/LoadingComponent';
 
 function Inventory() {
 	const { productStore } = useStore();
-	const { listaProdukata, metaData, handleDeleteProduct, loading, targetProduct, handlePaging, setListaProdukata } =
-		productStore;
+	const { listaProdukata, metaData, handleDeleteProduct, loading, targetProduct, handlePaging } = productStore;
 	const [editMode, setEditMode] = useState(false);
 	const [selectedProduct, setSelectedProduct] = useState(null);
 
@@ -32,26 +31,13 @@ function Inventory() {
 		setEditMode(true);
 	}
 
-	// function handleDeleteProduct(id) {
-	// 	setLoading(true);
-	// 	setTarget(id);
-	// 	agent.Admin.deleteProduct(id)
-	// 		.then(() => removeProduct(id))
-	// 		.catch(error => console.log(error))
-	// 		.finally(() => setLoading(false));
-	// }
-
 	function cancelEdit() {
 		if (selectedProduct) setSelectedProduct(null);
 		setEditMode(false);
 	}
 
-	console.log('%c 01 listaProdukata ', 'color:green', listaProdukata);
-	console.log('%c 02 metaData ', 'color:green', listaProdukata);
-
 	if (loading || listaProdukata === null) return <LoadingComponent message="Loading orders..." />;
-
-	// if (editMode) return <ProductForm product={selectedProduct} cancelEdit={cancelEdit} />;
+	if (editMode) return <ProductForm product={selectedProduct} cancelEdit={cancelEdit} />;
 
 	return (
 		<React.Fragment>
