@@ -20,6 +20,7 @@ import PrivateRoute from './PrivateRoute';
 import Orders from '../../features/orders/Orders';
 import CheckoutWrapper from '../../features/checkout/CheckoutWrapper';
 import Inventory from '../../features/admin/Inventory';
+import ImportFile from '../../features/importfile/ImportFile';
 
 function App(props) {
 	const { displayStore } = useStore();
@@ -55,6 +56,7 @@ function App(props) {
 							<PrivateRoute roles={['Admin']} path="/inventory" component={Inventory} />
 							<Route path="/login" component={Login} />
 							<Route path="/register" component={Register} />
+							<Route path="/import-file" component={ImportFile} />
 							<Route component={NotFound} />
 						</Switch>
 					</Container>

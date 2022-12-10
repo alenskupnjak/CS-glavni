@@ -25,6 +25,6 @@ export function StoreProvider({ children }) {
 			});
 		}
 	}
-	// van upotrebem staro
+	// VAN UPOTREBE STARO
 	return <StoreContext.Provider value={{ basket, setBasket, removeItem }}>{children}</StoreContext.Provider>;
 }

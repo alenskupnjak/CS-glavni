@@ -29,8 +29,6 @@ namespace API.Controllers
          .ProjectOrderToOrderDto()
          .Where(x => x.BuyerId == User.Identity.Name)
          .ToListAsync();
-
-
     }
 
     [HttpGet("{id}", Name = "GetOrder")]

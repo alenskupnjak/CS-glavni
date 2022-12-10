@@ -11,7 +11,7 @@ axios.defaults.withCredentials = true;
 
 // TOKEN TOKEN TOKEN TOKEN
 axios.interceptors.request.use(config => {
-	console.log('%c ----------------------', 'color:green');
+	console.log('%c -----config-----------', 'color:green', config);
 
 	config.headers.Test = 'special get headers';
 
