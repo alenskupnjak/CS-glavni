@@ -33,9 +33,7 @@ namespace API
     {
 
       services.AddControllers();
-
-      // AutoMaper
-      services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+      services.AddAutoMapper(typeof(MappingProfiles).Assembly);  // AutoMaper
 
       // SWAGGER
       services.AddSwaggerGen(c =>
@@ -70,7 +68,7 @@ namespace API
 
 
 
-      //Spajanje na bazu
+      // Spajanje na bazu
       services.AddDbContext<StoreContext>(opt =>
       {
         //opt.UseSqlite(Configuration.GetConnectionString("SpajanjeSQLite"));
@@ -80,9 +78,8 @@ namespace API
       }
       );
 
-      //CORS
-      services.AddCors();
-
+    
+      services.AddCors();    //CORS
 
       services.AddIdentityCore<User>(opt =>
           { // Jedinstveni email
