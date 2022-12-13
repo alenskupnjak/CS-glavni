@@ -4,7 +4,6 @@ export default class DisplayStore {
 	paletteType = 'light';
 
 	constructor() {
-		console.log('%c *** AAA constructor DisplayStore ***', 'color:red');
 		makeAutoObservable(this);
 	}
 

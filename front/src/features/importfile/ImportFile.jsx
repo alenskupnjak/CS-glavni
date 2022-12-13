@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import './ImportFile.css';
-import CrudServices from './CrudServices';
-import ReactFileReader from 'react-file-reader';
-import { Button, Pagination } from '@mui/material';
 import { Delete } from '@mui/icons-material';
+import { Button, Pagination } from '@mui/material';
+import './ImportFile.css';
 
-const service = new CrudServices();
+// import CrudServices from './CrudServices';
+import ReactFileReader from 'react-file-reader';
+import agent from '../../app/api/agent';
+
+// const service = new CrudServices();
 
 export default class HomePage extends Component {
 	constructor() {
@@ -29,55 +31,65 @@ export default class HomePage extends Component {
 		this.ReadRecord(this.state.PageNumber);
 	}
 
-	ReadRecord(CurrentPage) {
+	// READ READ READ
+	async ReadRecord(CurrentPage) {
 		let data = {
 			recordPerPage: this.state.RecordPerPage,
 			pageNumber: CurrentPage,
 		};
+		const response = await agent.ReadWriteDatabase.ReadRecord(data);
+		this.setState({ totalRecords: response.totalRecords });
+		this.setState({ totalPages: response.totalPages });
+		this.setState({ DataRecord: response.readRecord });
 
-		console.log('Record Request Body : ', data);
-
-		service
-			.ReadRecord(data)
-			.then(data => {
-				console.log(data.data.readRecord);
-				this.setState({ totalRecords: data.data.totalRecords });
-				this.setState({ totalPages: data.data.totalPages });
-				this.setState({ DataRecord: data.data.readRecord });
-			})
-			.catch(error => {
-				console.log(error);
-			});
+		// service
+		// 	.ReadRecord(data)
+		// 	.then(data => {
+		// 		console.log('%c 00 data ', 'color:red', data);
+		// 		console.log(data.data.readRecord);
+		// 		this.setState({ totalRecords: data.data.totalRecords });
+		// 		this.setState({ totalPages: data.data.totalPages });
+		// 		this.setState({ DataRecord: data.data.readRecord });
+		// 	})
+		// 	.catch(error => {
+		// 		console.log(error);
+		// 	});
 	}
 
-	snimiUBazu = event => {
+	snimiUBazu = async event => {
 		event.preventDefault();
 		if (this.state.FileExtension !== '') {
 			const data = new FormData();
 			data.append('file', this.state.File);
 
 			if (this.state.FileExtension.toLowerCase() === 'csv') {
-				service
-					.InsertCsvRecord(data)
-					.then(data => {
-						console.log(data);
-						this.ReadRecord(this.state.PageNumber);
-					})
-					.catch(error => {
-						console.log(error);
-						this.ReadRecord(this.state.PageNumber);
-					});
+				// service
+				// 	.InsertCsvRecord(data)
+				// 	.then(data => {
+				// 		console.log(data);
+				// 		this.ReadRecord(this.state.PageNumber);
+				// 	})
+				// 	.catch(error => {
+				// 		console.log(error);
+				// 		this.ReadRecord(this.state.PageNumber);
+				// 	});
+				const response = await agent.ReadWriteDatabase.InsertCsvRecord(data);
+				console.log('%c 00 ', 'color:red', response);
+				this.ReadRecord(this.state.PageNumber);
 			} else if (this.state.FileExtension.toLowerCase() === 'xlsx') {
-				service
-					.InsertExcelRecord(data)
-					.then(data => {
-						console.log(data);
-						this.ReadRecord(this.state.PageNumber);
-					})
-					.catch(error => {
-						console.log(error);
-						this.ReadRecord(this.state.PageNumber);
-					});
+				// service
+				// 	.InsertExcelRecord(data)
+				// 	.then(data => {
+				// 		console.log(data);
+				// 		this.ReadRecord(this.state.PageNumber);
+				// 	})
+				// 	.catch(error => {
+				// 		console.log(error);
+				// 		this.ReadRecord(this.state.PageNumber);
+				// 	});
+				const response = await agent.ReadWriteDatabase.InsertExcelRecord(data);
+				console.log('%c 00 ', 'color:red', response);
+				this.ReadRecord(this.state.PageNumber);
 			} else {
 				console.log('Invalid File');
 			}
@@ -129,18 +141,22 @@ export default class HomePage extends Component {
 		this.ReadRecord(value);
 	};
 
-	handleDelete = datas => {
-		console.log('Delete Body Id: ', datas.userId);
-		service
-			.DeleteRecord(datas.userId)
-			.then(data => {
-				console.log(data);
-				this.ReadRecord(this.state.PageNumber);
-			})
-			.catch(error => {
-				console.log(error);
-				this.ReadRecord(this.state.PageNumber);
-			});
+	handleDelete = async data => {
+		console.log('Delete Body Id-----------------: ', data);
+		// service
+		// 	.DeleteRecord(datas.userId)
+		// 	.then(data => {
+		// 		console.log(data);
+		// 		this.ReadRecord(this.state.PageNumber);
+		// 	})
+		// 	.catch(error => {
+		// 		console.log(error);
+		// 		this.ReadRecord(this.state.PageNumber);
+		// 	});
+
+		const response = await agent.ReadWriteDatabase.DeleteRecord(data.userId);
+		console.log('%c 00 ', 'color:red', response);
+		this.ReadRecord(this.state.PageNumber);
 	};
 
 	render() {
@@ -153,7 +169,7 @@ export default class HomePage extends Component {
 					<div className="Box1">
 						<div className="Input-Container">
 							<div className="flex-Container">
-								<div className="Header">Excel & Csv Bulk Data Upload</div>
+								<div className="Header">Excel & Csv Bulk Data Upload Total records= {this.state.totalRecords}</div>
 								<div className="sub-flex-Container">
 									<div className="FileName">{state.File !== null ? state.File.name : ''}</div>
 									<div className="UploadButton">

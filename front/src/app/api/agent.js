@@ -14,6 +14,7 @@ axios.interceptors.request.use(config => {
 	console.log('%c -----config-----------', 'color:green', config);
 
 	config.headers.Test = 'special get headers';
+	// config.headers.Config = config;
 
 	const token = JSON.parse(localStorage.getItem('user'))?.token;
 	if (token) config.headers.Authorization = `Bearer ${token}`;
@@ -30,7 +31,7 @@ axios.interceptors.response.use(
 	error => {
 		console.log('%c error', 'color:red', error);
 		console.log('%c error?.response', 'color:red', error?.response);
-		const { data, status, statusText } = error.response;
+		const { data, status, statusText } = error?.response || {};
 		switch (status) {
 			case 400:
 				if (data.errors) {
@@ -72,6 +73,7 @@ const requests = {
 	post: (url, body) => axios.post(url, body).then(response => response.data),
 	put: (url, body) => axios.put(url, body).then(response => response.data),
 	delete: url => axios.delete(url).then(response => response.data),
+	deleteBody: (url, body) => axios.delete(url, body).then(response => response.data),
 	postForm: (url, formData) =>
 		axios
 			.post(url, formData, {
@@ -97,7 +99,7 @@ function createFormData(item) {
 		formData.append(key, item[key]);
 	}
 	console.log('%c 23', 'color:red', formData.getAll('name'));
-	console.log('%c 24', 'color:red', formData.getAll('brand'));
+	console.log('%c 24', 'color:red', formData);
 	return formData;
 }
 
@@ -145,6 +147,13 @@ const Payments = {
 	createPaymentIntent: () => requests.post('payments', {}),
 };
 
+const ReadWriteDatabase = {
+	ReadRecord: pageNumber => requests.post('uploadFile/readRecord', pageNumber),
+	InsertCsvRecord: file => requests.post('uploadFile/UploadCSVFile', file),
+	InsertExcelRecord: file => requests.post('uploadFile/UploadExcelFile', file),
+	DeleteRecord: userId => requests.deleteBody('uploadFile/DeleteRecord', { data: { userID: userId } }),
+};
+
 const agent = {
 	Catalog,
 	TestErrors,
@@ -153,6 +162,7 @@ const agent = {
 	Orders,
 	Payments,
 	Admin,
+	ReadWriteDatabase,
 };
 
 export default agent;

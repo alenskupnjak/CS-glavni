@@ -1,4 +1,5 @@
 using API.Data;
+using API.DataAccessLayer;
 using API.Entities;
 using API.Middleware;
 using API.RequestHelpers;
@@ -106,6 +107,7 @@ namespace API
       services.AddScoped<TokenService>();
       services.AddScoped<PaymentService>();
       services.AddScoped<ImageService>();
+      services.AddScoped<IUploadFileDL, UploadFileDL>(); // Dependency Injection
 
     }
 
