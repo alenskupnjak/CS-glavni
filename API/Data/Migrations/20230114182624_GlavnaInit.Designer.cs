@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20221122192530_basket")]
-    partial class basket
+    [Migration("20230114182624_GlavnaInit")]
+    partial class GlavnaInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -142,6 +142,9 @@ namespace API.Data.Migrations
                     b.Property<long>("Price")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("PublicId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("QuantityInStock")
                         .HasColumnType("int");
 
@@ -185,14 +188,14 @@ namespace API.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "cf4e5fac-4901-4670-80fd-521c92af1906",
+                            ConcurrencyStamp = "318dfa52-5969-4ecf-91e6-2a6125436f43",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "7f60e692-8a9e-44d6-b45e-1a5904bae8d4",
+                            ConcurrencyStamp = "f4b3bf78-fa1e-45a6-9b42-cdddd410f3ec",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });

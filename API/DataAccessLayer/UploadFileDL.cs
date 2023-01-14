@@ -200,7 +200,7 @@ namespace API.DataAccessLayer
       {
         if (request.File.FileName.ToLower().Contains(".xlsx"))
         {
-          // OPCENUTI DIO Očitavanja EXcel file
+          // opčeniti dio Očitavanja EXcel file
           FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
           System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
           IExcelDataReader reader = ExcelReaderFactory.CreateReader(stream);  // Nuget paket ExcelDataReader
@@ -227,6 +227,8 @@ namespace API.DataAccessLayer
             Parameters.Add(rows);
           }
           stream.Close();
+
+          // Pocetak punjenja baze
           if (Parameters.Count > 0)
           {
             string queryMSSQL = @"INSERT INTO dbo.bulkuploadtable (UserName,EmailID,MobileNumber,Gender,Age,Salary,IsActive) 

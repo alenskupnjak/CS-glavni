@@ -4,6 +4,10 @@ using System.Threading.Tasks;
 using API.Entities;
 using Microsoft.AspNetCore.Identity;
 
+// U terminalu dodabanje nove baze
+// dotnet ef migrations add GlavnaInit -o Data/Migrations 
+// pokrenes backend i sve ce se samo kreirati
+
 namespace API.Data
 {
   public static class DbInitializer
@@ -19,16 +23,16 @@ namespace API.Data
           UserName = "bob",
           Email = "bob@test.com"
         };
-
-        //        {
-        //          "username": "tom",
-        //          "password": "Pa$$w0rd",
-        //          "email": "tom@test.com"
-        //        }
-        // 
-
         await userManager.CreateAsync(user, "Pa$$w0rd");
         await userManager.AddToRoleAsync(user, "Member");
+
+        var userA = new User
+        {
+          UserName = "max",
+          Email = "max@test.com"
+        };
+        await userManager.CreateAsync(userA, "Pa$$w0rd");
+        await userManager.AddToRoleAsync(userA, "Member");
 
         // user Admin
         var admin = new User
@@ -36,16 +40,14 @@ namespace API.Data
           UserName = "admin",
           Email = "admin@test.com"
         };
-
         await userManager.CreateAsync(admin, "Pa$$w0rd");
         await userManager.AddToRolesAsync(admin, new[] { "Member", "Admin" });
       }
 
 
 
-      // Ako ima ppodataka preskace..
+      // Ako baza postoji preskace..
       if (context.ProductsTBL.Any()) return;
-
       var products = new List<Product>
             {
                 new Product
@@ -251,7 +253,6 @@ namespace API.Data
       {
         context.ProductsTBL.Add(product);
       }
-
       context.SaveChanges();
     }
   }
