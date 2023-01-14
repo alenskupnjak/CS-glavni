@@ -5,6 +5,7 @@
 
 
 appsettings.json
+DbInitializerUser.cs
 /API/wwwroot
 
 # User-specific files

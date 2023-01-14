@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace API.Data.Migrations
 {
-    public partial class GlavnaInit : Migration
+    public partial class Mig001 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -292,12 +292,12 @@ namespace API.Data.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 1, "318dfa52-5969-4ecf-91e6-2a6125436f43", "Member", "MEMBER" });
+                values: new object[] { 1, "a9a75ccf-380a-437d-9125-b5b92dd2a783", "Member", "MEMBER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 2, "f4b3bf78-fa1e-45a6-9b42-cdddd410f3ec", "Admin", "ADMIN" });
+                values: new object[] { 2, "643255b3-1ef4-4db1-ad1d-9acf297d75c1", "Admin", "ADMIN" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

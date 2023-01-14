@@ -12,41 +12,10 @@ namespace API.Data
 {
   public static class DbInitializer
   {
-    public static async Task Initialize(StoreContext context, UserManager<User> userManager)
+    public static async Task Initialize(StoreContext context)
     {
 
-      // user  for test
-      if (!userManager.Users.Any())
-      {
-        var user = new User
-        {
-          UserName = "bob",
-          Email = "bob@test.com"
-        };
-        await userManager.CreateAsync(user, "Pa$$w0rd");
-        await userManager.AddToRoleAsync(user, "Member");
-
-        var userA = new User
-        {
-          UserName = "max",
-          Email = "max@test.com"
-        };
-        await userManager.CreateAsync(userA, "Pa$$w0rd");
-        await userManager.AddToRoleAsync(userA, "Member");
-
-        // user Admin
-        var admin = new User
-        {
-          UserName = "admin",
-          Email = "admin@test.com"
-        };
-        await userManager.CreateAsync(admin, "Pa$$w0rd");
-        await userManager.AddToRolesAsync(admin, new[] { "Member", "Admin" });
-      }
-
-
-
-      // Ako baza postoji preskace..
+      // Ako postoji tabela preskace..
       if (context.ProductsTBL.Any()) return;
       var products = new List<Product>
             {
@@ -228,7 +197,7 @@ namespace API.Data
                 new Product
                 {
                     Name = "Angular Purple Boots",
-                    Description = "Aenean nec lorem. In porttitor. Donec laoreet nonummy augue.",
+                    Description = "Pokus nec lorem. In porttitor. Donec laoreet nonummy augue.",
                     Price = 15000,
                     PictureUrl = "/images/products/boot-ang2.png",
                     Brand = "Angular",
@@ -239,7 +208,7 @@ namespace API.Data
                 {
                     Name = "Angular Blue Boots",
                     Description =
-                        "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
+                        "Dodao sam ja, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
                     Price = 18000,
                     PictureUrl = "/images/products/boot-ang1.png",
                     Brand = "Angular",
@@ -251,9 +220,10 @@ namespace API.Data
       // ubacivanje podataka jedno po jedno...
       foreach (var product in products)
       {
-        context.ProductsTBL.Add(product);
+       context.ProductsTBL.Add(product);
       }
-      context.SaveChanges();
+       context.SaveChanges();
+       await Task.CompletedTask;
     }
   }
 }

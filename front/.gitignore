@@ -23,5 +23,3 @@ findinmy
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-/API/Data/DbInitializerUser.cs
