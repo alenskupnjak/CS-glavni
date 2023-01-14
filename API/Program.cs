@@ -27,7 +27,7 @@ namespace API
       {
         await context.Database.MigrateAsync();
         await DbInitializer.Initialize(context);
-        await DbInitializerUser.Initialize(userManager);
+        await DbInitializerUser.Initialize(userManager); // Nije na git-u
       }
       catch (Exception ex)
       {
