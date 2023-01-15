@@ -20,7 +20,7 @@ namespace API.DataAccessLayer
     public UploadFileDL(IConfiguration configuration)
     {
       _configuration = configuration;
-      _connectMSSQL = new SqlConnection(_configuration["ConnectionStrings:LocalMSSQL"]);
+      _connectMSSQL = new SqlConnection(_configuration["ConnectionStrings:MSSQL"]);
     }
 
     // DELETE DELETE DELETE
@@ -31,7 +31,7 @@ namespace API.DataAccessLayer
       response.Message = "Obrisano";
       try
       {   //  spajanje na bazu
-        using SqlConnection connection = new SqlConnection(_configuration["ConnectionStrings:LocalMSSQL"]);
+        using SqlConnection connection = new SqlConnection(_configuration["ConnectionStrings:MSSQL"]);
         string queryMSSQL = @"DELETE FROM dbo.bulkuploadtable WHERE UserID = @UserID";
         connection.Open();
         SqlCommand command = new SqlCommand(queryMSSQL, connection);
@@ -62,7 +62,7 @@ namespace API.DataAccessLayer
       int Count = 0;
 
       //set the connection 
-      using (SqlConnection conn = new SqlConnection(_configuration["ConnectionStrings:LocalMSSQL"]))
+      using (SqlConnection conn = new SqlConnection(_configuration["ConnectionStrings:MSSQL"]))
         try
         {
           if (_connectMSSQL.State != ConnectionState.Open)

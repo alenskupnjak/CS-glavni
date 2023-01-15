@@ -1,4 +1,4 @@
-import { Container, CssBaseline, createTheme, ThemeProvider } from '@mui/material';
+import { Container, CssBaseline, createTheme, ThemeProvider, Stack } from '@mui/material';
 import { observer } from 'mobx-react';
 import { Route, Switch } from 'react-router';
 import { ToastContainer } from 'react-toastify';
@@ -21,8 +21,11 @@ import Orders from '../../features/orders/Orders';
 import CheckoutWrapper from '../../features/checkout/CheckoutWrapper';
 import Inventory from '../../features/admin/Inventory';
 import ImportFile from '../../features/importfile/ImportFile';
+import { useState } from 'react';
+import Sidebar from './Sidebar';
 
 function App(props) {
+	const [mode, setMode] = useState('light');
 	const { displayStore } = useStore();
 	const { handleThemeChange, darkMode, paletteType } = displayStore;
 	const theme = createTheme({
@@ -39,6 +42,9 @@ function App(props) {
 			<ToastContainer position="bottom-right" hideProgressBar theme="colored" />
 			<CssBaseline />
 			<Header darkMode={darkMode} handleThemeChange={handleThemeChange} />
+			<Stack direction="row" spacing={2} justifyContent="space-between">
+				<Sidebar setMode={setMode} mode={mode} />
+			</Stack>
 			<Route exact path="/" component={HomePage} />
 			<Route
 				path={'/(.+)'}
