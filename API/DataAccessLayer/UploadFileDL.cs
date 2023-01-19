@@ -303,7 +303,8 @@ namespace API.DataAccessLayer
             rows.Datum = dataSet.Tables[0].Rows[i].ItemArray[0] != null ? Convert.ToDateTime(dataSet.Tables[0].Rows[i].ItemArray[0]) : new DateTime();
             rows.Referencija = dataSet.Tables[0].Rows[i].ItemArray[1] != null ? Convert.ToString(dataSet.Tables[0].Rows[i].ItemArray[1]) : "-1";
             rows.Opis = dataSet.Tables[0].Rows[i].ItemArray[2] != null ? Convert.ToString(dataSet.Tables[0].Rows[i].ItemArray[2]) : "-1";
-            rows.Uplata = (float)(dataSet.Tables[0].Rows[i].ItemArray[3] != null ? Convert.ToDouble(dataSet.Tables[0].Rows[i].ItemArray[3]) : 0);
+            object data = dataSet.Tables[0].Rows[i].ItemArray[3];
+            rows.Uplata = (float)(data != null ? Convert.ToDouble(data) : 0);
             rows.Isplata = (float)(dataSet.Tables[0].Rows[i].ItemArray[4] != null ? Convert.ToDouble(dataSet.Tables[0].Rows[i].ItemArray[4]) : 0);
             Parameters.Add(rows);
           }
@@ -320,8 +321,8 @@ namespace API.DataAccessLayer
               zabaMSSQL.Parameters.AddWithValue("@Datum", rows.Datum);
               zabaMSSQL.Parameters.AddWithValue("@Referencija", rows.Referencija);
               zabaMSSQL.Parameters.AddWithValue("@Opis", rows.Opis);
-              zabaMSSQL.Parameters.AddWithValue("@Uplata", rows.Uplata);
-              zabaMSSQL.Parameters.AddWithValue("@Isplata", rows.Isplata);
+              zabaMSSQL.Parameters.AddWithValue("@Uplata", Math.Round(rows.Uplata,2));
+              zabaMSSQL.Parameters.AddWithValue("@Isplata", Math.Round(rows.Isplata,2));
               zabaMSSQL.Parameters.AddWithValue("@IsActive", "5");
               _connectMSSQL.Open();
               int StatusMSSQL = await zabaMSSQL.ExecuteNonQueryAsync();
