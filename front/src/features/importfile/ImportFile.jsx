@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Delete } from '@mui/icons-material';
 import { Button, Pagination } from '@mui/material';
 import './ImportFile.css';
+import { toast } from 'react-toastify';
 
 // import CrudServices from './CrudServices';
 import ReactFileReader from 'react-file-reader';
@@ -24,6 +25,7 @@ export default class HomePage extends Component {
 			totalPages: 0,
 			dataText: null,
 		};
+		// this.handleDelete = this.handleDelete.bind(this);
 	}
 
 	componentWillMount() {
@@ -155,14 +157,11 @@ export default class HomePage extends Component {
 		// 	});
 
 		const response = await agent.ReadWriteDatabase.DeleteRecord(data.userId);
-		console.log('%c 00 ', 'color:red', response);
+		toast.success(response.message);
 		this.ReadRecord(this.state.PageNumber);
 	};
 
 	render() {
-		console.log('State : ', this.state);
-		let state = this.state;
-		let Self = this;
 		return (
 			<div className="MainContainer">
 				<div className="SubContainer">
@@ -171,7 +170,7 @@ export default class HomePage extends Component {
 							<div className="flex-Container">
 								<div className="Header">Excel & Csv Bulk Data Upload Total records= {this.state.totalRecords}</div>
 								<div className="sub-flex-Container">
-									<div className="FileName">{state.File !== null ? state.File.name : ''}</div>
+									<div className="FileName">{this.state.File !== null ? this.state.File.name : ''}</div>
 									<div className="UploadButton">
 										<ReactFileReader handleFiles={this.handleFiles} fileTypes={'.xlsx, .csv'} className="Upload">
 											<Button variant="contained" color="primary" component="span">
@@ -200,7 +199,7 @@ export default class HomePage extends Component {
 							<div className="Delete"></div>
 						</div>
 						{Array.isArray(this.state.DataRecord) && this.state.DataRecord.length > 0
-							? this.state.DataRecord.map(function (data, index) {
+							? this.state.DataRecord.map((data, index) => {
 									return (
 										<div key={index} className="data-flex">
 											<div className="UserId">{data.userId}</div>
@@ -213,9 +212,9 @@ export default class HomePage extends Component {
 											<div className="Delete">
 												<Button
 													variant="outlined"
-													// color="primary"
-													onClick={() => {
-														Self.handleDelete(data);
+													color="error"
+													onClick={e => {
+														this.handleDelete(data);
 													}}
 												>
 													<Delete />
@@ -228,7 +227,7 @@ export default class HomePage extends Component {
 					</div>
 				</div>
 				<Pagination
-					count={state.totalPages}
+					count={this.state.totalPages}
 					page={this.state.PageNumber}
 					onChange={this.handlePaging}
 					variant="outlined"
