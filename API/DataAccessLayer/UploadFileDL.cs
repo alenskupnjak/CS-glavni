@@ -1,4 +1,5 @@
 ﻿using API.CommonLayer.Model;
+using API.CommonLayer.Zaba;
 using ExcelDataReader;
 using LumenWorks.Framework.IO.Csv;
 using Microsoft.Extensions.Configuration;
@@ -245,6 +246,85 @@ namespace API.DataAccessLayer
               commandMSSQL.Parameters.AddWithValue("@IsActive", "5");
               _connectMSSQL.Open();
               int StatusMSSQL = await commandMSSQL.ExecuteNonQueryAsync();
+              if (StatusMSSQL <= 0)
+              {
+                response.IsSuccess = false;
+                response.Message = "MSSQL Query Not Executed";
+                return response;
+              }
+              _connectMSSQL.Close();
+            }
+          }
+        }
+        else
+        {
+          response.IsSuccess = false;
+          response.Message = "Invalid File";
+        }
+      }
+      catch (Exception ex)
+      {
+        response.IsSuccess = false;
+        response.Message = ex.Message;
+      }
+      return response;
+    }
+
+
+    // SNIMI ZABA ZABA EXCEL U BAZU
+    public async Task<ExcelZabaResponse> UploadZabaFile(ExcelZabaRequest request, string path)
+    {
+      ExcelZabaResponse response = new ExcelZabaResponse();
+      List<UploadZabaParameter> Parameters = new List<UploadZabaParameter>();
+      response.IsSuccess = true;
+      response.Message = "Successful";
+      try
+      {
+        if (request.File.FileName.ToLower().Contains(".xlsx"))
+        {
+          // opčeniti dio Očitavanja EXcel file
+          FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+          System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+          IExcelDataReader reader = ExcelReaderFactory.CreateReader(stream);  // Nuget paket ExcelDataReader
+
+          DataSet dataSet = reader.AsDataSet(
+              new ExcelDataSetConfiguration()  // Nuget paket ExcelDataReader.DataSet
+              {
+                UseColumnDataType = false,
+                ConfigureDataTable = (tableReader) => new ExcelDataTableConfiguration()
+                {
+                  UseHeaderRow = true
+                }
+              });
+
+          for (int i = 0; i < dataSet.Tables[0].Rows.Count; i++)
+          {
+            UploadZabaParameter rows = new UploadZabaParameter();
+            rows.Datum = dataSet.Tables[0].Rows[i].ItemArray[0] != null ? Convert.ToDateTime(dataSet.Tables[0].Rows[i].ItemArray[0]) : new DateTime();
+            rows.Referencija = dataSet.Tables[0].Rows[i].ItemArray[1] != null ? Convert.ToString(dataSet.Tables[0].Rows[i].ItemArray[1]) : "-1";
+            rows.Opis = dataSet.Tables[0].Rows[i].ItemArray[2] != null ? Convert.ToString(dataSet.Tables[0].Rows[i].ItemArray[2]) : "-1";
+            rows.Uplata = (float)(dataSet.Tables[0].Rows[i].ItemArray[3] != null ? Convert.ToDouble(dataSet.Tables[0].Rows[i].ItemArray[3]) : 0);
+            rows.Isplata = (float)(dataSet.Tables[0].Rows[i].ItemArray[4] != null ? Convert.ToDouble(dataSet.Tables[0].Rows[i].ItemArray[4]) : 0);
+            Parameters.Add(rows);
+          }
+          stream.Close();
+
+          // Pocetak punjenja baze
+          if (Parameters.Count > 0)
+          {
+            string queryMSSQL = @"INSERT INTO dbo.Zaba (Datum,Referencija,Opis,Uplata,Isplata,IsActive) 
+                                  VALUES(@Datum,@Referencija,@Opis,@Uplata,@Isplata,@IsActive)";
+            foreach (UploadZabaParameter rows in Parameters)
+            {
+              SqlCommand zabaMSSQL = new SqlCommand(queryMSSQL, _connectMSSQL);
+              zabaMSSQL.Parameters.AddWithValue("@Datum", rows.Datum);
+              zabaMSSQL.Parameters.AddWithValue("@Referencija", rows.Referencija);
+              zabaMSSQL.Parameters.AddWithValue("@Opis", rows.Opis);
+              zabaMSSQL.Parameters.AddWithValue("@Uplata", rows.Uplata);
+              zabaMSSQL.Parameters.AddWithValue("@Isplata", rows.Isplata);
+              zabaMSSQL.Parameters.AddWithValue("@IsActive", "5");
+              _connectMSSQL.Open();
+              int StatusMSSQL = await zabaMSSQL.ExecuteNonQueryAsync();
               if (StatusMSSQL <= 0)
               {
                 response.IsSuccess = false;

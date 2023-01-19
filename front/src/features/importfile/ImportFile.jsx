@@ -98,6 +98,25 @@ export default class HomePage extends Component {
 		}
 	};
 
+	snimiZabaBazu = async event => {
+		event.preventDefault();
+		if (this.state.FileExtension !== '') {
+			const data = new FormData();
+			data.append('file', this.state.File);
+
+			if (this.state.FileExtension.toLowerCase() === 'csv') {
+				const response = await agent.ReadWriteDatabase.InsertCsvRecord(data);
+				// this.ReadRecord(this.state.PageNumber);
+			} else if (this.state.FileExtension.toLowerCase() === 'xlsx') {
+				console.log('%c 00 Ajmooo', 'color:red');
+				const response = await agent.ReadWriteDatabase.InsertZabaExcelRecord(data);
+				// this.ReadRecord(this.state.PageNumber);
+			} else {
+				console.log('Invalid File');
+			}
+		}
+	};
+
 	handleFiles = files => {
 		console.log('FiLES=', files);
 		console.log('FiLES=', files.base64);
@@ -182,7 +201,10 @@ export default class HomePage extends Component {
 							</div>
 							<div className="flex-button">
 								<Button variant="contained" color="secondary" onClick={this.snimiUBazu}>
-									Usnimu u bazu
+									Usnimi u bazu
+								</Button>
+								<Button variant="contained" color="secondary" onClick={this.snimiZabaBazu}>
+									Usnimi u Zabu bazu
 								</Button>
 							</div>
 						</div>

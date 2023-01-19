@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using API.DataAccessLayer;
+using API.CommonLayer.Zaba;
 
 namespace API.Controllers
 {
@@ -77,6 +78,37 @@ namespace API.Controllers
       }
       return Ok(response);
     }
+
+    //
+    // Upload ZabaFile
+    [HttpPost]
+    [Route("UploadZabaFile")]
+    public async Task<IActionResult> UploadZabaFile([FromForm] ExcelZabaRequest request)
+    {
+      ExcelZabaResponse response = new ExcelZabaResponse();
+      string path = "UploadFileFolder/" + request.File.FileName;
+      try
+      {
+        using (FileStream stream = new FileStream(path, FileMode.CreateNew))
+        {
+          await request.File.CopyToAsync(stream);
+        }
+        response = await _uploadFileDL.UploadZabaFile(request, path);
+        string[] files = Directory.GetFiles("UploadFileFolder/");
+        foreach (string file in files)
+        {
+          System.IO.File.Delete(file);
+          Console.WriteLine($"{file} is deleted.");
+        }
+      }
+      catch (Exception ex)
+      {
+        response.IsSuccess = false;
+        response.Message = ex.Message;
+      }
+      return Ok(response);
+    }
+
 
     //
     // READ READ READ record..
