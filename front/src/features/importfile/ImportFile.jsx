@@ -105,11 +105,12 @@ export default class HomePage extends Component {
 			data.append('file', this.state.File);
 
 			if (this.state.FileExtension.toLowerCase() === 'csv') {
-				const response = await agent.ReadWriteDatabase.InsertCsvRecord(data);
-				console.log('%c 00 ', 'color:green', response);
-
-				// this.ReadRecord(this.state.PageNumber);
-			} else if (this.state.FileExtension.toLowerCase() === 'xlsx') {
+				await agent.ReadWriteDatabase.InsertCsvRecord(data);
+				this.ReadRecord(this.state.PageNumber);
+			} else if (
+				this.state.FileExtension.toLowerCase() === 'xlsx' ||
+				this.state.FileExtension.toLowerCase() === 'xls'
+			) {
 				const response = await agent.ReadWriteDatabase.InsertZabaExcelRecord(data);
 				console.log('%c 00 Ajmooo', 'color:red', response);
 				// this.ReadRecord(this.state.PageNumber);
@@ -124,27 +125,27 @@ export default class HomePage extends Component {
 		console.log('FiLES=', files.base64);
 		var reader = new FileReader();
 
-		reader.addEventListener(
-			'load',
-			() => {
-				// this will then display a text file
-				console.log('%c 00', 'color:green', reader.result);
-				console.log('%c 01', 'color:red', JSON.stringify(reader.result));
+		// reader.addEventListener(
+		// 	'load',
+		// 	() => {
+		// 		// this will then display a text file
+		// 		console.log('%c 00', 'color:green', reader.result);
+		// 		console.log('%c 01', 'color:red', JSON.stringify(reader.result));
 
-				let dataText = reader.result.split('\r\n');
+		// 		let dataText = reader.result.split('\r\n');
 
-				// dataText = dataText.map(item => JSON.stringify(item));
+		// 		// dataText = dataText.map(item => JSON.stringify(item));
 
-				dataText = Object.assign({}, dataText);
-				console.log('%c 02', 'color:green', dataText);
-				console.log('%c typeof', 'color:green', typeof dataText);
+		// 		dataText = Object.assign({}, dataText);
+		// 		console.log('%c 02', 'color:green', dataText);
+		// 		console.log('%c typeof', 'color:green', typeof dataText);
 
-				this.setState({ dataText: dataText });
+		// 		this.setState({ dataText: dataText });
 
-				// content.innerText = reader.result;
-			},
-			false
-		);
+		// 		// content.innerText = reader.result;
+		// 	},
+		// 	false
+		// );
 		reader.readAsText(files[0], 'UTF-8');
 
 		console.log('%c 00', 'color:green', reader);
@@ -193,7 +194,7 @@ export default class HomePage extends Component {
 								<div className="sub-flex-Container">
 									<div className="FileName">{this.state.File !== null ? this.state.File.name : ''}</div>
 									<div className="UploadButton">
-										<ReactFileReader handleFiles={this.handleFiles} fileTypes={'.xlsx, .csv'} className="Upload">
+										<ReactFileReader handleFiles={this.handleFiles} fileTypes={'.xlsx, .csv, .xls'} className="Upload">
 											<Button variant="contained" color="primary" component="span">
 												Submit
 											</Button>

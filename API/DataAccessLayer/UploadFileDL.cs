@@ -284,14 +284,14 @@ namespace API.DataAccessLayer
       response.Dupli = "Start";
       try
       {
-        if (request.File.FileName.ToLower().Contains(".xlsx"))
+        if (request.File.FileName.ToLower().Contains(".xlsx") || request.File.FileName.ToLower().Contains(".xls"))
         {
           // opčeniti dio Očitavanja EXcel file
           FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
           System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
           IExcelDataReader reader = ExcelReaderFactory.CreateReader(stream);  // Nuget paket ExcelDataReader
 
-          DataSet dataSet = reader.AsDataSet(
+          DataSet ds = reader.AsDataSet(
               new ExcelDataSetConfiguration()  // Nuget paket ExcelDataReader.DataSet
               {
                 UseColumnDataType = false,
@@ -301,19 +301,19 @@ namespace API.DataAccessLayer
                 }
               });
 
-          for (int i = 0; i < dataSet.Tables[0].Rows.Count; i++)
+          for (int i = 4; i < ds.Tables[0].Rows.Count; i++)
           {
+
             UploadZabaParameter rows = new UploadZabaParameter();
-            rows.Datum = dataSet.Tables[0].Rows[i].ItemArray[0] != null ? Convert.ToDateTime(dataSet.Tables[0].Rows[i].ItemArray[0]) : new DateTime();
-            rows.Referencija = dataSet.Tables[0].Rows[i].ItemArray[1] != null ? Convert.ToString(dataSet.Tables[0].Rows[i].ItemArray[1]) : "-1";
-            rows.Opis = dataSet.Tables[0].Rows[i].ItemArray[2] != null ? Convert.ToString(dataSet.Tables[0].Rows[i].ItemArray[2]) : "-1";
-            object data = dataSet.Tables[0].Rows[i].ItemArray[3];
+            rows.Datum = ds.Tables[0].Rows[i].ItemArray[0] != null ? Convert.ToDateTime(ds.Tables[0].Rows[i].ItemArray[0]) : new DateTime();
+            rows.Referencija = ds.Tables[0].Rows[i].ItemArray[1] != null ? Convert.ToString(ds.Tables[0].Rows[i].ItemArray[1]) : "-1";
+            rows.Opis = ds.Tables[0].Rows[i].ItemArray[2] != null ? Convert.ToString(ds.Tables[0].Rows[i].ItemArray[2]) : "-1";
+            object data = ds.Tables[0].Rows[i].ItemArray[3];
             rows.Uplata = (float)(data != null ? Convert.ToDouble(data) : 0);
-            rows.Isplata = (float)(dataSet.Tables[0].Rows[i].ItemArray[4] != null ? Convert.ToDouble(dataSet.Tables[0].Rows[i].ItemArray[4]) : 0);
+            rows.Isplata = (float)(ds.Tables[0].Rows[i].ItemArray[4] != null ? Convert.ToDouble(ds.Tables[0].Rows[i].ItemArray[4]) : 0);
             Parameters.Add(rows);
           }
           stream.Close();
-
 
           // Pocetak punjenja baze
           if (Parameters.Count > 0)
@@ -342,7 +342,6 @@ namespace API.DataAccessLayer
                 podaciDupli[i] = rows;
                 response.Dupli = podaciDupli;
                 Provjera.Close();
-                //return response;
               }
               else
               {
