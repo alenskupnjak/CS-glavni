@@ -12,6 +12,8 @@ namespace API.CommonLayer.Zaba
   {
     public bool IsSuccess { get; set; }
     public string Message { get; set; }
+    public object NewData { get; set; }
+    public object Dupli { get; set; }
   }
 
   public class UploadZabaParameter

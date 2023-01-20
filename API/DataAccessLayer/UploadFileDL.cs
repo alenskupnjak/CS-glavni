@@ -79,7 +79,7 @@ namespace API.DataAccessLayer
           conn.Open();
           // Ocitavam koliko je Ukupno zapisa
           SqlCommand countSQL = new SqlCommand("SELECT COUNT(*) FROM dbo.bulkuploadtable", conn);
-          Int32 count = (int) countSQL.ExecuteScalar();
+          Int32 count = (int)countSQL.ExecuteScalar();
 
           int OffsetRow = (request.PageNumber - 1) * request.RecordPerPage;
           sqlCommand.Parameters.AddWithValue("@Offset", OffsetRow);
@@ -115,7 +115,7 @@ namespace API.DataAccessLayer
         {
           response.IsSuccess = false;
           response.Message = ex.Message;
-        } 
+        }
       return response;
     }
 
@@ -276,8 +276,12 @@ namespace API.DataAccessLayer
     {
       ExcelZabaResponse response = new ExcelZabaResponse();
       List<UploadZabaParameter> Parameters = new List<UploadZabaParameter>();
+      object[] podaciDupli = new object[1000];
+      object[] podaciUbaceni = new object[1000];
       response.IsSuccess = true;
       response.Message = "Successful";
+      response.NewData = "Start";
+      response.Dupli = "Start";
       try
       {
         if (request.File.FileName.ToLower().Contains(".xlsx"))
@@ -310,27 +314,48 @@ namespace API.DataAccessLayer
           }
           stream.Close();
 
+
           // Pocetak punjenja baze
           if (Parameters.Count > 0)
           {
             string queryMSSQL = @"INSERT INTO dbo.Zaba (Datum,Referencija,Opis,Uplata,Isplata,IsActive) 
                                   VALUES(@Datum,@Referencija,@Opis,@Uplata,@Isplata,@IsActive)";
+            int i = -1;
             foreach (UploadZabaParameter rows in Parameters)
             {
+              i++;
+              string NadiZapisMSSQL = @"SELECT * FROM dbo.Zaba WHERE ([Referencija] = '" + rows.Referencija + "')";
+              SqlCommand provjeraDaliZapisPostoji = new SqlCommand(NadiZapisMSSQL, _connectMSSQL);
               SqlCommand zabaMSSQL = new SqlCommand(queryMSSQL, _connectMSSQL);
               zabaMSSQL.Parameters.AddWithValue("@Datum", rows.Datum);
               zabaMSSQL.Parameters.AddWithValue("@Referencija", rows.Referencija);
               zabaMSSQL.Parameters.AddWithValue("@Opis", rows.Opis);
-              zabaMSSQL.Parameters.AddWithValue("@Uplata", Math.Round(rows.Uplata,2));
-              zabaMSSQL.Parameters.AddWithValue("@Isplata", Math.Round(rows.Isplata,2));
+              zabaMSSQL.Parameters.AddWithValue("@Uplata", Math.Round(rows.Uplata, 2));
+              zabaMSSQL.Parameters.AddWithValue("@Isplata", Math.Round(rows.Isplata, 2));
               zabaMSSQL.Parameters.AddWithValue("@IsActive", "5");
               _connectMSSQL.Open();
-              int StatusMSSQL = await zabaMSSQL.ExecuteNonQueryAsync();
-              if (StatusMSSQL <= 0)
+              SqlDataReader Provjera = provjeraDaliZapisPostoji.ExecuteReader();
+              if (Provjera.HasRows)
               {
                 response.IsSuccess = false;
-                response.Message = "MSSQL Query Not Executed";
-                return response;
+                response.Message = "Naso sam ga";
+                podaciDupli[i] = rows;
+                response.Dupli = podaciDupli;
+                Provjera.Close();
+                //return response;
+              }
+              else
+              {
+                Provjera.Close();
+                int StatusMSSQL = await zabaMSSQL.ExecuteNonQueryAsync();
+                if (StatusMSSQL <= 0)
+                {
+                  response.IsSuccess = false;
+                  response.Message = "MSSQL Query Not Executed";
+                  return response;
+                }
+                podaciUbaceni[i] = rows;
+                response.NewData = podaciUbaceni;
               }
               _connectMSSQL.Close();
             }

@@ -106,10 +106,12 @@ export default class HomePage extends Component {
 
 			if (this.state.FileExtension.toLowerCase() === 'csv') {
 				const response = await agent.ReadWriteDatabase.InsertCsvRecord(data);
+				console.log('%c 00 ', 'color:green', response);
+
 				// this.ReadRecord(this.state.PageNumber);
 			} else if (this.state.FileExtension.toLowerCase() === 'xlsx') {
-				console.log('%c 00 Ajmooo', 'color:red');
 				const response = await agent.ReadWriteDatabase.InsertZabaExcelRecord(data);
+				console.log('%c 00 Ajmooo', 'color:red', response);
 				// this.ReadRecord(this.state.PageNumber);
 			} else {
 				console.log('Invalid File');
