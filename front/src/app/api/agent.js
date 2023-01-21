@@ -153,6 +153,7 @@ const ReadWriteDatabase = {
 	InsertExcelRecord: file => requests.post('uploadFile/UploadExcelFile', file),
 	DeleteRecord: userId => requests.deleteBody('uploadFile/DeleteRecord', { data: { userID: userId } }),
 	InsertZabaExcelRecord: file => requests.post('uploadFile/UploadZabaFile', file),
+	ReadZaba: pageNumber => requests.post('uploadFile/ReadZaba', pageNumber),
 };
 
 const agent = {

@@ -114,6 +114,24 @@
 	flex: 2;
 	margin: 6px 5px;
 }
+
+/* zaba */
+.MainContainer .SubContainer .Box2 .data-flex .datum {
+	flex: 4;
+}
+.MainContainer .SubContainer .Box2 .data-flex .referencija {
+	flex: 5;
+}
+.MainContainer .SubContainer .Box2 .data-flex .opis {
+	flex: 16;
+}
+.MainContainer .SubContainer .Box2 .data-flex .uplata {
+	flex: 2;
+}
+.MainContainer .SubContainer .Box2 .data-flex .isplata {
+	flex: 2;
+}
+
 .MainContainer .MuiPaginationItem-outlinedSecondary.Mui-selected {
 	background-color: white;
 }

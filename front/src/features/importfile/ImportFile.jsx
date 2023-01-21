@@ -18,20 +18,24 @@ export default class HomePage extends Component {
 			UploadFile: false,
 			FileExtension: '',
 			DataRecord: [],
+			ZabaRecord: [],
 			RecordPerPage: 10,
 			PageNumber: 1,
 			currentPage: 1,
 			totalRecords: 0,
 			totalPages: 0,
 			dataText: null,
+			switch: true,
 		};
-		// this.handleDelete = this.handleDelete.bind(this);
-	}
 
-	componentWillMount() {
-		console.log('Component Will Mount Calling');
+		// this.handleDelete = this.handleDelete.bind(this);
 		this.ReadRecord(this.state.PageNumber);
 	}
+
+	// componentWillMount() {
+	// 	console.log('Component Will Mount Calling', this.state);
+	// 	this.ReadRecord(this.state.PageNumber);
+	// }
 
 	// READ READ READ
 	async ReadRecord(CurrentPage) {
@@ -39,10 +43,23 @@ export default class HomePage extends Component {
 			recordPerPage: this.state.RecordPerPage,
 			pageNumber: CurrentPage,
 		};
-		const response = await agent.ReadWriteDatabase.ReadRecord(data);
-		this.setState({ totalRecords: response.totalRecords });
-		this.setState({ totalPages: response.totalPages });
-		this.setState({ DataRecord: response.readRecord });
+		console.log('%c STATE ', 'color:red', this.state);
+
+		if (this.state.switch === true) {
+			const response = await agent.ReadWriteDatabase.ReadRecord(data);
+			console.log('%c CVS ', 'color:blue', response);
+			this.setState({ totalRecords: response.totalRecords });
+			this.setState({ totalPages: response.totalPages });
+			this.setState({ DataRecord: response.readRecord });
+		} else {
+			const response = await agent.ReadWriteDatabase.ReadZaba(data);
+			console.log('%c ZABA ', 'color:red', response);
+
+			this.setState({ totalRecords: response.totalRecords });
+			this.setState({ totalPages: response.totalPages });
+			this.setState({ ZabaRecord: response.zabaReadRecord });
+			console.log('%c ZABA state', 'color:red', this.state);
+		}
 
 		// service
 		// 	.ReadRecord(data)
@@ -120,10 +137,18 @@ export default class HomePage extends Component {
 		}
 	};
 
+	toggle = async () => {
+		await this.setState(state => ({
+			switch: !state.switch,
+		}));
+		this.ReadRecord(this.state.PageNumber);
+		console.log('%c -------------------- ', 'color:gold', this.state);
+	};
+
 	handleFiles = files => {
 		console.log('FiLES=', files);
 		console.log('FiLES=', files.base64);
-		var reader = new FileReader();
+		let reader = new FileReader();
 
 		// reader.addEventListener(
 		// 	'load',
@@ -209,21 +234,36 @@ export default class HomePage extends Component {
 								<Button variant="contained" color="secondary" onClick={this.snimiZabaBazu}>
 									Usnimi u Zabu bazu
 								</Button>
+								<Button variant="contained" color="secondary" onClick={this.toggle}>
+									Zabu/CVS
+								</Button>
 							</div>
 						</div>
 					</div>
 					<div className="Box2">
-						<div className="data-flex" style={{ color: 'red' }}>
-							<div className="UserId">UserId</div>
-							<div className="UserName">UserName</div>
-							<div className="EmailID">EmailID</div>
-							<div className="MobileNumber">MobileNo.</div>
-							<div className="Salary">Salary</div>
-							<div className="Gender">Gender</div>
-							<div className="Age">Age</div>
-							<div className="Delete"></div>
-						</div>
-						{Array.isArray(this.state.DataRecord) && this.state.DataRecord.length > 0
+						{this.state.switch && (
+							<div className="data-flex" style={{ color: 'red' }}>
+								<div className="UserId">UserId</div>
+								<div className="UserName">UserName</div>
+								<div className="EmailID">EmailID</div>
+								<div className="MobileNumber">MobileNo.</div>
+								<div className="Salary">Salary</div>
+								<div className="Gender">Gender</div>
+								<div className="Age">Age</div>
+								<div className="Delete"></div>
+							</div>
+						)}
+						{!this.state.switch && (
+							<div className="data-flex" style={{ color: 'red' }}>
+								<div className="datum">Datum</div>
+								<div className="referencija">Sifra</div>
+								<div className="opis">Opis</div>
+								<div className="uplata">Uplata</div>
+								<div className="isplata">Isplata</div>
+								<div className="Delete"></div>
+							</div>
+						)}
+						{this.state.switch && Array.isArray(this.state.DataRecord) && this.state.DataRecord.length > 0
 							? this.state.DataRecord.map((data, index) => {
 									return (
 										<div key={index} className="data-flex">
@@ -249,6 +289,31 @@ export default class HomePage extends Component {
 									);
 							  })
 							: null}
+						{!this.state.switch &&
+							this.state.ZabaRecord.map((data, index) => {
+								console.log('%c 00 ', 'color:green', data);
+
+								return (
+									<div key={index} className="data-flex">
+										<div className="datum">{data.datum}</div>
+										<div className="referencija">{data.referencija}</div>
+										<div className="opis">{data.opis}</div>
+										<div className="uplata">{data.uplata}</div>
+										<div className="isplata">{data.isplata}</div>
+										<div className="Delete">
+											<Button
+												variant="outlined"
+												color="error"
+												onClick={e => {
+													this.handleDelete(data);
+												}}
+											>
+												<Delete />
+											</Button>
+										</div>
+									</div>
+								);
+							})}
 					</div>
 				</div>
 				<Pagination

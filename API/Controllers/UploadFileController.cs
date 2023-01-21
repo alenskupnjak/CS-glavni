@@ -147,5 +147,24 @@ namespace API.Controllers
       }
       return Ok(response);
     }
+
+    //
+    // READ READ READ record..
+    [HttpPost]
+    [Route("ReadZaba")]
+    public async Task<IActionResult> ReadZaba(ZabaReadRequest request)
+    {
+      ZabaReadResponse response = new();
+      try
+      {
+        response = await _uploadFileDL.ReadZaba(request);
+      }
+      catch (Exception ex)
+      {
+        response.IsSuccess = false;
+        response.Message = ex.Message;
+      }
+      return Ok(response);
+    }
   }
 }

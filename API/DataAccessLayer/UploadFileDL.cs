@@ -373,5 +373,69 @@ namespace API.DataAccessLayer
       }
       return response;
     }
+
+    // READ ZABA RECORD ** READ ZABA RECORD
+    public async Task<ZabaReadResponse> ReadZaba(ZabaReadRequest request)
+    {
+      ZabaReadResponse response = new ZabaReadResponse();
+      response.IsSuccess = true;
+      response.Message = "Successful";
+      int Count = 0;
+
+      // set the connection 
+      using (SqlConnection conn = new SqlConnection(_configuration["ConnectionStrings:MSSQL"]))
+        try
+        {
+          if (_connectMSSQL.State != ConnectionState.Open)
+          {
+            await _connectMSSQL.OpenAsync();
+          }
+          string queryMSSQL = @"SELECT DISTINCT  Datum,Referencija,Opis,Uplata,Isplata,IsActive
+                                 FROM dbo.Zaba
+                                 ORDER BY Datum
+                                 OFFSET @Offset ROWS
+                                 FETCH NEXT @RecordPerPage ROWS ONLY;";
+          SqlCommand sqlCommand = new SqlCommand(queryMSSQL, conn);
+          conn.Open();
+          // Ocitavam koliko je Ukupno zapisa
+          SqlCommand countSQL = new("SELECT COUNT(*) FROM dbo.Zaba", conn);
+          Int32 count = (int)countSQL.ExecuteScalar();
+
+          int OffsetRow = (request.PageNumber - 1) * request.RecordPerPage;
+          sqlCommand.Parameters.AddWithValue("@Offset", OffsetRow);
+          sqlCommand.Parameters.AddWithValue("@RecordPerPage", request.RecordPerPage);
+          SqlDataReader dr = sqlCommand.ExecuteReader();
+          if (dr.HasRows)
+          {
+            response.ZabaReadRecord = new List<ZabaReadRecord>();
+            while (dr.Read())
+            {
+              ZabaReadRecord getdata = new()
+              {
+                Datum = dr.GetDateTime(0),
+                Referencija = dr.GetString(1),
+                Opis = dr.GetString(2),
+                Uplata = dr.GetDouble(3),
+                Isplata = dr.GetDouble(4),
+
+              };
+              if (Count == 0)
+              {
+                Count++;
+                response.TotalRecords = count;
+                response.TotalPages = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(response.TotalRecords / request.RecordPerPage)));
+                response.CurrentPage = request.PageNumber;
+              }
+              response.ZabaReadRecord.Add(getdata);
+            }
+          }
+        }
+        catch (Exception ex)
+        {
+          response.IsSuccess = false;
+          response.Message = ex.Message;
+        }
+      return response;
+    }
   }
 }
