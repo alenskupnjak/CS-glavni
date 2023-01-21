@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 
@@ -311,6 +312,9 @@ namespace API.DataAccessLayer
             object data = ds.Tables[0].Rows[i].ItemArray[3];
             rows.Uplata = (float)(data != null ? Convert.ToDouble(data) : 0);
             rows.Isplata = (float)(ds.Tables[0].Rows[i].ItemArray[4] != null ? Convert.ToDouble(ds.Tables[0].Rows[i].ItemArray[4]) : 0);
+            // pozovi funkciju
+            string podatak = DefinirajGrupu(Convert.ToString(ds.Tables[0].Rows[i].ItemArray[2]));
+            rows.Kategorija = podatak;
             Parameters.Add(rows);
           }
           stream.Close();
@@ -318,8 +322,8 @@ namespace API.DataAccessLayer
           // Pocetak punjenja baze
           if (Parameters.Count > 0)
           {
-            string queryMSSQL = @"INSERT INTO dbo.Zaba (Datum,Referencija,Opis,Uplata,Isplata,IsActive) 
-                                  VALUES(@Datum,@Referencija,@Opis,@Uplata,@Isplata,@IsActive)";
+            string queryMSSQL = @"INSERT INTO dbo.Zaba (Datum,Referencija,Opis,Uplata,Isplata,Kategorija,IsActive) 
+                                  VALUES(@Datum,@Referencija,@Opis,@Uplata,@Isplata,@Kategorija,@IsActive)";
             int i = -1;
             foreach (UploadZabaParameter rows in Parameters)
             {
@@ -332,6 +336,7 @@ namespace API.DataAccessLayer
               zabaMSSQL.Parameters.AddWithValue("@Opis", rows.Opis);
               zabaMSSQL.Parameters.AddWithValue("@Uplata", Math.Round(rows.Uplata, 2));
               zabaMSSQL.Parameters.AddWithValue("@Isplata", Math.Round(rows.Isplata, 2));
+              zabaMSSQL.Parameters.AddWithValue("@Kategorija", rows.Kategorija);
               zabaMSSQL.Parameters.AddWithValue("@IsActive", "5");
               _connectMSSQL.Open();
               SqlDataReader Provjera = provjeraDaliZapisPostoji.ExecuteReader();
@@ -390,7 +395,7 @@ namespace API.DataAccessLayer
           {
             await _connectMSSQL.OpenAsync();
           }
-          string queryMSSQL = @"SELECT DISTINCT  Datum,Referencija,Opis,Uplata,Isplata,IsActive
+          string queryMSSQL = @"SELECT DISTINCT Datum,Referencija,Opis,Uplata,Isplata,Kategorija,IsActive
                                  FROM dbo.Zaba
                                  ORDER BY Datum
                                  OFFSET @Offset ROWS
@@ -404,6 +409,7 @@ namespace API.DataAccessLayer
           int OffsetRow = (request.PageNumber - 1) * request.RecordPerPage;
           sqlCommand.Parameters.AddWithValue("@Offset", OffsetRow);
           sqlCommand.Parameters.AddWithValue("@RecordPerPage", request.RecordPerPage);
+
           SqlDataReader dr = sqlCommand.ExecuteReader();
           if (dr.HasRows)
           {
@@ -417,6 +423,7 @@ namespace API.DataAccessLayer
                 Opis = dr.GetString(2),
                 Uplata = dr.GetDouble(3),
                 Isplata = dr.GetDouble(4),
+                Kategorija = dr.GetString(5)
 
               };
               if (Count == 0)
@@ -437,5 +444,105 @@ namespace API.DataAccessLayer
         }
       return response;
     }
+
+    private static string DefinirajGrupu(string opis)
+    {
+      var  kategorija = "Nedefinirano";
+      Regex regex = new Regex(@"Podizanje gotovog novca");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = NadiRijecNaOpisu("Podizanje gotovog novca", opis, "Financije-Bankomat");
+      }
+
+      regex = new Regex(@"kaufland");
+      Match match = regex.Match(opis);
+      if (match.Success)
+      {
+        kategorija = NadiRijecNaOpisu("kaufland", opis, "Hrana-Doma");
+      }
+
+      regex = new Regex(@"terme");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = NadiRijecNaOpisu("terme", opis, "Ostalo:Slobodno-vrijeme");
+      }
+
+      regex = new Regex(@"mesnica");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = NadiRijecNaOpisu("mesnica", opis, "Hrana-Doma");
+      }
+
+      regex = new Regex(@"Podizanje gotovog novca");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = NadiRijecNaOpisu("Podizanje gotovog novca", opis, "Financije-Bankomat");
+      }
+
+      regex = new Regex(@"Naknada za kreditni transfer");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = NadiRijecNaOpisu("Naknada za kreditni transfer", opis, "Financije-Naknade");
+      }
+
+      regex = new Regex(@"Kupovina zaba kuhinjica");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = NadiRijecNaOpisu("Kupovina zaba kuhinjica", opis, "Hrana-Mirela");
+      }
+
+      regex = new Regex(@"hrvatska radiotelevizija");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = NadiRijecNaOpisu("hrvatska radiotelevizija", opis, "Rezije-HTV");
+      }
+
+      regex = new Regex(@"hrvatski telekom d.d.- mobilna");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = NadiRijecNaOpisu("hrvatski telekom d.d.- mobilna", opis, "Rezije-Mobitel");
+      }
+
+      regex = new Regex(@"holding d.o.o");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = NadiRijecNaOpisu("holding d.o.o", opis, "Rezije-holding");
+      }
+
+      regex = new Regex(@"Naknada");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = NadiRijecNaOpisu("Naknada", opis, "Financije-naknada");
+      }
+
+      regex = new Regex(@"revolut");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = "Financije-kartica";
+      }
+
+      regex = new Regex(@"Naplata obroka");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = "Financije-rate";
+      }
+
+      return kategorija;
+    }
+
+    private static string NadiRijecNaOpisu(string opis,string obrada,string kategorija)
+    {
+      var kat = "";
+      Regex regex = new Regex(@opis);
+      Match match = regex.Match(obrada);
+      if (match.Success)
+      {
+          kat = kategorija;
+       
+      }
+        return kat;
+    }
+
+
   }
 }

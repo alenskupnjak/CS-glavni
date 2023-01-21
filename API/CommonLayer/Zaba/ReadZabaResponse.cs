@@ -29,5 +29,6 @@ namespace API.CommonLayer.Zaba
     //The float data type in SQL maps to the double type in C#. !!!!!!!
     public double Uplata { get; set; }
     public double Isplata { get; set; }
+    public string Kategorija { get; set; }
   }
 }

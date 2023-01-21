@@ -131,6 +131,9 @@
 .MainContainer .SubContainer .Box2 .data-flex .isplata {
 	flex: 2;
 }
+.MainContainer .SubContainer .Box2 .data-flex .kategorija {
+	flex: 2;
+}
 
 .MainContainer .MuiPaginationItem-outlinedSecondary.Mui-selected {
 	background-color: white;

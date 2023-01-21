@@ -142,7 +142,6 @@ export default class HomePage extends Component {
 			switch: !state.switch,
 		}));
 		this.ReadRecord(this.state.PageNumber);
-		console.log('%c -------------------- ', 'color:gold', this.state);
 	};
 
 	handleFiles = files => {
@@ -234,7 +233,7 @@ export default class HomePage extends Component {
 								<Button variant="contained" color="secondary" onClick={this.snimiZabaBazu}>
 									Usnimi u Zabu bazu
 								</Button>
-								<Button variant="contained" color="secondary" onClick={this.toggle}>
+								<Button variant="contained" color="success" onClick={this.toggle}>
 									Zabu/CVS
 								</Button>
 							</div>
@@ -260,6 +259,7 @@ export default class HomePage extends Component {
 								<div className="opis">Opis</div>
 								<div className="uplata">Uplata</div>
 								<div className="isplata">Isplata</div>
+								<div className="kategorija">Isplata</div>
 								<div className="Delete"></div>
 							</div>
 						)}
@@ -300,6 +300,7 @@ export default class HomePage extends Component {
 										<div className="opis">{data.opis}</div>
 										<div className="uplata">{data.uplata}</div>
 										<div className="isplata">{data.isplata}</div>
+										<div className="kategorija">{data.kategorija}</div>
 										<div className="Delete">
 											<Button
 												variant="outlined"
