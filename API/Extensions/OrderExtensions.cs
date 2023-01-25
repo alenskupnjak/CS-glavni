@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using API.DTOs;
-using API.Entities.OrderAggregate;
+﻿using System.Linq;
+using BasketPrj.DTOs;
+using BasketPrj.Entities.OrderAggregate;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Extensions

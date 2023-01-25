@@ -1,4 +1,4 @@
-﻿namespace API.Entities
+﻿namespace BasketPrj.Entities
 {
   public class Product
   {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace API.Entities
+namespace BasketPrj.Entities
 {
   public class User : IdentityUser<int>
   {

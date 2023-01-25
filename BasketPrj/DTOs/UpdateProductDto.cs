@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
-namespace API.DTOs
+namespace BasketPrj.DTOs
 {
   public class UpdateProductDto
   {

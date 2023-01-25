@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using API.Data;
-using API.DTOs;
-using API.Entities;
 using API.Extensions;
 using API.RequestHelpers;
 using API.Services;
 using AutoMapper;
+using BasketPrj.DTOs;
+using BasketPrj.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

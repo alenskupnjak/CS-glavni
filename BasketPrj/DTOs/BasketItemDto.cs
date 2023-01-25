@@ -1,4 +1,4 @@
-﻿namespace API.DTOs
+﻿namespace BasketPrj.DTOs
 {
   public class BasketItemDto
   {

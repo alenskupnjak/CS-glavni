@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using API.Entities.OrderAggregate;
+using BasketPrj.Entities.OrderAggregate;
 
-namespace API.DTOs
+namespace BasketPrj.DTOs
 {
   public class OrderDto
   {

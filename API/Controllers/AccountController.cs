@@ -1,15 +1,14 @@
 ﻿using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using API.Data;
-using API.DTOs;
-using API.Entities;
+using BasketPrj.DTOs;
 using API.Extensions;
 using API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using BasketPrj.Entities;
 
 namespace API.Controllers
 {

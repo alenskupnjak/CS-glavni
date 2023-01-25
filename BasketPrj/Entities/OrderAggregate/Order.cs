@@ -1,7 +1,8 @@
-﻿using System;
+﻿using BasketPrj.Entities.OrderAggregate;
+using System;
 using System.Collections.Generic;
 
-namespace API.Entities.OrderAggregate
+namespace BasketPrj.Entities.OrderAggregate
 {
   public class Order
   {

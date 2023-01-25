@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-namespace API.Entities
+namespace BasketPrj.Entities
 {
   [Table("BasketItems")]
   public class BasketItem

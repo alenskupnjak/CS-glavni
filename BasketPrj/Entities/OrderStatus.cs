@@ -1,4 +1,4 @@
-﻿namespace API.Entities.OrderAggregate
+﻿namespace BasketPrj.Entities.OrderAggregate
 {
   public enum OrderStatus
   {

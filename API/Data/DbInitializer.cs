@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using API.Entities;
+using BasketPrj.Entities;
 
 // U terminalu dodabanje nove baze
 // dotnet ef migrations add GlavnaInit -o Data/Migrations 

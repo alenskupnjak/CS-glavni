@@ -1,11 +1,12 @@
-﻿namespace API.DTOs
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace BasketPrj.Entities.OrderAggregate
 {
-  public class OrderItemDto
+  [Owned]
+  public class ProductItemOrdered
   {
     public int ProductId { get; set; }
     public string Name { get; set; }
     public string PictureUrl { get; set; }
-    public long Price { get; set; }
-    public int Quantity { get; set; }
   }
 }

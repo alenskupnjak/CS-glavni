@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
-using API.DTOs;
-using API.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Extensions;
+using BasketPrj.DTOs;
+using BasketPrj.Entities;
 
 namespace API.Controllers
 {

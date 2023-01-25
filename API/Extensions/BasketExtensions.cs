@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using API.DTOs;
-using API.Entities;
+using BasketPrj.DTOs;
+using BasketPrj.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Extensions

@@ -1,4 +1,4 @@
-﻿using API.Entities.OrderAggregate;
+﻿using BasketPrj.Entities.OrderAggregate;
 
 namespace API.DTOs
 {

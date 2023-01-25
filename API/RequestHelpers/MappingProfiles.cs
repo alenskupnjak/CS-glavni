@@ -1,6 +1,6 @@
-﻿using API.DTOs;
-using API.Entities;
-using AutoMapper;
+﻿using AutoMapper;
+using BasketPrj.DTOs;
+using BasketPrj.Entities;
 
 namespace API.RequestHelpers
 {
