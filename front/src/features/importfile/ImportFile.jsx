@@ -284,6 +284,7 @@ export default class HomePage extends Component {
 							  })
 							: null}
 						{!this.state.switch &&
+							this.state.ZabaRecord &&
 							this.state.ZabaRecord.map((data, index) => {
 								return (
 									<div key={index} className="data-flex">

@@ -1,10 +1,10 @@
-using API.CommonLayer.Model;
+using BasketPrj.CommonLayer.Model;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 using API.DataAccessLayer;
-using API.CommonLayer.Zaba;
+using BasketPrj.CommonLayer.Zaba;
 
 namespace API.Controllers
 {

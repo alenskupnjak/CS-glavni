@@ -1,11 +1,12 @@
 ﻿
-using API.CommonLayer.Zaba;
+using BasketPrj.CommonLayer.CVS;
+using BasketPrj.CommonLayer.Zaba;
 using BasketPrj.Entities;
 using BasketPrj.Entities.OrderAggregate;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Data
+namespace BasketPrj.Data
 {
   public class StoreContext : IdentityDbContext<User, Role, int>
   {
@@ -16,6 +17,8 @@ namespace API.Data
     public DbSet<Basket> BasketsTBL { get; set; }
     public DbSet<Order> OrdersTBL { get; set; }
     public DbSet<ZabaReadRecord> ZabaTBL { get; set; }
+
+    public DbSet<CVSReadRecord> BulkUploadTable { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

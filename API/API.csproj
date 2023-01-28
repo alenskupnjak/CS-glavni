@@ -5,9 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DTOs\**" />
     <Compile Remove="UploadFileFolderx\**" />
+    <Content Remove="DTOs\**" />
     <Content Remove="UploadFileFolderx\**" />
+    <EmbeddedResource Remove="DTOs\**" />
     <EmbeddedResource Remove="UploadFileFolderx\**" />
+    <None Remove="DTOs\**" />
     <None Remove="UploadFileFolderx\**" />
   </ItemGroup>
 
@@ -33,7 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\" />
     <Folder Include="UploadFileFolder\" />
   </ItemGroup>
 

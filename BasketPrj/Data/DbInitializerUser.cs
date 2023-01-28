@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using BasketPrj.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace API.Data
+namespace BasketPrj.Data
 {
   public static class DbInitializerUser
   {

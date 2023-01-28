@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace API.Data.Migrations
+namespace BasketPrj.Migrations
 {
-    public partial class GlavnaInit : Migration
+    public partial class Glavna : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -61,6 +61,25 @@ namespace API.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BasketsTBL", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BulkUploadTable",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmailID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MobileNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Age = table.Column<int>(type: "int", nullable: false),
+                    Salary = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BulkUploadTable", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
@@ -309,12 +328,12 @@ namespace API.Data.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 1, "cf05aac2-d6e8-4690-bc85-1a622e25d048", "Member", "MEMBER" });
+                values: new object[] { 1, "1d06d7e7-c711-4fc9-94c2-fc7d2574450e", "Member", "MEMBER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 2, "78291cb9-0d83-4d33-98e3-f32346f25adc", "Admin", "ADMIN" });
+                values: new object[] { 2, "47a030d3-a5ee-4eb3-8614-fa361a4f68f7", "Admin", "ADMIN" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -390,6 +409,9 @@ namespace API.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "BasketItems");
+
+            migrationBuilder.DropTable(
+                name: "BulkUploadTable");
 
             migrationBuilder.DropTable(
                 name: "OrderItem");

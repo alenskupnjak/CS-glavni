@@ -1,7 +1,7 @@
 ﻿
 
 
-namespace API.CommonLayer.Zaba
+namespace BasketPrj.CommonLayer.Zaba
 {
   public class DeleteZabaRequest
   {

@@ -1,5 +1,5 @@
-﻿using API.CommonLayer.Model;
-using API.CommonLayer.Zaba;
+﻿using BasketPrj.CommonLayer.Model;
+using BasketPrj.CommonLayer.Zaba;
 using ExcelDataReader;
 using LumenWorks.Framework.IO.Csv;
 using Microsoft.Extensions.Configuration;
@@ -34,7 +34,7 @@ namespace API.DataAccessLayer
       try
       {   //  spajanje na bazu
         using SqlConnection connection = new SqlConnection(_configuration["ConnectionStrings:MSSQL"]);
-        string queryMSSQL = @"DELETE FROM dbo.bulkuploadtable WHERE UserID = @UserID";
+        string queryMSSQL = @"DELETE FROM dbo.BulkuploadTable WHERE UserID = @UserID";
         connection.Open();
         SqlCommand command = new SqlCommand(queryMSSQL, connection);
         command.Parameters.AddWithValue("@UserID", request.UserID);
@@ -79,7 +79,7 @@ namespace API.DataAccessLayer
           SqlCommand sqlCommand = new SqlCommand(queryMSSQL, conn);
           conn.Open();
           // Ocitavam koliko je Ukupno zapisa
-          SqlCommand countSQL = new SqlCommand("SELECT COUNT(*) FROM dbo.bulkuploadtable", conn);
+          SqlCommand countSQL = new SqlCommand("SELECT COUNT(*) FROM dbo.BulkuploadTable", conn);
           Int32 count = (int)countSQL.ExecuteScalar();
 
           int OffsetRow = (request.PageNumber - 1) * request.RecordPerPage;
@@ -153,7 +153,7 @@ namespace API.DataAccessLayer
           // Kod ovisno o kojoj se bazi radi -  MSSQL MSSQL MSSQL MSSQL MSSQL
           if (Parameters.Count > 0)
           {
-            string queryMSSQL = @"INSERT INTO dbo.bulkuploadtable (UserName,EmailID,MobileNumber,Gender,Age,Salary,IsActive) 
+            string queryMSSQL = @"INSERT INTO dbo.BulkuploadTable (UserName,EmailID,MobileNumber,Gender,Age,Salary,IsActive) 
                                   VALUES(@UserName,@EmailID,@MobileNumber,@Gender,@Age,@Salary,@IsActive)";
             foreach (UploadParameter rows in Parameters)
             {
@@ -233,7 +233,7 @@ namespace API.DataAccessLayer
           // Pocetak punjenja baze
           if (Parameters.Count > 0)
           {
-            string queryMSSQL = @"INSERT INTO dbo.bulkuploadtable (UserName,EmailID,MobileNumber,Gender,Age,Salary,IsActive) 
+            string queryMSSQL = @"INSERT INTO dbo.BulkuploadTable (UserName,EmailID,MobileNumber,Gender,Age,Salary,IsActive) 
                                   VALUES(@UserName,@EmailID,@MobileNumber,@Gender,@Age,@Salary,@IsActive)";
             foreach (UploadParameter rows in Parameters)
             {

@@ -1,4 +1,4 @@
-﻿namespace API.RequestHelpers
+﻿namespace BasketPrj.RequestHelpers
 {
   public class MetaData
   {

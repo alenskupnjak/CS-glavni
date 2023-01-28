@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.RequestHelpers
+namespace BasketPrj.RequestHelpers
 {
   public class PagedList<T> : List<T>
   {

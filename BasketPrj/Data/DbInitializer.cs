@@ -3,14 +3,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using BasketPrj.Entities;
 
-// U terminalu dodabanje nove baze
-// dotnet ef migrations add GlavnaInit -o Data/Migrations 
+// U terminalu dodabanje nove baze miras niti u folder glavni ne API!
+// dotnet ef migrations add Glavna -p BasketPrj -s API
 // pokrenes backend i sve ce se samo kreirati
 
 // **** brisanje baze
 // dotnet ef database drop
 
-namespace API.Data
+namespace BasketPrj.Data
 {
   public static class DbInitializer
   {

@@ -2,7 +2,7 @@
 using BasketPrj.DTOs;
 using BasketPrj.Entities;
 
-namespace API.RequestHelpers
+namespace BasketPrj.RequestHelpers
 {
   public class MappingProfiles : Profile
   {

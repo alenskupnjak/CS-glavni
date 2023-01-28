@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using API.Data;
 using BasketPrj.DTOs;
 using API.Extensions;
 using API.Services;
@@ -9,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BasketPrj.Entities;
+using BasketPrj.Data;
 
 namespace API.Controllers
 {

@@ -4,5 +4,5 @@ export function getCookie(key) {
 }
 
 export function currencyFormat(amount) {
-	return '$' + (amount / 1).toFixed(2);
+	return '$' + (amount / 100).toFixed(2);
 }

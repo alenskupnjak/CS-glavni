@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace API.CommonLayer.Model
+namespace BasketPrj.CommonLayer.Model
 {
   public class ReadRequest
   {

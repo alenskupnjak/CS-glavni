@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace API.CommonLayer.Model
+namespace BasketPrj.CommonLayer.Model
 {
   public class ExcelRequest
   {

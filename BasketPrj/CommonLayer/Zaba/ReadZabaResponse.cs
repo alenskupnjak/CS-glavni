@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace API.CommonLayer.Zaba
+namespace BasketPrj.CommonLayer.Zaba
 {
   public class ZabaReadRequest
   {
