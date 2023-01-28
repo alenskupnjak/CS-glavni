@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace API.Data.Migrations
 {
-    public partial class Mig001 : Migration
+    public partial class GlavnaInit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -106,6 +106,23 @@ namespace API.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductsTBL", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ZabaTBL",
+                columns: table => new
+                {
+                    Referencija = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Datum = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Opis = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Uplata = table.Column<double>(type: "float", nullable: false),
+                    Isplata = table.Column<double>(type: "float", nullable: false),
+                    Kategorija = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ZabaTBL", x => x.Referencija);
                 });
 
             migrationBuilder.CreateTable(
@@ -292,12 +309,12 @@ namespace API.Data.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 1, "a9a75ccf-380a-437d-9125-b5b92dd2a783", "Member", "MEMBER" });
+                values: new object[] { 1, "cf05aac2-d6e8-4690-bc85-1a622e25d048", "Member", "MEMBER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 2, "643255b3-1ef4-4db1-ad1d-9acf297d75c1", "Admin", "ADMIN" });
+                values: new object[] { 2, "78291cb9-0d83-4d33-98e3-f32346f25adc", "Admin", "ADMIN" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -379,6 +396,9 @@ namespace API.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserAddress");
+
+            migrationBuilder.DropTable(
+                name: "ZabaTBL");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

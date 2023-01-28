@@ -1,4 +1,5 @@
 ﻿
+using API.CommonLayer.Zaba;
 using BasketPrj.Entities;
 using BasketPrj.Entities.OrderAggregate;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -14,6 +15,7 @@ namespace API.Data
     public DbSet<Product> ProductsTBL { get; set; }
     public DbSet<Basket> BasketsTBL { get; set; }
     public DbSet<Order> OrdersTBL { get; set; }
+    public DbSet<ZabaReadRecord> ZabaTBL { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

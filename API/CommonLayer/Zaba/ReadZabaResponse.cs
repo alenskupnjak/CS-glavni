@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.CommonLayer.Zaba
 {
@@ -21,8 +22,13 @@ namespace API.CommonLayer.Zaba
   }
 
   public class ZabaReadRecord
+
   {
+
+    private int _isActive;
     public DateTime Datum { get; set; }
+
+    [Key]
     public string Referencija { get; set; }
     public string Opis { get; set; }
 
@@ -30,5 +36,14 @@ namespace API.CommonLayer.Zaba
     public double Uplata { get; set; }
     public double Isplata { get; set; }
     public string Kategorija { get; set; }
+    public int IsActive
+    {
+      get
+      {
+        return _isActive;
+      }
+
+      set { _isActive = 1; }
+    }
   }
 }

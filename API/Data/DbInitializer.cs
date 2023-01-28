@@ -7,6 +7,9 @@ using BasketPrj.Entities;
 // dotnet ef migrations add GlavnaInit -o Data/Migrations 
 // pokrenes backend i sve ce se samo kreirati
 
+// **** brisanje baze
+// dotnet ef database drop
+
 namespace API.Data
 {
   public static class DbInitializer

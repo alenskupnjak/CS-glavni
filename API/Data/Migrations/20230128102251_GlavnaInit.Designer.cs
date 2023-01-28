@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20230114195402_Mig001")]
-    partial class Mig001
+    [Migration("20230128102251_GlavnaInit")]
+    partial class GlavnaInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,35 @@ namespace API.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("API.Entities.Basket", b =>
+            modelBuilder.Entity("API.CommonLayer.Zaba.ZabaReadRecord", b =>
+                {
+                    b.Property<string>("Referencija")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Datum")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("IsActive")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Isplata")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Kategorija")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Opis")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Uplata")
+                        .HasColumnType("float");
+
+                    b.HasKey("Referencija");
+
+                    b.ToTable("ZabaTBL");
+                });
+
+            modelBuilder.Entity("BasketPrj.Entities.Basket", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -42,7 +70,7 @@ namespace API.Data.Migrations
                     b.ToTable("BasketsTBL");
                 });
 
-            modelBuilder.Entity("API.Entities.BasketItem", b =>
+            modelBuilder.Entity("BasketPrj.Entities.BasketItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -67,7 +95,7 @@ namespace API.Data.Migrations
                     b.ToTable("BasketItems");
                 });
 
-            modelBuilder.Entity("API.Entities.OrderAggregate.Order", b =>
+            modelBuilder.Entity("BasketPrj.Entities.OrderAggregate.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -97,7 +125,7 @@ namespace API.Data.Migrations
                     b.ToTable("OrdersTBL");
                 });
 
-            modelBuilder.Entity("API.Entities.OrderAggregate.OrderItem", b =>
+            modelBuilder.Entity("BasketPrj.Entities.OrderAggregate.OrderItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -120,7 +148,7 @@ namespace API.Data.Migrations
                     b.ToTable("OrderItem");
                 });
 
-            modelBuilder.Entity("API.Entities.Product", b =>
+            modelBuilder.Entity("BasketPrj.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -156,7 +184,7 @@ namespace API.Data.Migrations
                     b.ToTable("ProductsTBL");
                 });
 
-            modelBuilder.Entity("API.Entities.Role", b =>
+            modelBuilder.Entity("BasketPrj.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -188,20 +216,20 @@ namespace API.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "a9a75ccf-380a-437d-9125-b5b92dd2a783",
+                            ConcurrencyStamp = "cf05aac2-d6e8-4690-bc85-1a622e25d048",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "643255b3-1ef4-4db1-ad1d-9acf297d75c1",
+                            ConcurrencyStamp = "78291cb9-0d83-4d33-98e3-f32346f25adc",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
                 });
 
-            modelBuilder.Entity("API.Entities.User", b =>
+            modelBuilder.Entity("BasketPrj.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -268,7 +296,7 @@ namespace API.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("API.Entities.UserAddress", b =>
+            modelBuilder.Entity("BasketPrj.Entities.UserAddress", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -400,15 +428,15 @@ namespace API.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("API.Entities.BasketItem", b =>
+            modelBuilder.Entity("BasketPrj.Entities.BasketItem", b =>
                 {
-                    b.HasOne("API.Entities.Basket", "Basket")
+                    b.HasOne("BasketPrj.Entities.Basket", "Basket")
                         .WithMany("Items")
                         .HasForeignKey("BasketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("API.Entities.Product", "Product")
+                    b.HasOne("BasketPrj.Entities.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -419,9 +447,9 @@ namespace API.Data.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("API.Entities.OrderAggregate.Order", b =>
+            modelBuilder.Entity("BasketPrj.Entities.OrderAggregate.Order", b =>
                 {
-                    b.OwnsOne("API.Entities.OrderAggregate.ShippingAddress", "ShippingAddress", b1 =>
+                    b.OwnsOne("BasketPrj.Entities.OrderAggregate.ShippingAddress", "ShippingAddress", b1 =>
                         {
                             b1.Property<int>("OrderId")
                                 .ValueGeneratedOnAdd()
@@ -460,13 +488,13 @@ namespace API.Data.Migrations
                     b.Navigation("ShippingAddress");
                 });
 
-            modelBuilder.Entity("API.Entities.OrderAggregate.OrderItem", b =>
+            modelBuilder.Entity("BasketPrj.Entities.OrderAggregate.OrderItem", b =>
                 {
-                    b.HasOne("API.Entities.OrderAggregate.Order", null)
+                    b.HasOne("BasketPrj.Entities.OrderAggregate.Order", null)
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId");
 
-                    b.OwnsOne("API.Entities.OrderAggregate.ProductItemOrdered", "ItemOrdered", b1 =>
+                    b.OwnsOne("BasketPrj.Entities.OrderAggregate.ProductItemOrdered", "ItemOrdered", b1 =>
                         {
                             b1.Property<int>("OrderItemId")
                                 .ValueGeneratedOnAdd()
@@ -493,18 +521,18 @@ namespace API.Data.Migrations
                     b.Navigation("ItemOrdered");
                 });
 
-            modelBuilder.Entity("API.Entities.UserAddress", b =>
+            modelBuilder.Entity("BasketPrj.Entities.UserAddress", b =>
                 {
-                    b.HasOne("API.Entities.User", null)
+                    b.HasOne("BasketPrj.Entities.User", null)
                         .WithOne("Address")
-                        .HasForeignKey("API.Entities.UserAddress", "Id")
+                        .HasForeignKey("BasketPrj.Entities.UserAddress", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("API.Entities.Role", null)
+                    b.HasOne("BasketPrj.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -513,7 +541,7 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("API.Entities.User", null)
+                    b.HasOne("BasketPrj.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -522,7 +550,7 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("API.Entities.User", null)
+                    b.HasOne("BasketPrj.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -531,13 +559,13 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.HasOne("API.Entities.Role", null)
+                    b.HasOne("BasketPrj.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("API.Entities.User", null)
+                    b.HasOne("BasketPrj.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -546,24 +574,24 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("API.Entities.User", null)
+                    b.HasOne("BasketPrj.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("API.Entities.Basket", b =>
+            modelBuilder.Entity("BasketPrj.Entities.Basket", b =>
                 {
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("API.Entities.OrderAggregate.Order", b =>
+            modelBuilder.Entity("BasketPrj.Entities.OrderAggregate.Order", b =>
                 {
                     b.Navigation("OrderItems");
                 });
 
-            modelBuilder.Entity("API.Entities.User", b =>
+            modelBuilder.Entity("BasketPrj.Entities.User", b =>
                 {
                     b.Navigation("Address");
                 });

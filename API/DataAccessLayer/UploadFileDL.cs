@@ -322,13 +322,13 @@ namespace API.DataAccessLayer
           // Pocetak punjenja baze
           if (Parameters.Count > 0)
           {
-            string queryMSSQL = @"INSERT INTO dbo.Zaba (Datum,Referencija,Opis,Uplata,Isplata,Kategorija,IsActive) 
+            string queryMSSQL = @"INSERT INTO dbo.ZabaTBL (Datum,Referencija,Opis,Uplata,Isplata,Kategorija,IsActive) 
                                   VALUES(@Datum,@Referencija,@Opis,@Uplata,@Isplata,@Kategorija,@IsActive)";
             int i = -1;
             foreach (UploadZabaParameter rows in Parameters)
             {
               i++;
-              string NadiZapisMSSQL = @"SELECT * FROM dbo.Zaba WHERE ([Referencija] = '" + rows.Referencija + "')";
+              string NadiZapisMSSQL = @"SELECT * FROM dbo.ZabaTBL WHERE ([Referencija] = '" + rows.Referencija + "')";
               SqlCommand provjeraDaliZapisPostoji = new SqlCommand(NadiZapisMSSQL, _connectMSSQL);
               SqlCommand zabaMSSQL = new SqlCommand(queryMSSQL, _connectMSSQL);
               zabaMSSQL.Parameters.AddWithValue("@Datum", rows.Datum);
@@ -396,14 +396,14 @@ namespace API.DataAccessLayer
             await _connectMSSQL.OpenAsync();
           }
           string queryMSSQL = @"SELECT DISTINCT Datum,Referencija,Opis,Uplata,Isplata,Kategorija,IsActive
-                                 FROM dbo.Zaba
+                                 FROM dbo.ZabaTBL
                                  ORDER BY Datum
                                  OFFSET @Offset ROWS
                                  FETCH NEXT @RecordPerPage ROWS ONLY;";
           SqlCommand sqlCommand = new SqlCommand(queryMSSQL, conn);
           conn.Open();
           // Ocitavam koliko je Ukupno zapisa
-          SqlCommand countSQL = new("SELECT COUNT(*) FROM dbo.Zaba", conn);
+          SqlCommand countSQL = new("SELECT COUNT(*) FROM dbo.ZabaTBL", conn);
           Int32 count = (int)countSQL.ExecuteScalar();
 
           int OffsetRow = (request.PageNumber - 1) * request.RecordPerPage;

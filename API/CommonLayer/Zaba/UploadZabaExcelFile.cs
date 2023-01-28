@@ -24,5 +24,6 @@ namespace API.CommonLayer.Zaba
     public float Uplata { get; set; }
     public float Isplata { get; set; }
     public string Kategorija { get; set; }
+
   }
 }
