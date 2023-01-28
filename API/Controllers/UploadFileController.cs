@@ -130,7 +130,7 @@ namespace API.Controllers
     }
 
     ///
-    // DELETE DELETE DELETE DELETE
+    // DELETE CVS DELETE CVS DELETE CVS
     [HttpDelete]
     [Route("DeleteRecord")]
     public async Task<IActionResult> DeleteRecord(DeleteRequest request)
@@ -158,6 +158,25 @@ namespace API.Controllers
       try
       {
         response = await _uploadFileDL.ReadZaba(request);
+      }
+      catch (Exception ex)
+      {
+        response.IsSuccess = false;
+        response.Message = ex.Message;
+      }
+      return Ok(response);
+    }
+
+    ///
+    // DELETE ZABA DELETE ZABA DELETE ZABA
+    [HttpDelete]
+    [Route("DeleteZabaRecord")]
+    public async Task<IActionResult> DeleteZabaRecord(DeleteZabaRequest request)
+    {
+      DeleteZabaResponse response = new DeleteZabaResponse();
+      try
+      {
+        response = await _uploadFileDL.DeleteZabaRecord(request);
       }
       catch (Exception ex)
       {

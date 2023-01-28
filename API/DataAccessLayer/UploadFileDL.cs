@@ -25,7 +25,7 @@ namespace API.DataAccessLayer
       _connectMSSQL = new SqlConnection(_configuration["ConnectionStrings:MSSQL"]);
     }
 
-    // DELETE DELETE DELETE
+    // DELETE CVS DELETE CVS DELETE CVS
     public async Task<DeleteResponse> DeleteRecord(DeleteRequest request)
     {
       DeleteResponse response = new DeleteResponse();
@@ -445,6 +445,40 @@ namespace API.DataAccessLayer
       return response;
     }
 
+    // DELETE ZABA DELETE ZABA DELETE ZABA
+    public async Task<DeleteZabaResponse> DeleteZabaRecord(DeleteZabaRequest request)
+    {
+      DeleteZabaResponse response = new DeleteZabaResponse();
+      response.IsSuccess = true;
+      response.Message = "Obrisano";
+      try
+      {   //  spajanje na bazu
+        using SqlConnection connection = new SqlConnection(_configuration["ConnectionStrings:MSSQL"]);
+        string queryMSSQL = @"DELETE FROM dbo.ZabaTBL WHERE Referencija = @Referencija";
+        connection.Open();
+        SqlCommand command = new SqlCommand(queryMSSQL, connection);
+        command.Parameters.AddWithValue("@Referencija", request.Referencija);
+        int Status = await command.ExecuteNonQueryAsync();
+        if (Status <= 0)
+        {
+          response.IsSuccess = false;
+          response.Message = "Delete Query Not Executed";
+          return response;
+        }
+        connection.Close();
+      }
+      catch (Exception ex)
+      {
+        response.IsSuccess = false;
+        response.Message = ex.Message;
+      }
+      return response;
+    }
+
+
+
+    //
+    //
     private static string DefinirajGrupu(string opis)
     {
       var  kategorija = "Nedefinirano";

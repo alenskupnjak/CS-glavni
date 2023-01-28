@@ -27,15 +27,8 @@ export default class HomePage extends Component {
 			dataText: null,
 			switch: true,
 		};
-
-		// this.handleDelete = this.handleDelete.bind(this);
 		this.ReadRecord(this.state.PageNumber);
 	}
-
-	// componentWillMount() {
-	// 	console.log('Component Will Mount Calling', this.state);
-	// 	this.ReadRecord(this.state.PageNumber);
-	// }
 
 	// READ READ READ
 	async ReadRecord(CurrentPage) {
@@ -60,19 +53,6 @@ export default class HomePage extends Component {
 			this.setState({ ZabaRecord: response.zabaReadRecord });
 			console.log('%c ZABA state', 'color:red', this.state);
 		}
-
-		// service
-		// 	.ReadRecord(data)
-		// 	.then(data => {
-		// 		console.log('%c 00 data ', 'color:red', data);
-		// 		console.log(data.data.readRecord);
-		// 		this.setState({ totalRecords: data.data.totalRecords });
-		// 		this.setState({ totalPages: data.data.totalPages });
-		// 		this.setState({ DataRecord: data.data.readRecord });
-		// 	})
-		// 	.catch(error => {
-		// 		console.log(error);
-		// 	});
 	}
 
 	snimiUBazu = async event => {
@@ -80,32 +60,11 @@ export default class HomePage extends Component {
 		if (this.state.FileExtension !== '') {
 			const data = new FormData();
 			data.append('file', this.state.File);
-
 			if (this.state.FileExtension.toLowerCase() === 'csv') {
-				// service
-				// 	.InsertCsvRecord(data)
-				// 	.then(data => {
-				// 		console.log(data);
-				// 		this.ReadRecord(this.state.PageNumber);
-				// 	})
-				// 	.catch(error => {
-				// 		console.log(error);
-				// 		this.ReadRecord(this.state.PageNumber);
-				// 	});
 				const response = await agent.ReadWriteDatabase.InsertCsvRecord(data);
 				console.log('%c 00 ', 'color:red', response);
 				this.ReadRecord(this.state.PageNumber);
 			} else if (this.state.FileExtension.toLowerCase() === 'xlsx') {
-				// service
-				// 	.InsertExcelRecord(data)
-				// 	.then(data => {
-				// 		console.log(data);
-				// 		this.ReadRecord(this.state.PageNumber);
-				// 	})
-				// 	.catch(error => {
-				// 		console.log(error);
-				// 		this.ReadRecord(this.state.PageNumber);
-				// 	});
 				const response = await agent.ReadWriteDatabase.InsertExcelRecord(data);
 				console.log('%c 00 ', 'color:red', response);
 				this.ReadRecord(this.state.PageNumber);
@@ -130,7 +89,7 @@ export default class HomePage extends Component {
 			) {
 				const response = await agent.ReadWriteDatabase.InsertZabaExcelRecord(data);
 				console.log('%c 00 Ajmooo', 'color:red', response);
-				// this.ReadRecord(this.state.PageNumber);
+				this.ReadRecord(this.state.PageNumber);
 			} else {
 				console.log('Invalid File');
 			}
@@ -190,21 +149,16 @@ export default class HomePage extends Component {
 	};
 
 	handleDelete = async data => {
-		console.log('Delete Body Id-----------------: ', data);
-		// service
-		// 	.DeleteRecord(datas.userId)
-		// 	.then(data => {
-		// 		console.log(data);
-		// 		this.ReadRecord(this.state.PageNumber);
-		// 	})
-		// 	.catch(error => {
-		// 		console.log(error);
-		// 		this.ReadRecord(this.state.PageNumber);
-		// 	});
-
-		const response = await agent.ReadWriteDatabase.DeleteRecord(data.userId);
-		toast.success(response.message);
-		this.ReadRecord(this.state.PageNumber);
+		if (this.state.switch) {
+			const response = await agent.ReadWriteDatabase.DeleteRecord(data.userId);
+			toast.success(response.message);
+			this.ReadRecord(this.state.PageNumber);
+		} else {
+			console.log('Delete Body Id-----------------: ', data);
+			const response = await agent.ReadWriteDatabase.DeleteZabaRecord(data.referencija);
+			toast.success(response.message);
+			this.ReadRecord(this.state.PageNumber);
+		}
 	};
 
 	render() {
@@ -219,20 +173,23 @@ export default class HomePage extends Component {
 									<div className="FileName">{this.state.File !== null ? this.state.File.name : ''}</div>
 									<div className="UploadButton">
 										<ReactFileReader handleFiles={this.handleFiles} fileTypes={'.xlsx, .csv, .xls'} className="Upload">
-											<Button variant="contained" color="primary" component="span">
-												Submit
+											<Button fullWidth variant="contained" color="primary" component="span">
+												Ucitaj sa racunala
 											</Button>
 										</ReactFileReader>
 									</div>
 								</div>
 							</div>
 							<div className="flex-button">
-								<Button variant="contained" color="secondary" onClick={this.snimiUBazu}>
-									Usnimi u bazu
-								</Button>
-								<Button variant="contained" color="secondary" onClick={this.snimiZabaBazu}>
-									Usnimi u Zabu bazu
-								</Button>
+								{this.state.switch ? (
+									<Button variant="contained" color="secondary" onClick={this.snimiUBazu}>
+										Usnimi u CVS bazu
+									</Button>
+								) : (
+									<Button variant="contained" color="secondary" onClick={this.snimiZabaBazu}>
+										Usnimi u Zabu bazu
+									</Button>
+								)}
 								<Button variant="contained" color="success" onClick={this.toggle}>
 									Zabu/CVS
 								</Button>
@@ -291,8 +248,6 @@ export default class HomePage extends Component {
 							: null}
 						{!this.state.switch &&
 							this.state.ZabaRecord.map((data, index) => {
-								console.log('%c 00 ', 'color:green', data);
-
 								return (
 									<div key={index} className="data-flex">
 										<div className="datum">{data.datum}</div>

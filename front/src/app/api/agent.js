@@ -154,6 +154,7 @@ const ReadWriteDatabase = {
 	DeleteRecord: userId => requests.deleteBody('uploadFile/DeleteRecord', { data: { userID: userId } }),
 	InsertZabaExcelRecord: file => requests.post('uploadFile/UploadZabaFile', file),
 	ReadZaba: pageNumber => requests.post('uploadFile/ReadZaba', pageNumber),
+	DeleteZabaRecord: ref => requests.deleteBody('uploadFile/DeleteZabaRecord', { data: { referencija: ref } }),
 };
 
 const agent = {
