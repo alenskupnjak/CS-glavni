@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Delete } from '@mui/icons-material';
-import { Button, Pagination } from '@mui/material';
+import { Close, Delete, Update } from '@mui/icons-material';
+import { Box, Button, Modal, Pagination, Typography } from '@mui/material';
 import './ImportFile.css';
 import { toast } from 'react-toastify';
+import ProductForm from '../admin/ProductForm';
 
 // import CrudServices from './CrudServices';
 import ReactFileReader from 'react-file-reader';
@@ -26,8 +27,20 @@ export default class HomePage extends Component {
 			totalPages: 0,
 			dataText: null,
 			switch: true,
+			modalOpen: false,
 		};
 		this.ReadRecord(this.state.PageNumber);
+		this.style = {
+			position: 'absolute',
+			top: '50%',
+			left: '50%',
+			transform: 'translate(-50%, -50%)',
+			width: 400,
+			bgcolor: 'background.paper',
+			border: '2px solid #000',
+			boxShadow: 24,
+			p: 4,
+		};
 	}
 
 	// READ READ READ
@@ -101,6 +114,18 @@ export default class HomePage extends Component {
 			switch: !state.switch,
 		}));
 		this.ReadRecord(this.state.PageNumber);
+	};
+
+	handleUpdate = async () => {
+		await this.setState(state => ({
+			modalOpen: true,
+		}));
+	};
+
+	handleClose = async () => {
+		await this.setState(state => ({
+			modalOpen: false,
+		}));
 	};
 
 	handleFiles = files => {
@@ -218,6 +243,7 @@ export default class HomePage extends Component {
 								<div className="isplata">Isplata</div>
 								<div className="kategorija">Isplata</div>
 								<div className="Delete"></div>
+								<div className="Update"></div>
 							</div>
 						)}
 						{this.state.switch && Array.isArray(this.state.DataRecord) && this.state.DataRecord.length > 0
@@ -240,6 +266,17 @@ export default class HomePage extends Component {
 													}}
 												>
 													<Delete />
+												</Button>
+											</div>
+											<div className="Delete">
+												<Button
+													variant="outlined"
+													color="error"
+													onClick={e => {
+														this.handleUpdate(data);
+													}}
+												>
+													<Update />
 												</Button>
 											</div>
 										</div>
@@ -280,6 +317,25 @@ export default class HomePage extends Component {
 					shape="rounded"
 					color="secondary"
 				/>
+				<Modal
+					open={this.state.modalOpen}
+					onClose={this.handleClose}
+					aria-labelledby="modal-modal-title"
+					aria-describedby="modal-modal-description"
+				>
+					<Box sx={this.style}>
+						<Button variant="outlined" color="error" onClick={this.handleClose}>
+							<Close />
+						</Button>
+						<Typography id="modal-modal-title" variant="h6" component="h2">
+							Text in a modal
+						</Typography>
+						<Typography id="modal-modal-description" sx={{ mt: 2 }}>
+							Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+						</Typography>
+						<ProductForm />
+					</Box>
+				</Modal>
 			</div>
 		);
 	}
