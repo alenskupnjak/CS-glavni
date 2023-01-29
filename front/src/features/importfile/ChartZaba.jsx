@@ -8,7 +8,6 @@ import { v4 as uuid } from 'uuid';
 import { useStore } from '../../app/stores/store';
 import { Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import _ from 'lodash-es';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -17,12 +16,14 @@ function ChartZaba(props) {
 	const { loadAllData, dataLabels, dataLabelsNum, trosakUkupno, dataChart } = chartStore;
 
 	useEffect(() => {
-		loadAllData();
+		if (!dataChart) {
+			loadAllData();
+		}
 		// ovaj return se okida kada je komponenta destroyed
 		return () => {
 			// Call this method when you've finished using an object URL to let the browser know not to keep the reference to the file any longer.
 		};
-	}, []);
+	}, [dataChart, loadAllData]);
 
 	const Item = styled(Paper)(({ theme }) => ({
 		backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',

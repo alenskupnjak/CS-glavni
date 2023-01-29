@@ -46,7 +46,6 @@ function App(props) {
 			<Stack direction="row" spacing={2} justifyContent="space-between">
 				<Sidebar setMode={setMode} mode={mode} />
 			</Stack>
-			<Route exact path="/" component={HomePage} />
 			<Route
 				path={'/(.+)'}
 				render={() => (
@@ -70,6 +69,7 @@ function App(props) {
 					</Container>
 				)}
 			/>
+			<Route exact path="/" component={HomePage} />
 		</ThemeProvider>
 	);
 }

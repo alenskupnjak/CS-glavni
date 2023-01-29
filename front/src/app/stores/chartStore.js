@@ -3,6 +3,9 @@ import _ from 'lodash-es';
 import agent from '../api/agent';
 
 export default class ChartStore {
+	// dataChart = [];
+	dataLabels = [];
+	dataLabelsNum = [];
 	constructor() {
 		makeAutoObservable(this);
 
