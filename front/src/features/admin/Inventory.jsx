@@ -20,7 +20,8 @@ import ProductForm from './ProductForm';
 import { useStore } from '../../app/stores/store';
 import LoadingComponent from '../../app/layout/LoadingComponent';
 
-function Inventory() {
+function Inventory(props) {
+	console.log('%c 4444444444444444444 ', 'color:green', props);
 	const { productStore } = useStore();
 	const { listaProdukata, metaData, handleDeleteProduct, loading, targetProduct, handlePaging } = productStore;
 	const [editMode, setEditMode] = useState(false);

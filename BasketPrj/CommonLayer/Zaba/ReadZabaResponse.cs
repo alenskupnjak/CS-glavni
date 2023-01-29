@@ -8,6 +8,7 @@ namespace BasketPrj.CommonLayer.Zaba
   {
     public int RecordPerPage { get; set; }
     public int PageNumber { get; set; }
+    public bool AllRecords { get; set; }
   }
 
   public class ZabaReadResponse

@@ -33,7 +33,6 @@ ReactDOM.render(
 				{/* </StoreProvider> NEIL */}
 			</Router>
 		</StoreContext.Provider>
-		,
 	</React.StrictMode>,
 	document.getElementById('root')
 );

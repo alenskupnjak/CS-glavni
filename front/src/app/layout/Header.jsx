@@ -10,6 +10,7 @@ const midLinks = [
 	{ title: 'about', path: '/about' },
 	{ title: 'contact', path: '/contact' },
 	{ title: 'File', path: 'import-file' },
+	{ title: 'Chart', path: '/chartZaba' },
 ];
 
 const rightLinks = [

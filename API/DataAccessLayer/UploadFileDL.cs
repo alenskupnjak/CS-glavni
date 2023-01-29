@@ -406,9 +406,20 @@ namespace API.DataAccessLayer
           SqlCommand countSQL = new("SELECT COUNT(*) FROM dbo.ZabaTBL", conn);
           Int32 count = (int)countSQL.ExecuteScalar();
 
-          int OffsetRow = (request.PageNumber - 1) * request.RecordPerPage;
-          sqlCommand.Parameters.AddWithValue("@Offset", OffsetRow);
-          sqlCommand.Parameters.AddWithValue("@RecordPerPage", request.RecordPerPage);
+          if (request.AllRecords)
+          {
+            //int OffsetRow = (1 - 1) * request.RecordPerPage;
+            sqlCommand.Parameters.AddWithValue("@Offset", 0);
+            sqlCommand.Parameters.AddWithValue("@RecordPerPage", count);
+          }
+          else
+          {
+            int OffsetRow = (request.PageNumber - 1) * request.RecordPerPage;
+            sqlCommand.Parameters.AddWithValue("@Offset", OffsetRow);
+            sqlCommand.Parameters.AddWithValue("@RecordPerPage", request.RecordPerPage);
+
+          }
+
 
           SqlDataReader dr = sqlCommand.ExecuteReader();
           if (dr.HasRows)
@@ -481,7 +492,7 @@ namespace API.DataAccessLayer
     //
     private static string DefinirajGrupu(string opis)
     {
-      var  kategorija = "Nedefinirano";
+      var kategorija = "Nedefinirano";
       Regex regex = new Regex(@"Podizanje gotovog novca");
       if (regex.Match(opis).Success)
       {
@@ -561,20 +572,98 @@ namespace API.DataAccessLayer
         kategorija = "Financije-rate";
       }
 
+      regex = new Regex(@"zabavljak");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = "Hrana-Posao";
+      }
+
+      regex = new Regex(@"pbztpetrolbp");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = "Auto";
+      }
+
+      regex = new Regex(@"konzum");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = "Hrana-Doma";
+      }
+
+      regex = new Regex(@"mastercard");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = "Financije-mastercard";
+      }
+
+      regex = new Regex(@"trajnog naloga");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = "Rezije-Trajni nalog";
+      }
+
+      regex = new Regex(@"zajednička pričuva");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = "Rezije-Trajni nalog";
+      }
+
+      regex = new Regex(@"zdravstveno osiguranje");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = "Rezije-Trajni nalog";
+      }
+
+      regex = new Regex(@"hrvatski telekom");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = "Rezije-Trajni nalog";
+      }
+
+      regex = new Regex(@"kudelic");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = "Hrana-Doma";
+      }
+
+      regex = new Regex(@"poliklinika");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = "Osobne Potrebe-Zdravlje";
+      }
+
+      regex = new Regex(@"eventim");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = "Osobne Potrebe-Zabava";
+      }
+
+      regex = new Regex(@"lesnina");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = "Osobne Potrebe-Uredenje doma";
+      }
+
+      regex = new Regex(@"ljekarni");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = "Osobne Potrebe-Zdravlje";
+      }
+
       return kategorija;
     }
 
-    private static string NadiRijecNaOpisu(string opis,string obrada,string kategorija)
+    private static string NadiRijecNaOpisu(string opis, string obrada, string kategorija)
     {
       var kat = "";
       Regex regex = new Regex(@opis);
       Match match = regex.Match(obrada);
       if (match.Success)
       {
-          kat = kategorija;
-       
+        kat = kategorija;
+
       }
-        return kat;
+      return kat;
     }
 
 

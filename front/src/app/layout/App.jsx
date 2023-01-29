@@ -23,6 +23,7 @@ import Inventory from '../../features/admin/Inventory';
 import ImportFile from '../../features/importfile/ImportFile';
 import { useState } from 'react';
 import Sidebar from './Sidebar';
+import ChartZaba from '../../features/importfile/ChartZaba';
 
 function App(props) {
 	const [mode, setMode] = useState('light');
@@ -63,6 +64,7 @@ function App(props) {
 							<Route path="/login" component={Login} />
 							<Route path="/register" component={Register} />
 							<Route path="/import-file" component={ImportFile} />
+							<Route path="/chartZaba" component={ChartZaba} />
 							<Route component={NotFound} />
 						</Switch>
 					</Container>

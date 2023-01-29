@@ -7,7 +7,7 @@ using BasketPrj.Entities;
 // dotnet ef migrations add Glavna -p BasketPrj -s API
 // pokrenes backend i sve ce se samo kreirati
 
-// **** brisanje baze
+// **** brisanje baze, moras biti u API direktoriju
 // dotnet ef database drop
 
 namespace BasketPrj.Data

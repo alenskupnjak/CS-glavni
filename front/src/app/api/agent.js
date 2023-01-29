@@ -11,7 +11,7 @@ axios.defaults.withCredentials = true;
 
 // TOKEN TOKEN TOKEN TOKEN
 axios.interceptors.request.use(config => {
-	console.log('%c -----config-----------', 'color:green', config);
+	// console.log('%c -----config-----------', 'color:green', config);
 
 	config.headers.Test = 'special get headers';
 	// config.headers.Config = config;
@@ -25,7 +25,7 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(
 	async response => {
 		if (process.env.NODE_ENV === 'development') await sleep();
-		console.log('%c axios.interceptors', 'color:gold', response);
+		// console.log('%c axios.interceptors', 'color:gold', response);
 		return response;
 	},
 	error => {

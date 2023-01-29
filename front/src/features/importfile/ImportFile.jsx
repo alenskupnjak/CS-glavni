@@ -8,6 +8,7 @@ import ProductForm from '../admin/ProductForm';
 // import CrudServices from './CrudServices';
 import ReactFileReader from 'react-file-reader';
 import agent from '../../app/api/agent';
+import { dateFormat } from '../../app/util/util';
 
 // const service = new CrudServices();
 
@@ -20,13 +21,13 @@ export default class HomePage extends Component {
 			FileExtension: '',
 			DataRecord: [],
 			ZabaRecord: [],
-			RecordPerPage: 10,
+			RecordPerPage: 15,
 			PageNumber: 1,
 			currentPage: 1,
 			totalRecords: 0,
 			totalPages: 0,
 			dataText: null,
-			switch: true,
+			switch: false,
 			modalOpen: false,
 		};
 		this.ReadRecord(this.state.PageNumber);
@@ -41,6 +42,7 @@ export default class HomePage extends Component {
 			boxShadow: 24,
 			p: 4,
 		};
+		this.podaciGraph = 0;
 	}
 
 	// READ READ READ
@@ -48,23 +50,19 @@ export default class HomePage extends Component {
 		let data = {
 			recordPerPage: this.state.RecordPerPage,
 			pageNumber: CurrentPage,
+			allRecords: false,
 		};
-		console.log('%c STATE ', 'color:red', this.state);
-
 		if (this.state.switch === true) {
 			const response = await agent.ReadWriteDatabase.ReadRecord(data);
-			console.log('%c CVS ', 'color:blue', response);
+
 			this.setState({ totalRecords: response.totalRecords });
 			this.setState({ totalPages: response.totalPages });
 			this.setState({ DataRecord: response.readRecord });
 		} else {
 			const response = await agent.ReadWriteDatabase.ReadZaba(data);
-			console.log('%c ZABA ', 'color:red', response);
-
 			this.setState({ totalRecords: response.totalRecords });
 			this.setState({ totalPages: response.totalPages });
 			this.setState({ ZabaRecord: response.zabaReadRecord });
-			console.log('%c ZABA state', 'color:red', this.state);
 		}
 	}
 
@@ -169,7 +167,6 @@ export default class HomePage extends Component {
 
 	handlePaging = (event, value) => {
 		this.setState({ PageNumber: value });
-		console.log('value : ', value);
 		this.ReadRecord(value);
 	};
 
@@ -237,11 +234,10 @@ export default class HomePage extends Component {
 						{!this.state.switch && (
 							<div className="data-flex" style={{ color: 'red' }}>
 								<div className="datum">Datum</div>
-								<div className="referencija">Sifra</div>
 								<div className="opis">Opis</div>
 								<div className="uplata">Uplata</div>
 								<div className="isplata">Isplata</div>
-								<div className="kategorija">Isplata</div>
+								<div className="kategorija">Kategorija</div>
 								<div className="Delete"></div>
 								<div className="Update"></div>
 							</div>
@@ -288,12 +284,13 @@ export default class HomePage extends Component {
 							this.state.ZabaRecord.map((data, index) => {
 								return (
 									<div key={index} className="data-flex">
-										<div className="datum">{data.datum}</div>
-										<div className="referencija">{data.referencija}</div>
+										<div className="datum">{dateFormat(data.datum)}</div>
 										<div className="opis">{data.opis}</div>
 										<div className="uplata">{data.uplata}</div>
 										<div className="isplata">{data.isplata}</div>
-										<div className="kategorija">{data.kategorija}</div>
+										<div className="kategorija" style={{ color: `${data.kategorija === 'Nedefinirano' ? 'red' : ''}` }}>
+											{data.kategorija}
+										</div>
 										<div className="Delete">
 											<Button
 												variant="outlined"
