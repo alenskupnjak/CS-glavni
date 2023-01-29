@@ -8,6 +8,7 @@ import { v4 as uuid } from 'uuid';
 import { useStore } from '../../app/stores/store';
 import { Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import _ from 'lodash-es';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -21,7 +22,7 @@ function ChartZaba(props) {
 		return () => {
 			// Call this method when you've finished using an object URL to let the browser know not to keep the reference to the file any longer.
 		};
-	}, [loadAllData]);
+	}, []);
 
 	const Item = styled(Paper)(({ theme }) => ({
 		backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -64,6 +65,9 @@ function ChartZaba(props) {
 		],
 	};
 
+	console.log('%c 00 ', 'color:green', dataChart);
+	// if (_.IsEmpty(dataChart)) return null;
+
 	return (
 		<React.Fragment>
 			<Grid container spacing={2}>
@@ -80,7 +84,7 @@ function ChartZaba(props) {
 							<React.Fragment>
 								<Grid item xs={4}>
 									<Item key={uuid()}>
-										{data.kat}: {Math.round((data.sumaKat / 100) * trosakUkupno * 100) / 100}
+										{data.kat}: {Math.round((data.sumaKat * trosakUkupno) / 100)}
 										{'EUR'} - {data.sumaKat}%
 									</Item>
 								</Grid>
@@ -88,7 +92,8 @@ function ChartZaba(props) {
 									{data.podaci.map(item => {
 										return (
 											<Item key={uuid()}>
-												{item.podKat ?? 'Nedefinirano'}: {item.sumPodKat}
+												{' '}
+												{item.podKat ?? 'Nedefinirano'}-{item.sumPodKat}
 											</Item>
 										);
 									})}

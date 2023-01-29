@@ -518,22 +518,10 @@ namespace API.DataAccessLayer
         kategorija = NadiRijecNaOpisu("mesnica", opis, "Hrana-Doma");
       }
 
-      regex = new Regex(@"Podizanje gotovog novca");
-      if (regex.Match(opis).Success)
-      {
-        kategorija = NadiRijecNaOpisu("Podizanje gotovog novca", opis, "Financije-Bankomat");
-      }
-
-      regex = new Regex(@"Naknada za kreditni transfer");
-      if (regex.Match(opis).Success)
-      {
-        kategorija = NadiRijecNaOpisu("Naknada za kreditni transfer", opis, "Financije-Naknade");
-      }
-
       regex = new Regex(@"Kupovina zaba kuhinjica");
       if (regex.Match(opis).Success)
       {
-        kategorija = NadiRijecNaOpisu("Kupovina zaba kuhinjica", opis, "Hrana-Mirela");
+        kategorija = NadiRijecNaOpisu("Kupovina zaba kuhinjica", opis, "Hrana-Posao");
       }
 
       regex = new Regex(@"hrvatska radiotelevizija");
@@ -554,11 +542,7 @@ namespace API.DataAccessLayer
         kategorija = NadiRijecNaOpisu("holding d.o.o", opis, "Rezije-holding");
       }
 
-      regex = new Regex(@"Naknada");
-      if (regex.Match(opis).Success)
-      {
-        kategorija = NadiRijecNaOpisu("Naknada", opis, "Financije-naknada");
-      }
+
 
       regex = new Regex(@"revolut");
       if (regex.Match(opis).Success)
@@ -602,6 +586,12 @@ namespace API.DataAccessLayer
         kategorija = "Rezije-Trajni nalog";
       }
 
+      regex = new Regex(@"Naknada");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = "Financije-naknada";
+      }
+
       regex = new Regex(@"zajednička pričuva");
       if (regex.Match(opis).Success)
       {
@@ -629,25 +619,37 @@ namespace API.DataAccessLayer
       regex = new Regex(@"poliklinika");
       if (regex.Match(opis).Success)
       {
-        kategorija = "Osobne Potrebe-Zdravlje";
+        kategorija = "Osobno-Zdravlje";
       }
 
       regex = new Regex(@"eventim");
       if (regex.Match(opis).Success)
       {
-        kategorija = "Osobne Potrebe-Zabava";
+        kategorija = "Osobno-Zabava";
       }
 
       regex = new Regex(@"lesnina");
       if (regex.Match(opis).Success)
       {
-        kategorija = "Osobne Potrebe-Uredenje doma";
+        kategorija = "Osobno-Uredenje doma";
       }
 
       regex = new Regex(@"ljekarni");
       if (regex.Match(opis).Success)
       {
-        kategorija = "Osobne Potrebe-Zdravlje";
+        kategorija = "Osobno-Zdravlje";
+      }
+
+      regex = new Regex(@"videoteka");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = "Osobno-Cigarete";
+      }
+
+      regex = new Regex(@"donacija");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = "Osobno-Donacije";
       }
 
       return kategorija;
