@@ -95,7 +95,7 @@ function App() {
 					</Container>
 				)}
 			/>
-			{/* <Grid container spacing={2}>
+			<Grid container spacing={2}>
 				<Grid item xs={8} sx={{ ml: 25 }}>
 					<Item>xs=8</Item>
 				</Grid>
@@ -108,7 +108,7 @@ function App() {
 				<Grid item xs={8}>
 					<Item>xs=8</Item>
 				</Grid>
-			</Grid> */}
+			</Grid>
 		</ThemeProvider>
 	);
 }

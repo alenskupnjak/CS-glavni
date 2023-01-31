@@ -6,9 +6,8 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import AppSelectList from '../../app/components/AppSelectList';
-import AppTextInput from '../../app/components/AppTextInput';
+// import AppTextInput from '../../app/components/AppTextInput';
 // import agent from '../../app/api/agent';
-import { useStore } from '../../app/stores/store';
 import { validationSchema } from './zabaValidation';
 
 function ZabaDataForm({ state, handleClose }) {
@@ -16,7 +15,6 @@ function ZabaDataForm({ state, handleClose }) {
 
 	const { modalData, ZabaKategorije } = state;
 
-	const { productStore } = useStore();
 	// console.log('%c 00 ', 'color:green', ZabaKategorije);
 
 	const {
@@ -38,7 +36,7 @@ function ZabaDataForm({ state, handleClose }) {
 		return () => {
 			// Call this method when you've finished using an object URL to let the browser know not to keep the reference to the file any longer.
 		};
-	}, []);
+	}, [reset, isDirty, modalData]);
 
 	async function handleSubmitData(data) {
 		try {
@@ -51,16 +49,12 @@ function ZabaDataForm({ state, handleClose }) {
 				// }
 				// loadAllProduct();
 			}
-			cancelEdit();
+			handleClose();
 		} catch (error) {
 			console.log(error);
 		}
 	}
 
-	function cancelEdit() {
-		console.log('%c cancel edit ', 'color:green', ZabaKategorije);
-	}
-	console.log('%c cancel edit ', 'color:green', ZabaKategorije);
 	return (
 		<Box component={Paper} sx={{ p: 4 }}>
 			<Typography variant="h4" gutterBottom sx={{ mb: 4 }}>

@@ -33,7 +33,6 @@ export default class ImportFile extends Component {
 			modalOpen: false,
 			modalData: null,
 		};
-		this.ReadRecord(this.state.PageNumber);
 		this.style = {
 			position: 'absolute',
 			top: '50%',
@@ -46,6 +45,10 @@ export default class ImportFile extends Component {
 			p: 4,
 		};
 		this.podaciGraph = 0;
+	}
+
+	componentDidMount() {
+		this.ReadRecord(1);
 	}
 
 	// READ READ READ
