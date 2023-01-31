@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './app/layout/App';
+import App from './App';
 // import ReactDOM from 'react-dom/client';    verzija 18
 import './app/layout/styles.css';
 import { Router } from 'react-router-dom';

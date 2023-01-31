@@ -1,10 +1,8 @@
-import { UploadFile } from '@mui/icons-material';
+import { UploadFile, Upload } from '@mui/icons-material';
 import { FormControl, FormHelperText, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useController } from 'react-hook-form';
-
-import UploadIcon from '@mui/icons-material/Upload';
 
 export default function AppDropzone(props) {
 	const { fieldState, field } = useController({ ...props, defaultValue: null });
@@ -39,7 +37,7 @@ export default function AppDropzone(props) {
 				<input {...getInputProps()} />
 				<div>
 					<UploadFile sx={{ fontSize: '100px' }} />
-					<UploadIcon sx={{ fontSize: '100px' }} />
+					<Upload sx={{ fontSize: '100px' }} />
 				</div>
 				<Typography variant="h4">Drop image here</Typography>
 				<FormHelperText>{fieldState.error?.message}</FormHelperText>

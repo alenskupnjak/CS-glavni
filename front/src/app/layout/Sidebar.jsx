@@ -12,7 +12,7 @@ const Sidebar = ({ mode, setMode }) => {
 			<Box position="fixed">
 				<List>
 					<ListItem disablePadding>
-						<ListItemButton component="Home" href="/">
+						<ListItemButton component="b" href="#simple-list">
 							<ListItemIcon>
 								<Home />
 							</ListItemIcon>
