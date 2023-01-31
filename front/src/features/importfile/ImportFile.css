@@ -120,7 +120,7 @@
 	flex: 2;
 }
 .MainContainer .SubContainer .Box2 .data-flex .opis {
-	flex: 13;
+	flex: 12;
 }
 .MainContainer .SubContainer .Box2 .data-flex .uplata {
 	flex: 2;
@@ -129,6 +129,12 @@
 	flex: 2;
 }
 .MainContainer .SubContainer .Box2 .data-flex .kategorija {
+	flex: 2;
+}
+.MainContainer .SubContainer .Box2 .data-flex .delete {
+	flex: 2;
+}
+.MainContainer .SubContainer .Box2 .data-flex .update {
 	flex: 2;
 }
 

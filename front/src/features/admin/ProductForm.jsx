@@ -56,6 +56,7 @@ function ProductForm({ product, cancelEdit }) {
 			console.log(error);
 		}
 	}
+	console.log('%c 100 ', 'color:green', filters.brands, product);
 
 	return (
 		<Box component={Paper} sx={{ p: 4 }}>

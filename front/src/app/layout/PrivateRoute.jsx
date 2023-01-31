@@ -6,8 +6,6 @@ export default function PrivateRoute({ component: Component, roles, ...rest }) {
 	const { userStore } = useStore();
 	const { user } = userStore;
 
-	console.log('%c 00 roles ', 'color:red', roles);
-
 	return (
 		<Route
 			{...rest}
@@ -23,7 +21,6 @@ export default function PrivateRoute({ component: Component, roles, ...rest }) {
 					toast.error('Not authorised to access this area');
 					return <Redirect to={{ pathname: '/catalog' }} />;
 				}
-
 				return <Component {...props} />;
 			}}
 		/>
