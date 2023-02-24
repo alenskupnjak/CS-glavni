@@ -56,45 +56,34 @@ function App() {
 				<Sidebar setMode={setMode} mode={mode} />
 			</Stack>
 
-			<Route exact path="/" component={HomePage} />
-			<Route
-				path={'/(.+)'}
-				render={() => (
-					<Container sx={{ mt: 4 }}>
-						<Suspense fallback={<div>Loading u APP...</div>}>
-							<Switch>
-								{routes.map(route => {
-									if (route.privateRoute) {
-										return (
-											<PrivateRoute
-												roles={route.roles}
-												path={route.path}
-												component={route.component}
-												key={route.path}
-											/>
-										);
-									} else {
-										return <Route path={route.path} component={route.component} key={route.path} exact={route.exact} />;
-									}
-								})}
-								{/* <Route exact path="/catalog" component={Catalog} /> */}
-								{/* <Route path="/catalog/:id" component={ProductDetails} /> */}
-								{/* <Route path="/about" component={AboutPage} /> */}
-								{/* <Route path="/contact" component={ContactPage} /> */}
-								{/* <Route path="/server-error" component={ServerError} /> */}
-								{/* <Route path="/register" component={Register} /> */}
-								{/* <Route path="/import-file" component={ImportFile} /> */}
-								{/* <Route path="/chartZaba" component={ChartZaba} /> */}
-								{/* <PrivateRoute path="/checkout" component={CheckoutWrapper} /> */}
-								{/* <PrivateRoute path="/orders" component={Orders} /> */}
-								{/* <PrivateRoute roles={['Admin']} path="/inventory" component={Inventory} /> */}
-								{/* <Route exact path="/" component={HomePage} /> */}
-								<Route component={NotFound} />
-							</Switch>
-						</Suspense>
-					</Container>
-				)}
-			/>
+			<Container sx={{ mt: 4 }}>
+				<Suspense fallback={<div>Loading u APP...</div>}>
+					<Switch>
+						{routes.map(route => {
+							if (route.privateRoute) {
+								return (
+									<PrivateRoute roles={route.roles} path={route.path} component={route.component} key={route.path} />
+								);
+							} else {
+								return <Route path={route.path} component={route.component} key={route.path} exact={route.exact} />;
+							}
+						})}
+						{/* <Route exact path="/catalog" component={Catalog} /> */}
+						{/* <Route path="/catalog/:id" component={ProductDetails} /> */}
+						{/* <Route path="/about" component={AboutPage} /> */}
+						{/* <Route path="/contact" component={ContactPage} /> */}
+						{/* <Route path="/server-error" component={ServerError} /> */}
+						{/* <Route path="/register" component={Register} /> */}
+						{/* <Route path="/import-file" component={ImportFile} /> */}
+						{/* <Route path="/chartZaba" component={ChartZaba} /> */}
+						{/* <PrivateRoute path="/checkout" component={CheckoutWrapper} /> */}
+						{/* <PrivateRoute path="/orders" component={Orders} /> */}
+						{/* <PrivateRoute roles={['Admin']} path="/inventory" component={Inventory} /> */}
+						<Route exact path="/" component={HomePage} />
+						<Route component={NotFound} />
+					</Switch>
+				</Suspense>
+			</Container>
 			<Grid container spacing={2}>
 				<Grid item xs={8} sx={{ ml: 25 }}>
 					<Item>xs=8</Item>

@@ -17,13 +17,6 @@ const HomePage = React.lazy(() => import('./features/home/HomePage'));
 
 const routes = [
 	{
-		enabled: false,
-		path: '/',
-		component: HomePage,
-		child: null,
-		exact: true,
-	},
-	{
 		enabled: true,
 		path: '/catalog',
 		component: Catalog,
