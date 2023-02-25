@@ -22,7 +22,6 @@ const Dashboard = () => {
 			{/* HEADER */}
 			<Box display="flex" justifyContent="space-between" alignItems="center">
 				<Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
-
 				<Box>
 					<Button
 						sx={{
@@ -40,7 +39,7 @@ const Dashboard = () => {
 			</Box>
 
 			{/* GRID & CHARTS */}
-			<Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="140px" gap="20px">
+			<Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="140px" gap="25px">
 				{/* ROW 1 */}
 				<Box
 					gridColumn="span 3"
@@ -52,7 +51,7 @@ const Dashboard = () => {
 					<StatBox
 						title="12,361"
 						subtitle="Emails Sent"
-						progress="0.75"
+						progress="0.66"
 						increase="+14%"
 						icon={<EmailIcon sx={{ color: colors.greenAccent[600], fontSize: '26px' }} />}
 					/>
