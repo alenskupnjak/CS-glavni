@@ -202,7 +202,7 @@ const Sidebar = () => {
 							selected={selected}
 							setSelected={setSelected}
 						/>
-						<SubMenu title="Ajmoo" icon={<MapOutlinedIcon />}>
+						<SubMenu title="Pokus" icon={<MapOutlinedIcon />}>
 							<Item
 								title="Geography Chart"
 								to="/geography"
