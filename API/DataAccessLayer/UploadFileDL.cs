@@ -55,7 +55,7 @@ namespace API.DataAccessLayer
       return response;
     }
 
-    // READ RECORD READ RECORD
+    // READ RECORD BulkUploadTable READ RECORD BulkUploadTable
     public async Task<ReadResponse> ReadRecord(ReadRequest request)
     {
       ReadResponse response = new ReadResponse();
@@ -337,7 +337,7 @@ namespace API.DataAccessLayer
               zabaMSSQL.Parameters.AddWithValue("@Uplata", Math.Round(rows.Uplata, 2));
               zabaMSSQL.Parameters.AddWithValue("@Isplata", Math.Round(rows.Isplata, 2));
               zabaMSSQL.Parameters.AddWithValue("@Kategorija", rows.Kategorija);
-              zabaMSSQL.Parameters.AddWithValue("@IsActive", "5");
+              zabaMSSQL.Parameters.AddWithValue("@IsActive", true);
               _connectMSSQL.Open();
               SqlDataReader Provjera = provjeraDaliZapisPostoji.ExecuteReader();
               if (Provjera.HasRows)
@@ -397,6 +397,7 @@ namespace API.DataAccessLayer
           }
           string queryMSSQL = @"SELECT DISTINCT Datum,Referencija,Opis,Uplata,Isplata,Kategorija,IsActive
                                  FROM dbo.ZabaTBL
+	                               WHERE IsActive='1' OR IsActive=@IsActive
                                  ORDER BY Datum
                                  OFFSET @Offset ROWS
                                  FETCH NEXT @RecordPerPage ROWS ONLY;";
@@ -411,13 +412,14 @@ namespace API.DataAccessLayer
             //int OffsetRow = (1 - 1) * request.RecordPerPage;
             sqlCommand.Parameters.AddWithValue("@Offset", 0);
             sqlCommand.Parameters.AddWithValue("@RecordPerPage", count);
+            sqlCommand.Parameters.AddWithValue("@IsActive", '1');
           }
           else
           {
             int OffsetRow = (request.PageNumber - 1) * request.RecordPerPage;
             sqlCommand.Parameters.AddWithValue("@Offset", OffsetRow);
             sqlCommand.Parameters.AddWithValue("@RecordPerPage", request.RecordPerPage);
-
+            sqlCommand.Parameters.AddWithValue("@IsActive", '0');
           }
 
 
@@ -425,8 +427,10 @@ namespace API.DataAccessLayer
           if (dr.HasRows)
           {
             response.ZabaReadRecord = new List<ZabaReadRecord>();
+            var countGraph = 0;
             while (dr.Read())
             {
+              countGraph++;
               ZabaReadRecord getdata = new()
               {
                 Datum = dr.GetDateTime(0),
@@ -434,7 +438,8 @@ namespace API.DataAccessLayer
                 Opis = dr.GetString(2),
                 Uplata = dr.GetDouble(3),
                 Isplata = dr.GetDouble(4),
-                Kategorija = dr.GetString(5)
+                Kategorija = dr.GetString(5),
+                IsActive= dr.GetBoolean(6)
 
               };
               if (Count == 0)
@@ -444,8 +449,10 @@ namespace API.DataAccessLayer
                 response.TotalPages = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(response.TotalRecords / request.RecordPerPage)));
                 response.CurrentPage = request.PageNumber;
               }
-              response.ZabaReadRecord.Add(getdata);
+                response.ZabaReadRecord.Add(getdata);
+
             }
+              response.NewData = countGraph;
           }
         }
         catch (Exception ex)
@@ -474,6 +481,44 @@ namespace API.DataAccessLayer
         {
           response.IsSuccess = false;
           response.Message = "Delete Query Not Executed";
+          return response;
+        }
+        connection.Close();
+      }
+      catch (Exception ex)
+      {
+        response.IsSuccess = false;
+        response.Message = ex.Message;
+      }
+      return response;
+    }
+
+    // UPLOAD ZABA RECORD UPLOAD ZABA UPLOAD ZABA RECORD
+    public async Task<UpdateZabaRecordResponse> UpdateZabaRecord(UpdateZabaRecord request)
+    {
+      UpdateZabaRecordResponse response = new UpdateZabaRecordResponse();
+      response.IsSuccess = true;
+      response.Message = "Uspjesno UPDATE";
+      try
+      {   //  spajanje na bazu
+        using SqlConnection connection = new SqlConnection(_configuration["ConnectionStrings:MSSQL"]);
+        string queryMSSQL = @"UPDATE dbo.ZabaTBL 
+                              SET Datum=@Datum, Opis=@Opis, IsActive=@IsActive, Kategorija=@Kategorija
+                              WHERE Referencija = @Referencija";
+        connection.Open();
+        SqlCommand command = new SqlCommand(queryMSSQL, connection);
+        command.Parameters.AddWithValue("@Datum", request.Datum);
+        command.Parameters.AddWithValue("@Opis", request.Opis);
+        command.Parameters.AddWithValue("@Uplata", request.Uplata);
+        command.Parameters.AddWithValue("@Isplata", request.Isplata);
+        command.Parameters.AddWithValue("@Kategorija", request.Kategorija);
+        command.Parameters.AddWithValue("@IsActive", request.IsActive);
+        command.Parameters.AddWithValue("@Referencija", request.Referencija);
+        int Status = await command.ExecuteNonQueryAsync();
+        if (Status <= 0)
+        {
+          response.IsSuccess = false;
+          response.Message = "Update Query Not Executed";
           return response;
         }
         connection.Close();
@@ -578,6 +623,12 @@ namespace API.DataAccessLayer
       if (regex.Match(opis).Success)
       {
         kategorija = "Financije-mastercard";
+      }
+
+      regex = new Regex(@"hep");
+      if (regex.Match(opis).Success)
+      {
+        kategorija = "Rezije-Struja";
       }
 
       regex = new Regex(@"trajnog naloga");

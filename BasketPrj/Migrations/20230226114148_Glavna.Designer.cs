@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BasketPrj.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20230128134108_Glavna")]
+    [Migration("20230226114148_Glavna")]
     partial class Glavna
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,8 +62,8 @@ namespace BasketPrj.Migrations
                     b.Property<DateTime>("Datum")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IsActive")
-                        .HasColumnType("int");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<double>("Isplata")
                         .HasColumnType("float");
@@ -249,14 +249,14 @@ namespace BasketPrj.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "1d06d7e7-c711-4fc9-94c2-fc7d2574450e",
+                            ConcurrencyStamp = "bd874a18-4a7c-4021-895a-56e4ea231399",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "47a030d3-a5ee-4eb3-8614-fa361a4f68f7",
+                            ConcurrencyStamp = "eba18aea-731e-4b8e-b4b9-15f434eb3a79",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });

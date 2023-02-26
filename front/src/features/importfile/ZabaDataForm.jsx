@@ -9,10 +9,10 @@ import AppSelectList from '../../app/components/AppSelectList';
 // import AppTextInput from '../../app/components/AppTextInput';
 // import agent from '../../app/api/agent';
 import { validationSchema } from './zabaValidation';
+import agent from '../../app/api/agent';
+// import AppTextInput from '../../app/components/AppTextInput';
 
 function ZabaDataForm({ state, handleClose }) {
-	console.log('%c state Zaba form dfata ', 'color:green', state);
-
 	const { modalData, ZabaKategorije } = state;
 
 	// console.log('%c 00 ', 'color:green', ZabaKategorije);
@@ -40,20 +40,23 @@ function ZabaDataForm({ state, handleClose }) {
 
 	async function handleSubmitData(data) {
 		try {
+			console.log('%c 13 ', 'color:green', data.isActive, typeof data.isActive);
 			if (isDirty) {
+				if (typeof data.isActive === 'string') {
+					data.isActive = data.isActive === 'true' ? true : false;
+				} else {
+					data.isActive = data.isActive ?? false;
+				}
 				console.log('%c 14 ', 'color:red', data);
-				// if (product) {
-				// 	await agent.Admin.updateProduct(data);
-				// } else {
-				// 	await agent.Admin.createProduct(data);
-				// }
-				// loadAllProduct();
+				await agent.ReadWriteDatabase.updateZabaRecord(data);
 			}
 			handleClose();
 		} catch (error) {
 			console.log(error);
 		}
 	}
+
+	const vrijednostiActive = ['true', 'false'];
 
 	return (
 		<Box component={Paper} sx={{ p: 4 }}>
@@ -62,11 +65,11 @@ function ZabaDataForm({ state, handleClose }) {
 			</Typography>
 			<form onSubmit={handleSubmit(handleSubmitData)}>
 				<Grid container spacing={3}>
-					{/* <Grid item xs={12} sm={12}>
-						<AppTextInput control={control} name="kategorija" label="Product name" />
-					</Grid> */}
 					<Grid item xs={12} sm={6}>
 						<AppSelectList items={ZabaKategorije} control={control} name="kategorija" label="Kategorija" />
+					</Grid>
+					<Grid item xs={12} sm={6}>
+						<AppSelectList items={vrijednostiActive} control={control} name="isActive" label="Active" />
 					</Grid>
 				</Grid>
 				<Box display="flex" justifyContent="space-between" sx={{ mt: 3 }}>

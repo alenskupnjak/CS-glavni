@@ -16,6 +16,7 @@ namespace API.DataAccessLayer
     public Task<ExcelZabaResponse> UploadZabaFile(ExcelZabaRequest request, string Path);
     public Task<ZabaReadResponse> ReadZaba(ZabaReadRequest request);
     public Task<DeleteZabaResponse> DeleteZabaRecord(DeleteZabaRequest request);
+    public Task<UpdateZabaRecordResponse> UpdateZabaRecord(UpdateZabaRecord request);
 
   }
 }

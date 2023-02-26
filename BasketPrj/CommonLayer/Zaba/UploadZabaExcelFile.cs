@@ -24,6 +24,24 @@ namespace BasketPrj.CommonLayer.Zaba
     public float Uplata { get; set; }
     public float Isplata { get; set; }
     public string Kategorija { get; set; }
+  }
 
+  public class UpdateZabaRecord
+  {
+    public DateTime Datum { get; set; }
+    public string Referencija { get; set; }
+    public string Opis { get; set; }
+    public float Uplata { get; set; }
+    public float Isplata { get; set; }
+    public string Kategorija { get; set; }
+    public bool IsActive { get; set; }
+  }
+
+  public class UpdateZabaRecordResponse
+  {
+    public bool IsSuccess { get; set; }
+    public string Message { get; set; }
+    public object NewData { get; set; }
+    public object Dupli { get; set; }
   }
 }

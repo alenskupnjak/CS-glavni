@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading.Tasks;
 using API.DataAccessLayer;
 using BasketPrj.CommonLayer.Zaba;
+using BasketPrj.Data;
 
 namespace API.Controllers
 {
@@ -13,9 +14,11 @@ namespace API.Controllers
   public class UploadFileController : ControllerBase
   {
     public readonly IUploadFileDL _uploadFileDL;
-    public UploadFileController(IUploadFileDL uploadFileDL)
+    private readonly StoreContext _context;
+    public UploadFileController(IUploadFileDL uploadFileDL, StoreContext context)
     {
       _uploadFileDL = uploadFileDL;
+      _context = context;
     }
 
     //
@@ -177,6 +180,28 @@ namespace API.Controllers
       try
       {
         response = await _uploadFileDL.DeleteZabaRecord(request);
+      }
+      catch (Exception ex)
+      {
+        response.IsSuccess = false;
+        response.Message = ex.Message;
+      }
+      return Ok(response);
+    }
+
+    ///
+    // UPDATE ZABA UPDATE ZABA UPDATE ZABA
+    [HttpPost]
+    [Route("UpdateZabaRecord")]
+    public async Task<IActionResult> UpdateZabaRecord(UpdateZabaRecord request)
+    {
+      UpdateZabaRecordResponse response = new UpdateZabaRecordResponse();
+      var record = await _context.ZabaTBL.FindAsync(request.Referencija);
+
+      if (record == null) return NotFound();
+      try
+      {
+        response = await _uploadFileDL.UpdateZabaRecord(request);
       }
       catch (Exception ex)
       {

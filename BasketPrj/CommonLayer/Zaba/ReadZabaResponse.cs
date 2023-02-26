@@ -25,10 +25,7 @@ namespace BasketPrj.CommonLayer.Zaba
   public class ZabaReadRecord
 
   {
-
-    private int _isActive;
     public DateTime Datum { get; set; }
-
     [Key]
     public string Referencija { get; set; }
     public string Opis { get; set; }
@@ -37,14 +34,6 @@ namespace BasketPrj.CommonLayer.Zaba
     public double Uplata { get; set; }
     public double Isplata { get; set; }
     public string Kategorija { get; set; }
-    public int IsActive
-    {
-      get
-      {
-        return _isActive;
-      }
-
-      set { _isActive = 1; }
-    }
+    public bool IsActive { get; set; }
   }
 }

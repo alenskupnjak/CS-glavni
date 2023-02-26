@@ -137,7 +137,7 @@ namespace BasketPrj.Migrations
                     Uplata = table.Column<double>(type: "float", nullable: false),
                     Isplata = table.Column<double>(type: "float", nullable: false),
                     Kategorija = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<int>(type: "int", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -328,12 +328,12 @@ namespace BasketPrj.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 1, "1d06d7e7-c711-4fc9-94c2-fc7d2574450e", "Member", "MEMBER" });
+                values: new object[] { 1, "bd874a18-4a7c-4021-895a-56e4ea231399", "Member", "MEMBER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 2, "47a030d3-a5ee-4eb3-8614-fa361a4f68f7", "Admin", "ADMIN" });
+                values: new object[] { 2, "eba18aea-731e-4b8e-b4b9-15f434eb3a79", "Admin", "ADMIN" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

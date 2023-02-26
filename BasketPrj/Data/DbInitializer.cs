@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BasketPrj.Entities;
 
-// U terminalu dodabanje nove baze miras niti u folder glavni ne API!
+// U terminalu dodavanje nove baze moras biti u folder glavni ne API!
 // dotnet ef migrations add Glavna -p BasketPrj -s API
 // pokrenes backend i sve ce se samo kreirati
 

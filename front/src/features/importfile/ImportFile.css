@@ -131,6 +131,9 @@
 .MainContainer .SubContainer .Box2 .data-flex .kategorija {
 	flex: 2;
 }
+.MainContainer .SubContainer .Box2 .data-flex .isActive {
+	flex: 2;
+}
 .MainContainer .SubContainer .Box2 .data-flex .delete {
 	flex: 2;
 }

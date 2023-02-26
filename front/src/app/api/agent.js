@@ -155,6 +155,7 @@ const ReadWriteDatabase = {
 	InsertZabaExcelRecord: file => requests.post('uploadFile/UploadZabaFile', file),
 	ReadZaba: pageNumber => requests.post('uploadFile/ReadZaba', pageNumber),
 	DeleteZabaRecord: ref => requests.deleteBody('uploadFile/DeleteZabaRecord', { data: { referencija: ref } }),
+	updateZabaRecord: data => requests.post('uploadFile/UpdateZabaRecord', data),
 };
 
 const agent = {

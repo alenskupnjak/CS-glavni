@@ -156,6 +156,7 @@ export default class ImportFile extends Component {
 		await this.setState(state => ({
 			modalOpen: false,
 		}));
+		this.ReadRecord(this.state.PageNumber);
 	};
 
 	handleFiles = files => {
@@ -208,7 +209,6 @@ export default class ImportFile extends Component {
 			toast.success(response.message);
 			this.ReadRecord(this.state.PageNumber);
 		} else {
-			console.log('Delete Body Id-----------------: ', data);
 			const response = await agent.ReadWriteDatabase.DeleteZabaRecord(data.referencija);
 			toast.success(response.message);
 			this.ReadRecord(this.state.PageNumber);
@@ -276,6 +276,7 @@ export default class ImportFile extends Component {
 										<div className="uplata">Uplata</div>
 										<div className="isplata">Isplata</div>
 										<div className="kategorija">Kategorija</div>
+										<div className="isActive">Aktivno</div>
 										<div className="delete">Delete</div>
 										<div className="update">Update</div>
 									</div>
@@ -321,6 +322,9 @@ export default class ImportFile extends Component {
 												>
 													{data.kategorija}
 												</div>
+												<div className="isActive" style={{ color: `${data.isActive === false ? 'blue' : ''}` }}>{`${
+													data.isActive ? 'Da' : 'Ne'
+												}`}</div>
 												<div className="delete">
 													<Button
 														variant="outlined"
