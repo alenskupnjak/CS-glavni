@@ -138,7 +138,7 @@ const Sidebar = () => {
 							Pages
 						</Typography>
 						<Item
-							title="Profile Form"
+							title="Formic Profile Form"
 							to="/form"
 							icon={<PersonOutlinedIcon />}
 							selected={selected}

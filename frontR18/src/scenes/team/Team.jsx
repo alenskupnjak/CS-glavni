@@ -36,11 +36,6 @@ const Team = () => {
 			flex: 1,
 		},
 		{
-			field: 'pokus',
-			headerName: 'Pokus',
-			flex: 1,
-		},
-		{
 			field: 'accessLevel',
 			headerName: 'Access Level',
 			flex: 1,

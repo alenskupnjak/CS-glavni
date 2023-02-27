@@ -38,7 +38,7 @@ export default class ImportFile extends Component {
 			top: '50%',
 			left: '50%',
 			transform: 'translate(-50%, -50%)',
-			width: 600,
+			// width: 900,
 			bgcolor: 'background.paper',
 			border: '2px solid #000',
 			boxShadow: 24,
@@ -275,10 +275,10 @@ export default class ImportFile extends Component {
 										<div className="opis">Opis</div>
 										<div className="uplata">Uplata</div>
 										<div className="isplata">Isplata</div>
-										<div className="kategorija">Kategorija</div>
+										<div className="kategorija">Kat.</div>
 										<div className="isActive">Aktivno</div>
-										<div className="delete">Delete</div>
-										<div className="update">Update</div>
+										<div className="delete">Del</div>
+										<div className="update">Up.</div>
 									</div>
 								)}
 								{this.state.switch && Array.isArray(this.state.DataRecord) && this.state.DataRecord.length > 0

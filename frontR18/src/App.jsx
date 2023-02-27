@@ -5,16 +5,16 @@ import Sidebar from './scenes/global/Sidebar';
 import Dashboard from './scenes/dashboard/Dashboard';
 import Team from './scenes/team/Team';
 import Invoices from './scenes/invoices/Invoices';
-import Contacts from './scenes/contacts';
-import Bar from './scenes/bar';
-import Form from './scenes/form';
-import Line from './scenes/line';
-import Pie from './scenes/pie';
-import FAQ from './scenes/faq';
-import Geography from './scenes/geography';
+import Contacts from './scenes/contacts/Contacts';
+import Bar from './scenes/bar/Bar';
+import Form from './scenes/form/Form';
+import Line from './scenes/line/Line';
+import Pie from './scenes/pie/Pie';
+import FAQ from './scenes/faq/FAQ';
+import Geography from './scenes/geography/Geography';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { ColorModeContext, useMode } from './theme';
-import Calendar from './scenes/calendar/calendar';
+import Calendar from './scenes/calendar/Calendar';
 
 function App() {
 	const [theme, colorMode] = useMode();

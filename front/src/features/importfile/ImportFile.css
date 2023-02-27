@@ -120,25 +120,25 @@
 	flex: 2;
 }
 .MainContainer .SubContainer .Box2 .data-flex .opis {
-	flex: 12;
+	flex: 11;
 }
 .MainContainer .SubContainer .Box2 .data-flex .uplata {
-	flex: 2;
+	flex: 1;
 }
 .MainContainer .SubContainer .Box2 .data-flex .isplata {
-	flex: 2;
+	flex: 1;
 }
 .MainContainer .SubContainer .Box2 .data-flex .kategorija {
 	flex: 2;
 }
 .MainContainer .SubContainer .Box2 .data-flex .isActive {
-	flex: 2;
+	flex: 1;
 }
 .MainContainer .SubContainer .Box2 .data-flex .delete {
-	flex: 2;
+	flex: 1;
 }
 .MainContainer .SubContainer .Box2 .data-flex .update {
-	flex: 2;
+	flex: 1;
 }
 
 .MainContainer .MuiPaginationItem-outlinedSecondary.Mui-selected {
