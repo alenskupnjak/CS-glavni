@@ -29,9 +29,10 @@ axios.interceptors.response.use(
 		return response;
 	},
 	error => {
-		console.log('%c error', 'color:red', error);
-		console.log('%c error?.response', 'color:red', error?.response);
+		// console.log('%c 01 error', 'color:red', error);
 		const { data, status, statusText } = error?.response || {};
+		// console.log('%c 02 error?.response', 'color:red', error?.response);
+		// console.log('%c 03 STATUS=', 'color:red', status);
 		switch (status) {
 			case 400:
 				if (data.errors) {

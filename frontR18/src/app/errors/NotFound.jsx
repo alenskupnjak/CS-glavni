@@ -8,7 +8,7 @@ export default function NotFound() {
 				NotFound() Oops - we could not find what you are looking for
 			</Typography>
 			<Divider />
-			<Button fullWidth component={Link} to="/catalog">
+			<Button fullWidth component={Link} to="/login">
 				Go back
 			</Button>
 		</Container>

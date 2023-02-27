@@ -145,7 +145,7 @@ namespace API
       app.UseCors(opt =>
       {
         //opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5031");
-        opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:5031");
+        opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:5031","http://localhost:5035");
       });
 
       app.UseAuthentication();

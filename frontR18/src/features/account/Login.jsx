@@ -6,16 +6,20 @@ import Box from '@mui/material/Box';
 import { LockOutlined } from '@mui/icons-material';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { Paper } from '@mui/material';
+import { Paper, useTheme } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 import { LoadingButton } from '@mui/lab';
+import { useNavigate } from 'react-router-dom';
 
 import { useStore } from '../../app/stores/store';
+import { tokens } from '../../theme';
 
 export default function Login() {
 	const { userStore } = useStore();
 	const { loginForm } = userStore;
-	const location = useLocation();
+	const navigate = useNavigate();
+	const theme = useTheme();
+	const colors = tokens(theme.palette.mode);
 
 	const {
 		register,
@@ -29,7 +33,13 @@ export default function Login() {
 		<Container
 			component={Paper}
 			maxWidth="sm"
-			sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 4 }}
+			sx={{
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				p: 4,
+				backgroundColor: colors.grey[500],
+			}}
 		>
 			<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
 				<LockOutlined />
@@ -39,7 +49,7 @@ export default function Login() {
 			</Typography>
 			<Box
 				component="form"
-				onSubmit={handleSubmit(formData => loginForm(formData, location))}
+				onSubmit={handleSubmit(formData => loginForm(formData, navigate))}
 				noValidate
 				sx={{ mt: 1 }}
 			>
@@ -56,6 +66,11 @@ export default function Login() {
 					})}
 					error={!!errors.username}
 					helperText={errors?.username?.message}
+					sx={{
+						'& .MuiOutlinedInput-input': {
+							background: colors.grey[800],
+						},
+					}}
 				/>
 				<TextField
 					margin="normal"
@@ -65,14 +80,27 @@ export default function Login() {
 					{...register('password', { required: 'Password is required' })}
 					error={!!errors.password}
 					helperText={errors?.password?.message}
+					sx={{
+						'& .MuiOutlinedInput-input': {
+							background: colors.grey[800],
+						},
+					}}
 				/>
 				<LoadingButton
 					disabled={!isValid}
 					loading={isSubmitting}
 					type="submit"
 					fullWidth
+					// color="primary"
 					variant="contained"
-					sx={{ mt: 3, mb: 2 }}
+					sx={{
+						mt: 3,
+						mb: 2,
+						'& .Mui-disabled': {
+							background: colors.primary[200],
+							color: 'red',
+						},
+					}}
 				>
 					Sign In
 				</LoadingButton>

@@ -37,6 +37,8 @@ export default class ProductStore {
 			basket => {
 				console.log('%c ****** BOOM BASKET ******************', 'color:red', basket);
 				// this.pagingParams = { pageNumber: 1, pageSize: 3 };
+
+				window.localStorage.setItem('xxx', 'ajmoo');
 			}
 		);
 		this.filtersFind = debounce(this.fildFilteredItems, 100);

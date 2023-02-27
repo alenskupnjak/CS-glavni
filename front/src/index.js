@@ -20,6 +20,8 @@ export const history = createBrowserHistory({ basename: process.env.PUBLIC_URL }
 
 // usnimi postojeceg usera
 const user = JSON.parse(localStorage.getItem('user'));
+console.log('%c 00 user', 'color:green', user);
+
 if (user) {
 	store.userStore.user = user;
 }

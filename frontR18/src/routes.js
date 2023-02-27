@@ -14,15 +14,38 @@ const CheckoutWrapper = React.lazy(() => import('./features/checkout/CheckoutWra
 const Orders = React.lazy(() => import('./features/orders/Orders'));
 const Inventory = React.lazy(() => import('./features/admin/Inventory'));
 const HomePage = React.lazy(() => import('./features/home/HomePage'));
+const Team = React.lazy(() => import('./scenes/team/Team'));
+const NotFound = React.lazy(() => import('./app/errors/NotFound'));
+const Dashboard = React.lazy(() => import('./scenes/dashboard/Dashboard'));
+const Form = React.lazy(() => import('./scenes/form/Form'));
+
+{
+	/* <Route path="/contacts" element={<Contacts />} />
+<Route path="/invoices" element={<Invoices />} />
+<Route path="/form" element={<Form />} />
+<Route path="/bar" element={<Bar />} />
+<Route path="/pie" element={<Pie />} />
+<Route path="/line" element={<Line />} />
+<Route path="/faq" element={<FAQ />} />
+<Route path="/calendar" element={<Calendar />} />
+<Route path="/geography" element={<Geography />} /> */
+}
 
 const routes = [
+	{
+		enabled: true,
+		path: '/dashboard',
+		component: Dashboard,
+		child: null,
+		privateRoute: true,
+	},
 	{
 		enabled: true,
 		path: '/catalog',
 		component: Catalog,
 		child: null,
 		exact: true,
-		navbar: 'Catalog',
+		privateRoute: true,
 	},
 	{
 		enabled: true,
@@ -111,6 +134,38 @@ const routes = [
 		exact: false,
 		privateRoute: true,
 		roles: ['Admin'],
+	},
+	{
+		enabled: true,
+		path: '/team',
+		component: Team,
+		child: null,
+		exact: false,
+		privateRoute: true,
+	},
+	{
+		enabled: true,
+		path: '/',
+		component: HomePage,
+		child: null,
+		exact: false,
+		privateRoute: false,
+	},
+	{
+		enabled: true,
+		path: '/form',
+		component: Form,
+		child: null,
+		exact: false,
+		privateRoute: false,
+	},
+	{
+		enabled: true,
+		path: '*',
+		component: NotFound,
+		child: null,
+		exact: false,
+		privateRoute: false,
 	},
 ];
 

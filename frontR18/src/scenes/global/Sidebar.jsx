@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
-import { Box, Icon, IconButton, Typography, useTheme } from '@mui/material';
+import { Box, IconButton, Typography, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
 import 'react-pro-sidebar/dist/css/styles.css';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
@@ -11,6 +11,7 @@ import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined';
+import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 import PieChartOutlineOutlinedIcon from '@mui/icons-material/PieChartOutlineOutlined';
 import TimelineOutlinedIcon from '@mui/icons-material/TimelineOutlined';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
@@ -107,7 +108,13 @@ const Sidebar = () => {
 					)}
 
 					<Box paddingLeft={isCollapsed ? null : '5%'}>
-						<Item title="Dashboard" to="/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} />
+						<Item
+							title="Dashboard"
+							to="/dashboard"
+							icon={<HomeOutlinedIcon />}
+							selected={selected}
+							setSelected={setSelected}
+						/>
 
 						<Typography variant="h6" color={colors.grey[300]} sx={{ m: '15px 0 5px 20px' }}>
 							Data
@@ -193,7 +200,7 @@ const Sidebar = () => {
 						<SubMenu title="Pokus" icon={<MapOutlinedIcon />}>
 							<Item
 								title="Geography Chart"
-								to="/geography"
+								to="/"
 								icon={<MapOutlinedIcon />}
 								selected={selected}
 								setSelected={setSelected}
@@ -202,6 +209,13 @@ const Sidebar = () => {
 								title="Bar Chart"
 								to="/bar"
 								icon={<BarChartOutlinedIcon />}
+								selected={selected}
+								setSelected={setSelected}
+							/>
+							<Item
+								title="Login"
+								to="/login"
+								icon={<LoginOutlinedIcon />}
 								selected={selected}
 								setSelected={setSelected}
 							/>

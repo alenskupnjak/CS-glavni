@@ -21,7 +21,7 @@ export default function ServerError() {
 					Server Error
 				</Typography>
 			)}
-			<Button onClick={() => navigate('/catalog')}>Go back to the store</Button>
+			<Button onClick={() => navigate('/')}>Go back to the store</Button>
 		</Container>
 	);
 }

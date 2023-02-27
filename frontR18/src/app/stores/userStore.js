@@ -1,21 +1,19 @@
+import React, { Component } from 'react';
 import { makeAutoObservable } from 'mobx';
 import agent from '../api/agent';
 import { history } from '../..';
 import { store } from './store';
 import { isEmpty } from 'lodash-es';
+import { toast } from 'react-toastify';
 
-export default class UserStore {
+class UserStore {
 	user = null;
 	constructor() {
 		makeAutoObservable(this);
 	}
 
-	loginForm = async (formData, location) => {
+	loginForm = async (formData, navigation) => {
 		this.user = null;
-		// console.log('%c 00 formData', 'color:green', formData);
-		// console.log('%c 00 history', 'color:green', history);
-		// console.log('%c 00 location', 'color:green', location);
-
 		try {
 			const user = await agent.Account.login(formData);
 			let claims = JSON.parse(atob(user.token.split('.')[1]));
@@ -34,17 +32,18 @@ export default class UserStore {
 					});
 				}
 			}
-			history.push(location?.state?.from?.pathname || '/catalog');
+			toast.success('Successful login');
+			navigation('/dashboard');
 		} catch (error) {
 			console.log(error);
-		} finally {
-			// console.log('%c 00 provjera', 'color:red', provjera);
 		}
 	};
 
 	// LOGOUT LOGOUT LOGOUT LOGOUT
 	signOut = () => {
 		this.user = null;
+		console.log('%c 0000000000000000000', 'color:green');
+
 		localStorage.removeItem('user');
 		store.productStore.basket = { buyerId: null, id: null, items: [] };
 		store.productStore.itemCount = 0;
@@ -69,3 +68,5 @@ export default class UserStore {
 		}
 	};
 }
+
+export default UserStore;
