@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
 import { makeAutoObservable } from 'mobx';
 import agent from '../api/agent';
-import { history } from '../..';
 import { store } from './store';
 import { isEmpty } from 'lodash-es';
 import { toast } from 'react-toastify';
@@ -12,14 +10,17 @@ class UserStore {
 		makeAutoObservable(this);
 	}
 
+	// LOGIN LOGIN LOGIN LOGIN
 	loginForm = async (formData, navigation) => {
 		this.user = null;
 		try {
 			const user = await agent.Account.login(formData);
 			let claims = JSON.parse(atob(user.token.split('.')[1]));
 			let roles = claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+
 			this.user = user;
 			this.user = { ...this.user, roles };
+
 			console.log('%c LOGIN user', 'color:blue', this.user);
 			localStorage.setItem('user', JSON.stringify(this.user));
 			if (user.basket?.items.length > 0) {
@@ -32,7 +33,7 @@ class UserStore {
 					});
 				}
 			}
-			toast.success('Successful login');
+			toast.success('Successful login.');
 			navigation('/dashboard');
 		} catch (error) {
 			console.log(error);
@@ -42,12 +43,9 @@ class UserStore {
 	// LOGOUT LOGOUT LOGOUT LOGOUT
 	signOut = () => {
 		this.user = null;
-		console.log('%c 0000000000000000000', 'color:green');
-
 		localStorage.removeItem('user');
 		store.productStore.basket = { buyerId: null, id: null, items: [] };
 		store.productStore.itemCount = 0;
-		history.push('/');
 	};
 
 	fetchCurrentUser = async () => {

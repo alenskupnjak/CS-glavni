@@ -1,9 +1,10 @@
-import { Box, Typography } from '@mui/material';
 import React from 'react';
+import { observer } from 'mobx-react';
+import { Typography } from '@mui/material';
 import Slider from 'react-slick';
 import './Slider.css';
 
-export default function HomePage() {
+function HomePage() {
 	const settings = {
 		dots: true,
 		infinite: true,
@@ -33,3 +34,5 @@ export default function HomePage() {
 		</div>
 	);
 }
+
+export default observer(HomePage);

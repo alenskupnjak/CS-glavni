@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { Box, IconButton, Typography, useTheme } from '@mui/material';
-import { Link } from 'react-router-dom';
 import 'react-pro-sidebar/dist/css/styles.css';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
@@ -16,7 +17,9 @@ import PieChartOutlineOutlinedIcon from '@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from '@mui/icons-material/TimelineOutlined';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
+
 import { tokens } from '../../theme';
+import { useStore } from '../../app/stores/store';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
 	const theme = useTheme();
@@ -39,6 +42,8 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 const Sidebar = () => {
 	const theme = useTheme();
 	const colors = tokens(theme.palette.mode);
+	const { userStore } = useStore();
+	const { user } = userStore;
 	const [isCollapsed, setIsCollapsed] = useState(false);
 	const [selected, setSelected] = useState('Dashboard');
 
@@ -197,29 +202,31 @@ const Sidebar = () => {
 							selected={selected}
 							setSelected={setSelected}
 						/>
-						<SubMenu title="Pokus" icon={<MapOutlinedIcon />}>
-							<Item
-								title="Geography Chart"
-								to="/"
-								icon={<MapOutlinedIcon />}
-								selected={selected}
-								setSelected={setSelected}
-							/>
-							<Item
-								title="Bar Chart"
-								to="/bar"
-								icon={<BarChartOutlinedIcon />}
-								selected={selected}
-								setSelected={setSelected}
-							/>
-							<Item
-								title="Login"
-								to="/login"
-								icon={<LoginOutlinedIcon />}
-								selected={selected}
-								setSelected={setSelected}
-							/>
-						</SubMenu>
+						{user && user.roles?.includes('Admin') && (
+							<SubMenu title="Admin" icon={<MapOutlinedIcon />}>
+								<Item
+									title="Inventory"
+									to="inventory"
+									icon={<MapOutlinedIcon />}
+									selected={selected}
+									setSelected={setSelected}
+								/>
+								<Item
+									title="Bar Chart"
+									to="/bar"
+									icon={<BarChartOutlinedIcon />}
+									selected={selected}
+									setSelected={setSelected}
+								/>
+								<Item
+									title="Login"
+									to="/login"
+									icon={<LoginOutlinedIcon />}
+									selected={selected}
+									setSelected={setSelected}
+								/>
+							</SubMenu>
+						)}
 					</Box>
 				</Menu>
 			</ProSidebar>
@@ -227,4 +234,4 @@ const Sidebar = () => {
 	);
 };
 
-export default Sidebar;
+export default observer(Sidebar);

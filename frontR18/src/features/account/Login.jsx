@@ -1,15 +1,8 @@
 import { useForm } from 'react-hook-form';
-import Avatar from '@mui/material/Avatar';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
+import { Link, useNavigate } from 'react-router-dom';
+import { Avatar, TextField, Box, Paper, useTheme, Typography, Container, Grid } from '@mui/material';
 import { LockOutlined } from '@mui/icons-material';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { Paper, useTheme } from '@mui/material';
-import { Link, useLocation } from 'react-router-dom';
 import { LoadingButton } from '@mui/lab';
-import { useNavigate } from 'react-router-dom';
 
 import { useStore } from '../../app/stores/store';
 import { tokens } from '../../theme';

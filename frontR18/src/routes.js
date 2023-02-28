@@ -18,26 +18,58 @@ const Team = React.lazy(() => import('./scenes/team/Team'));
 const NotFound = React.lazy(() => import('./app/errors/NotFound'));
 const Dashboard = React.lazy(() => import('./scenes/dashboard/Dashboard'));
 const Form = React.lazy(() => import('./scenes/form/Form'));
-
-{
-	/* <Route path="/contacts" element={<Contacts />} />
-<Route path="/invoices" element={<Invoices />} />
-<Route path="/form" element={<Form />} />
-<Route path="/bar" element={<Bar />} />
-<Route path="/pie" element={<Pie />} />
-<Route path="/line" element={<Line />} />
-<Route path="/faq" element={<FAQ />} />
-<Route path="/calendar" element={<Calendar />} />
-<Route path="/geography" element={<Geography />} /> */
-}
+const Contacts = React.lazy(() => import('./scenes/contacts/Contacts'));
+const UnderConstruction = React.lazy(() => import('./app/errors/UnderConstruction'));
+const Invoices = React.lazy(() => import('./scenes/invoices/Invoices'));
+const Calendar = React.lazy(() => import('./scenes/calendar/Calendar'));
+const FAQ = React.lazy(() => import('./scenes/faq/FAQ'));
+const Bar = React.lazy(() => import('./scenes/bar/Bar'));
+const Line = React.lazy(() => import('./scenes/line/Line'));
+const Pie = React.lazy(() => import('./scenes/pie/Pie'));
+const Geography = React.lazy(() => import('./scenes/geography/Geography'));
 
 const routes = [
+	{
+		enabled: true,
+		path: '/line',
+		component: Line,
+		child: null,
+		privateRoute: false,
+	},
+	{
+		enabled: true,
+		path: '/pie',
+		component: Pie,
+		child: null,
+		privateRoute: false,
+	},
+	{
+		enabled: true,
+		path: '/geography',
+		component: Geography,
+		child: null,
+		privateRoute: false,
+	},
+	{
+		enabled: true,
+		path: '/bar',
+		component: Bar,
+		child: null,
+		privateRoute: false,
+	},
+	{
+		enabled: true,
+		path: '/faq',
+		component: FAQ,
+		child: null,
+		privateRoute: false,
+	},
 	{
 		enabled: true,
 		path: '/dashboard',
 		component: Dashboard,
 		child: null,
-		privateRoute: true,
+		privateRoute: false,
 	},
 	{
 		enabled: true,
@@ -141,20 +173,52 @@ const routes = [
 		component: Team,
 		child: null,
 		exact: false,
-		privateRoute: true,
-	},
-	{
-		enabled: true,
-		path: '/',
-		component: HomePage,
-		child: null,
-		exact: false,
 		privateRoute: false,
 	},
 	{
 		enabled: true,
 		path: '/form',
 		component: Form,
+		child: null,
+		exact: false,
+		privateRoute: false,
+	},
+	{
+		enabled: true,
+		path: '/contacts',
+		component: Contacts,
+		child: null,
+		exact: false,
+		privateRoute: false,
+	},
+	{
+		enabled: true,
+		path: '/underConstruction',
+		component: UnderConstruction,
+		child: null,
+		exact: false,
+		privateRoute: false,
+	},
+	{
+		enabled: true,
+		path: '/invoices',
+		component: Invoices,
+		child: null,
+		exact: false,
+		privateRoute: false,
+	},
+	{
+		enabled: true,
+		path: '/calendar',
+		component: Calendar,
+		child: null,
+		exact: false,
+		privateRoute: false,
+	},
+	{
+		enabled: true,
+		path: '/',
+		component: HomePage,
 		child: null,
 		exact: false,
 		privateRoute: false,

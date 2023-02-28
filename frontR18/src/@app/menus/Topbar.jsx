@@ -1,5 +1,6 @@
-import { Box, IconButton, useTheme } from '@mui/material';
 import { useContext } from 'react';
+import { observer } from 'mobx-react';
+import { Box, IconButton, useTheme } from '@mui/material';
 import { ColorModeContext, tokens } from '../../theme';
 import InputBase from '@mui/material/InputBase';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
@@ -8,7 +9,7 @@ import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import SearchIcon from '@mui/icons-material/Search';
-import UserMenu from './UserMenu';
+import UserMenu from '@app/menus/UserMenu';
 
 const Topbar = () => {
 	const theme = useTheme();
@@ -45,4 +46,4 @@ const Topbar = () => {
 	);
 };
 
-export default Topbar;
+export default observer(Topbar);
