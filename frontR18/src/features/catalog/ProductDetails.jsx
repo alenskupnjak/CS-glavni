@@ -11,7 +11,7 @@ import {
 	TextField,
 	Typography,
 } from '@mui/material';
-import NotFound from '../../app/errors/NotFound';
+import NotFound from '../../@app/errors/NotFound';
 import { useStore } from '../../app/stores/store';
 // import { useHistory, useParams } from 'react-router-dom';
 

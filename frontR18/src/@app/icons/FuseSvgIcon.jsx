@@ -6,8 +6,6 @@ import { Box } from '@mui/system';
 import Icon from '@mui/material/Icon';
 
 const Root = styled(Box)(({ theme, ...props }) => {
-	console.log('%c props ', 'color:green', props);
-
 	return {
 		width: props.size,
 		height: props.size,
@@ -32,10 +30,6 @@ const Root = styled(Box)(({ theme, ...props }) => {
 const FuseSvgIcon = forwardRef((props, ref) => {
 	const { children, size, sx, className, color } = props;
 	const iconPath = children.replace(':', '.svg#');
-
-	console.log('%c 03 FuseSvgIcon props', 'color:green', props);
-	console.log('%c 04 FuseSvgIcon iconPath ', 'color:green', iconPath);
-
 	return (
 		<React.Fragment>
 			{!props.children.includes(':') ? (

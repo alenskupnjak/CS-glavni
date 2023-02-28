@@ -12,11 +12,12 @@ import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined';
-import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
+import DonutLargeIcon from '@mui/icons-material/DonutLarge';
 import PieChartOutlineOutlinedIcon from '@mui/icons-material/PieChartOutlineOutlined';
 import TimelineOutlinedIcon from '@mui/icons-material/TimelineOutlined';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
+import RunningWithErrorsIcon from '@mui/icons-material/RunningWithErrors';
 
 import { tokens } from '../../theme';
 import { useStore } from '../../app/stores/store';
@@ -205,23 +206,23 @@ const Sidebar = () => {
 						{user && user.roles?.includes('Admin') && (
 							<SubMenu title="Admin" icon={<MapOutlinedIcon />}>
 								<Item
-									title="Inventory"
-									to="inventory"
-									icon={<MapOutlinedIcon />}
+									title="Chart"
+									to="/chartZaba"
+									icon={<DonutLargeIcon />}
 									selected={selected}
 									setSelected={setSelected}
 								/>
 								<Item
-									title="Bar Chart"
-									to="/bar"
+									title="Inventory"
+									to="/inventory"
 									icon={<BarChartOutlinedIcon />}
 									selected={selected}
 									setSelected={setSelected}
 								/>
 								<Item
-									title="Login"
-									to="/login"
-									icon={<LoginOutlinedIcon />}
+									title="About"
+									to="/about"
+									icon={<RunningWithErrorsIcon />}
 									selected={selected}
 									setSelected={setSelected}
 								/>

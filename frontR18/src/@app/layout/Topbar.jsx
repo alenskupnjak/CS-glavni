@@ -9,7 +9,7 @@ import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import SearchIcon from '@mui/icons-material/Search';
-import UserMenu from '@app/menus/UserMenu';
+import UserMenu from '@app/layout/UserMenu';
 
 const Topbar = () => {
 	const theme = useTheme();

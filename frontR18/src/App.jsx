@@ -1,8 +1,8 @@
 import { Suspense, useState } from 'react';
 import { observer } from 'mobx-react';
 import { Routes, Route } from 'react-router-dom';
-import Topbar from '@app/menus/Topbar';
-import Sidebar from '@app/menus/Sidebar';
+import Topbar from '@app/layout/Topbar';
+import Sidebar from '@app/layout/Sidebar';
 
 // react tostify have to go with CSS
 import { ToastContainer } from 'react-toastify';

@@ -3,8 +3,8 @@
 		"baseUrl": "src",
 		"paths": {
 			"@app/*": ["./src/@app/*"],
-			"@history*": ["./src/@history"],
-			"@mock-api": ["./src/@mock-api"],
+			"components/*": ["./src/components"],
+			"@data": ["./src/@data"],
 			"app/store/*": ["./src/app/store/*"],
 			"app/shared-components/*": ["./src/app/shared-components/*"],
 			"app/configs/*": ["./src/app/configs/*"],

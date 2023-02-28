@@ -103,7 +103,7 @@ function UserMenu(props) {
 							}}
 						>
 							<ListItemIcon className="min-w-40">
-								<FuseSvgIcon>heroicons-outline:logout</FuseSvgIcon>
+								<FuseSvgIcon color="info">heroicons-outline:logout</FuseSvgIcon>
 							</ListItemIcon>
 							<ListItemText primary="Sign out" />
 						</MenuItem>
