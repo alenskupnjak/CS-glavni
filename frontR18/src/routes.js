@@ -8,7 +8,7 @@ const ServerError = React.lazy(() => import('@app/errors/ServerError'));
 const BasketPage = React.lazy(() => import('./features/basket/BasketPage'));
 const Login = React.lazy(() => import('./features/account/Login'));
 const Register = React.lazy(() => import('./features/account/Register'));
-const ImportFile = React.lazy(() => import('./features/importfile/ImportFile'));
+const ImportFileOld = React.lazy(() => import('./features/importfile/ImportFileOld'));
 const ChartZaba = React.lazy(() => import('./features/importfile/ChartZaba'));
 const CheckoutWrapper = React.lazy(() => import('./features/checkout/CheckoutWrapper'));
 const Orders = React.lazy(() => import('./features/orders/Orders'));
@@ -130,8 +130,8 @@ const routes = [
 	},
 	{
 		enabled: true,
-		path: '/import-file',
-		component: ImportFile,
+		path: '/import-file-old',
+		component: ImportFileOld,
 		child: null,
 		exact: false,
 	},

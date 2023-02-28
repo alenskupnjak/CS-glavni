@@ -4,26 +4,30 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import Paper from '@mui/material/Paper';
 import { v4 as uuid } from 'uuid';
-// import { map } from 'lodash-es';
+
 import { useStore } from '../../app/stores/store';
-import { Grid } from '@mui/material';
+import { Grid, Container, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 function ChartZaba(props) {
 	const { chartStore } = useStore();
-	const { loadAllData, dataLabels, dataLabelsNum, trosakUkupno, dataChart } = chartStore;
+	const { loadAllData, dataLabels, dataLabelsNum, trosakUkupno, dataChart, destroy } = chartStore;
 
+	let initialized = false;
 	useEffect(() => {
-		if (!dataChart) {
+		if (!initialized) {
 			loadAllData();
 		}
+
 		// ovaj return se okida kada je komponenta destroyed
 		return () => {
+			if (initialized) destroy();
+			initialized = true;
 			// Call this method when you've finished using an object URL to let the browser know not to keep the reference to the file any longer.
 		};
-	}, [dataChart, loadAllData]);
+	}, [initialized]);
 
 	const Item = styled(Paper)(({ theme }) => ({
 		backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -66,43 +70,56 @@ function ChartZaba(props) {
 		],
 	};
 
-	console.log('%c 00 ', 'color:green', dataChart);
+	// console.log('%c 00 ', 'color:green', dataChart);
 	// if (_.IsEmpty(dataChart)) return null;
 
 	return (
 		<React.Fragment>
-			<Grid container spacing={2}>
-				<Grid item xs={8}>
-					<h2 key="trosak">Trosak ukupno:{trosakUkupno}</h2>
-					<Doughnut key={uuid()} data={data} />
+			<Container
+				component={Paper}
+				maxWidth="xl"
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+					p: 4,
+				}}
+			>
+				<Grid container spacing={2}>
+					<Grid item xs={6}>
+						<Doughnut key={uuid()} data={data} />
+					</Grid>
+					<Grid item xs={6}>
+						<Typography component="h1" variant="h5">
+							Trosak ukupno:{trosakUkupno}
+						</Typography>
+						{/* <Item key={uuid()}>xs=4</Item> */}
+					</Grid>
+					{dataChart &&
+						dataChart.map(data => {
+							return (
+								<React.Fragment>
+									<Grid item xs={4} key={uuid()}>
+										<Item key={uuid()} sx={{ fontSize: 15 }}>
+											{data.kat}: {Math.round((data.sumaKat * trosakUkupno) / 100)}
+											{'EUR'} - {data.sumaKat}%
+										</Item>
+									</Grid>
+									<Grid item xs={8} key={uuid()}>
+										{data.podaci.map((item, idx) => {
+											return (
+												<Item key={uuid()}>
+													{' '}
+													{idx} {'-'} {item.podKat ?? 'Nedefinirano'}-{item.sumPodKat}
+												</Item>
+											);
+										})}
+									</Grid>
+								</React.Fragment>
+							);
+						})}
 				</Grid>
-				<Grid item xs={4}>
-					<Item key={uuid()}>xs=4</Item>
-				</Grid>
-				{dataChart &&
-					dataChart.map(data => {
-						return (
-							<React.Fragment>
-								<Grid item xs={4} key={uuid()}>
-									<Item key={uuid()}>
-										{data.kat}: {Math.round((data.sumaKat * trosakUkupno) / 100)}
-										{'EUR'} - {data.sumaKat}%
-									</Item>
-								</Grid>
-								<Grid item xs={8} key={uuid()}>
-									{data.podaci.map(item => {
-										return (
-											<Item key={uuid()}>
-												{' '}
-												{item.podKat ?? 'Nedefinirano'}-{item.sumPodKat}
-											</Item>
-										);
-									})}
-								</Grid>
-							</React.Fragment>
-						);
-					})}
-			</Grid>
+			</Container>
 		</React.Fragment>
 	);
 }

@@ -18,6 +18,7 @@ import TimelineOutlinedIcon from '@mui/icons-material/TimelineOutlined';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import RunningWithErrorsIcon from '@mui/icons-material/RunningWithErrors';
+import PublishOutlinedIcon from '@mui/icons-material/PublishOutlined';
 
 import { tokens } from '../../theme';
 import { useStore } from '../../app/stores/store';
@@ -203,6 +204,13 @@ const Sidebar = () => {
 							selected={selected}
 							setSelected={setSelected}
 						/>
+						<Item
+							title="About"
+							to="/about"
+							icon={<RunningWithErrorsIcon />}
+							selected={selected}
+							setSelected={setSelected}
+						/>
 						{user && user.roles?.includes('Admin') && (
 							<SubMenu title="Admin" icon={<MapOutlinedIcon />}>
 								<Item
@@ -220,9 +228,9 @@ const Sidebar = () => {
 									setSelected={setSelected}
 								/>
 								<Item
-									title="About"
-									to="/about"
-									icon={<RunningWithErrorsIcon />}
+									title="Import File"
+									to="/import-file-old"
+									icon={<PublishOutlinedIcon />}
 									selected={selected}
 									setSelected={setSelected}
 								/>

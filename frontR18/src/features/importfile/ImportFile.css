@@ -70,7 +70,7 @@
 	width: 15%;
 }
 .MainContainer .SubContainer .Box1 .Input-Container .flex-Container .sub-flex-Container .UploadButton .Upload {
-	display: none;
+	/* display: none; */
 }
 .MainContainer .SubContainer .Box1 .Input-Container .flex-button {
 	margin: 15px auto;

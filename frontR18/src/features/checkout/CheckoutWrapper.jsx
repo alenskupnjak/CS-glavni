@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import LoadingComponent from '../../app/layout/LoadingComponent';
+import LoadingComponent from '@app/layout/LoadingComponent';
 import { useStore } from '../../app/stores/store';
 import CheckoutPage from './CheckoutPage';
 

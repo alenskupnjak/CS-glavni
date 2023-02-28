@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { ColorModeContext, useMode } from './theme';
-import PrivateRoute from './app/layout/PrivateRoute';
+import PrivateRoute from './@app/layout/PrivateRoute';
 import routes from './routes';
 
 function App() {

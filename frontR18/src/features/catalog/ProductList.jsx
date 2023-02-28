@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import { observer } from 'mobx-react';
-import LoadingComponent from '../../app/layout/LoadingComponent';
+import LoadingComponent from '@app/layout/LoadingComponent';
 import { useStore } from '../../app/stores/store';
 import ProductCard from './ProductCard';
 import ProductCardSkeleton from './ProductCardSkeleton';

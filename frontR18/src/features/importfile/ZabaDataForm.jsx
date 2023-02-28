@@ -1,16 +1,13 @@
 import { useEffect } from 'react';
 import { LoadingButton } from '@mui/lab';
-// import { observer } from 'mobx-react';
 import { Typography, Grid, Paper, Box, Button } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import AppSelectList from '../../app/components/AppSelectList';
 // import AppTextInput from '../../app/components/AppTextInput';
-// import agent from '../../app/api/agent';
 import { validationSchema } from './zabaValidation';
 import agent from '../../app/api/agent';
-// import AppTextInput from '../../app/components/AppTextInput';
 
 function ZabaDataForm({ state, handleClose }) {
 	const { modalData, ZabaKategorije } = state;

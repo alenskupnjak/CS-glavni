@@ -3,18 +3,18 @@ import _ from 'lodash-es';
 import agent from '../api/agent';
 
 export default class ChartStore {
+	// dataLabels = [];
+	trosakUkupno = 0;
 	// dataChart = [];
-	dataLabels = [];
-	dataLabelsNum = [];
 	constructor() {
 		makeAutoObservable(this);
+		console.log('%c ***************************', 'color:red');
 
 		// this.loadAllData();
 	}
 
 	//  Usnimavanje svih podataka
 	loadAllData = async () => {
-		this.dataLabels = [];
 		const labels = [];
 		const dataLabelsNum = [];
 		try {
@@ -69,7 +69,6 @@ export default class ChartStore {
 			this.dataChart = [...this.dataTemp];
 			this.dataLabels = [...labels];
 			this.dataLabelsNum = [...dataLabelsNum];
-			console.log('%c this.dataChart', 'color:gold', this.dataChart);
 		} catch (err) {
 			console.log('%c Greška u ChartStore ', 'color:red', err);
 			runInAction(() => {});
@@ -77,4 +76,16 @@ export default class ChartStore {
 			this.loading = false;
 		}
 	};
+
+	destroy = () => {
+		console.log('%c 007 ODLAZIM', 'color:red');
+	};
+
+	componentDidMount() {
+		console.log('%c 008 componentDidMount BOOM', 'color:gold');
+	}
+
+	componentWillUnmount() {
+		console.log('%c BOOM 005', 'color:pink');
+	}
 }
