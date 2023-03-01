@@ -77,16 +77,12 @@ export default class ImportFile extends Component {
 			this.setState({ totalPages: response.totalPages });
 			this.setState({ DataRecord: response.readRecord });
 		} else {
-			console.log('%c ----------------------- ', 'color:green');
 			const response = await agent.ReadWriteDatabase.ReadZaba(data);
 			this.setState({ totalRecords: response.totalRecords });
 			this.setState({ totalPages: response.totalPages });
 			this.setState({ ZabaRecord: response.zabaReadRecord });
-
-			console.log('%c 00 ', 'color:green', this.state.ZabaKategorije);
 			if (isEmpty(this.state.ZabaKategorije)) {
 				const responseAll = await agent.ReadWriteDatabase.ReadZaba(dataAll);
-				console.log('%c ****************** ', 'color:red');
 				const ZabaKategorije = _.chain(responseAll.zabaReadRecord)
 					.groupBy('kategorija')
 					.map((value, key) => {
@@ -152,7 +148,6 @@ export default class ImportFile extends Component {
 	};
 
 	handleUpdate = async data => {
-		console.log('%c 00 ', 'color:red', data);
 		await this.setState(state => ({
 			modalData: data,
 		}));

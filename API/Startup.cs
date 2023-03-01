@@ -78,7 +78,7 @@ namespace API
       }
       );
 
-    
+
       services.AddCors();    //CORS
 
       services.AddIdentityCore<User>(opt =>
@@ -131,8 +131,8 @@ namespace API
 
       app.UseRouting();
 
-    // Podesavanje za React applikaciju ide u WWWROOT folder traziti index.html ili default.html
-    // https://www.youtube.com/watch?v=yt6bzZoovgM&list=PL6n9fhu94yhVkdrusLaQsfERmL_Jh4XmU&index=12&ab_channel=kudvenkat
+      // Podesavanje za React applikaciju ide u WWWROOT folder traziti index.html ili default.html
+      // https://www.youtube.com/watch?v=yt6bzZoovgM&list=PL6n9fhu94yhVkdrusLaQsfERmL_Jh4XmU&index=12&ab_channel=kudvenkat
       app.UseDefaultFiles();
 
 
@@ -145,7 +145,7 @@ namespace API
       app.UseCors(opt =>
       {
         //opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5031");
-        opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:5031","http://localhost:5035");
+        opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:5031", "http://localhost:5035");
       });
 
       app.UseAuthentication();
@@ -166,7 +166,6 @@ namespace API
         await context.Response.WriteAsync("Pozdrav!");
         await context.Response.WriteAsync(System.Diagnostics.Process.GetCurrentProcess().ProcessName);
       });
-
 
     }
   }
