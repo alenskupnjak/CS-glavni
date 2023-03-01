@@ -47,7 +47,7 @@ const Topbar = () => {
 				<IconButton>
 					<PersonOutlinedIcon />
 				</IconButton>
-				{currentRoutePath.includes('catalog') && (
+				{(currentRoutePath.includes('catalog') || currentRoutePath.includes('basket')) && (
 					<IconButton component={Link} to="/basket" size="large" sx={{ color: 'inherit' }}>
 						<Badge badgeContent={itemCount} color="secondary">
 							<ShoppingCart />

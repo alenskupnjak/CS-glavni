@@ -205,7 +205,7 @@ const Sidebar = () => {
 						<Item
 							title="Catalog"
 							to="/catalog"
-							icon={<SvgIcon color="warning">heroicons-outline:newspaper</SvgIcon>}
+							icon={<SvgIcon>heroicons-outline:newspaper</SvgIcon>}
 							selected={selected}
 							setSelected={setSelected}
 						/>

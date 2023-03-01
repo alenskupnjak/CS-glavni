@@ -4,6 +4,7 @@ import { Box, Button, Grid, Modal, Pagination, Typography } from '@mui/material'
 import './ImportFile.css';
 import { toast } from 'react-toastify';
 import _ from 'lodash-es';
+import { isEmpty } from 'lodash-es';
 
 // import CrudServices from './CrudServices';
 import ReactFileReader from 'react-file-reader';
@@ -49,6 +50,8 @@ export default class ImportFile extends Component {
 	}
 
 	componentDidMount() {
+		console.log('%c **************** ', 'color:blue');
+
 		this.ReadRecord(1);
 	}
 
@@ -70,32 +73,33 @@ export default class ImportFile extends Component {
 		};
 		if (this.state.switch === true) {
 			const response = await agent.ReadWriteDatabase.ReadRecord(data);
-
 			this.setState({ totalRecords: response.totalRecords });
 			this.setState({ totalPages: response.totalPages });
 			this.setState({ DataRecord: response.readRecord });
 		} else {
+			console.log('%c ----------------------- ', 'color:green');
 			const response = await agent.ReadWriteDatabase.ReadZaba(data);
-
 			this.setState({ totalRecords: response.totalRecords });
 			this.setState({ totalPages: response.totalPages });
 			this.setState({ ZabaRecord: response.zabaReadRecord });
 
-			const responseAll = await agent.ReadWriteDatabase.ReadZaba(dataAll);
-			const ZabaKategorije = _.chain(responseAll.zabaReadRecord)
-				.groupBy('kategorija')
-				.map((value, key) => {
-					return { key: key };
-				})
-				.value();
-			const propertyKey = Object.keys(ZabaKategorije);
-			// console.log('%c 5 ', 'color:green', propertyKey);
-			const propertyValues = Object.values(ZabaKategorije).map(data => data.key);
-			// console.log('%c 10 ', 'color:green', propertyValues);
-			const entries = Object.entries(ZabaKategorije);
-			// console.log('%c 20 ', 'color:green', entries);
-
-			this.setState({ ZabaKategorije: [...propertyValues] });
+			console.log('%c 00 ', 'color:green', this.state.ZabaKategorije);
+			if (isEmpty(this.state.ZabaKategorije)) {
+				const responseAll = await agent.ReadWriteDatabase.ReadZaba(dataAll);
+				console.log('%c ****************** ', 'color:red');
+				const ZabaKategorije = _.chain(responseAll.zabaReadRecord)
+					.groupBy('kategorija')
+					.map((value, key) => {
+						return { key: key };
+					})
+					.value();
+				const propertyKey = Object.keys(ZabaKategorije);
+				// console.log('%c 5 ', 'color:green', propertyKey);
+				const propertyValues = Object.values(ZabaKategorije).map(data => data.key);
+				// console.log('%c 10 ', 'color:green', propertyValues);
+				const entries = Object.entries(ZabaKategorije);
+				this.setState({ ZabaKategorije: [...propertyValues] });
+			}
 		}
 	}
 
@@ -217,7 +221,6 @@ export default class ImportFile extends Component {
 		await this.setState(state => ({
 			modalOpenConfirm: false,
 		}));
-		this.ReadRecord(this.state.PageNumber);
 	};
 
 	handleDelete = async data => {

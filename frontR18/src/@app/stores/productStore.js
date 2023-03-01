@@ -50,7 +50,6 @@ export default class ProductStore {
 	//  Usnimavanje svih dogadaja
 	loadAllProduct = async () => {
 		try {
-			// this.loadingInitial = true;
 			this.listaProdukata = null;
 			this.loading = true;
 			const responseFilters = await agent.Catalog.filters();
@@ -66,26 +65,6 @@ export default class ProductStore {
 				};
 				this.filters = responseFilters.data;
 				this.listaProdukata = response.data;
-				// this.basket = responseBasket.data;
-				// this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
-				// this.activities = _.sortBy(response.data, ['date']);
-				// this.activities = _.chain(this.activities)
-				// Group the elements of Array based on `date` property
-				// .groupBy('date')
-				// // `key` is group's name (date), `value` is the array of objects
-				// .map((value, key) => ({ date: key, podaci: value }))
-				// .value();
-
-				// const user = store.userStore.user;
-				// this.activities.forEach(data => {
-				// 	if (user) {
-				// 		data.podaci[0].isGoing = data.podaci[0]?.attendees.some(a => a.username === user.username);
-				// 		data.podaci[0].isHost = data.podaci[0]?.hostUsername === user.username;
-				// 		data.podaci[0].host = data.podaci[0]?.attendees?.find(x => x.username === data.podaci[0].hostUsername);
-				// 		data.domacin = data.podaci[0]?.attendees?.find(x => x.username === data.podaci[0].hostUsername);
-				// 	}
-				// 	return data;
-				// });
 			});
 		} catch (err) {
 			console.log('%c Greška u ProductStore ', 'color:red', err);
@@ -327,6 +306,10 @@ export default class ProductStore {
 	clearBasket = () => {
 		this.basket = { buyerId: null, id: null, items: [], clientSecret: null, paymentIntentId: null };
 		this.itemCount = 0;
+		this.productParams = {
+			...this.productParams,
+			pageNumber: 1,
+		};
 	};
 
 	setBasket = basket => {

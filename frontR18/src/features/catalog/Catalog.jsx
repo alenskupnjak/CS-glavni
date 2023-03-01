@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Grid, Paper, Typography, Container, useTheme } from '@mui/material';
 
 import { observer } from 'mobx-react';
@@ -25,7 +25,15 @@ function Catalog(props) {
 		handleTypes,
 		handlePaging,
 		metaData,
+		loadAllProduct,
 	} = productStore;
+
+	let initialized = false;
+	useEffect(() => {
+		if (!initialized) {
+			loadAllProduct();
+		}
+	}, []);
 
 	return (
 		<Container>

@@ -11,6 +11,7 @@ import {
 	TableCell,
 	TableBody,
 	Box,
+	Container,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Edit, Delete } from '@mui/icons-material';
@@ -19,6 +20,7 @@ import AppPagination from '../../app/components/AppPagination';
 import ProductForm from './ProductForm';
 import { useStore } from '@app/stores/store';
 import LoadingComponent from '@app/layout/LoadingComponent';
+import ColorSet from '@app/theme/colorSet';
 
 function Inventory(props) {
 	const { productStore } = useStore();
@@ -40,12 +42,17 @@ function Inventory(props) {
 	if (editMode) return <ProductForm product={selectedProduct} cancelEdit={cancelEdit} />;
 
 	return (
-		<React.Fragment>
+		<Container>
 			<Box display="flex" justifyContent="space-between">
 				<Typography sx={{ p: 2 }} variant="h4">
 					Inventory
 				</Typography>
-				<Button onClick={() => setEditMode(true)} sx={{ m: 2 }} size="large" variant="contained">
+				<Button
+					onClick={() => setEditMode(true)}
+					sx={{ m: 2, bgcolor: ColorSet().blueAccent[600] }}
+					size="large"
+					variant="contained"
+				>
 					Create
 				</Button>
 			</Box>
@@ -53,7 +60,7 @@ function Inventory(props) {
 				<Table sx={{ minWidth: 650 }} aria-label="simple table">
 					<TableHead>
 						<TableRow>
-							<TableCell>#</TableCell>
+							<TableCell>ID#</TableCell>
 							<TableCell align="left">Product</TableCell>
 							<TableCell align="right">Price</TableCell>
 							<TableCell align="center">Type</TableCell>
@@ -79,7 +86,16 @@ function Inventory(props) {
 								<TableCell align="center">{product.brand}</TableCell>
 								<TableCell align="center">{product.quantityInStock}</TableCell>
 								<TableCell align="right">
-									<Button onClick={() => handleSelectProduct(product)} startIcon={<Edit />} />
+									<Button
+										onClick={() => handleSelectProduct(product)}
+										startIcon={<Edit />}
+										sx={{
+											bgcolor: ColorSet().blueAccent[600],
+											':hover': {
+												bgcolor: ColorSet().grey[500],
+											},
+										}}
+									/>
 									<LoadingButton
 										loading={loading && targetProduct === product.id}
 										startIcon={<Delete />}
@@ -97,7 +113,7 @@ function Inventory(props) {
 					<AppPagination metaData={metaData} handlePaging={pageNumber => handlePaging(pageNumber, 'Inventory')} />
 				</Box>
 			)}
-		</React.Fragment>
+		</Container>
 	);
 }
 

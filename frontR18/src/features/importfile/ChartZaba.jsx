@@ -97,14 +97,14 @@ function ChartZaba(props) {
 					{dataChart &&
 						dataChart.map(data => {
 							return (
-								<React.Fragment>
-									<Grid item xs={4} key={uuid()}>
-										<Item key={uuid()} sx={{ fontSize: 15 }}>
+								<React.Fragment key={uuid()}>
+									<Grid item xs={4}>
+										<Item sx={{ fontSize: 15 }}>
 											{data.kat}: {Math.round((data.sumaKat * trosakUkupno) / 100)}
 											{'EUR'} - {data.sumaKat}%
 										</Item>
 									</Grid>
-									<Grid item xs={8} key={uuid()}>
+									<Grid item xs={8}>
 										{data.podaci.map((item, idx) => {
 											return (
 												<Item key={uuid()}>
