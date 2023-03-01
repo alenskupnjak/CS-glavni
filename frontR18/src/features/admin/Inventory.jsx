@@ -17,7 +17,7 @@ import { Edit, Delete } from '@mui/icons-material';
 import { currencyFormat } from '../../app/util/util';
 import AppPagination from '../../app/components/AppPagination';
 import ProductForm from './ProductForm';
-import { useStore } from '../../app/stores/store';
+import { useStore } from '@app/stores/store';
 import LoadingComponent from '@app/layout/LoadingComponent';
 
 function Inventory(props) {

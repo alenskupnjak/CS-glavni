@@ -1,11 +1,11 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import _ from 'lodash-es';
-import agent from '../api/agent';
+import agent from '../../app/api/agent';
 
 export default class ChartStore {
 	// dataLabels = [];
 	trosakUkupno = 0;
-	// dataChart = [];
+	dataChart = [];
 	constructor() {
 		makeAutoObservable(this);
 		console.log('%c ***************************', 'color:red');
@@ -31,8 +31,6 @@ export default class ChartStore {
 			});
 
 			this.trosakUkupno = Math.round(sumaUkupno * 100) / 100;
-
-			// console.log('%c 00 ajmooos', 'color:green', Object.entries(this.dataTemp));
 			this.dataTemp = _.chain(responseAll.zabaReadRecord)
 				.groupBy('kategorija')
 				.map((value, key) => {
@@ -78,7 +76,7 @@ export default class ChartStore {
 	};
 
 	destroy = () => {
-		console.log('%c 007 ODLAZIM', 'color:red');
+		console.log('%c 007 ODLAZIM iz class ChartStore ', 'color:red');
 	};
 
 	componentDidMount() {
@@ -86,6 +84,6 @@ export default class ChartStore {
 	}
 
 	componentWillUnmount() {
-		console.log('%c BOOM 005', 'color:pink');
+		alert('tut');
 	}
 }

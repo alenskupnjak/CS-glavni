@@ -7,7 +7,7 @@ import { createBrowserHistory } from 'history';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-import { store, StoreContext } from './app/stores/store';
+import { store, StoreContext } from './@app/stores/store';
 
 export const history = createBrowserHistory({ basename: process.env.PUBLIC_URL });
 

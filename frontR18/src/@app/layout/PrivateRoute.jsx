@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router';
-import { useStore } from '../../app/stores/store';
+import { useStore } from '../stores/store';
 import { toast } from 'react-toastify';
 
 export default function PrivateRoute({ children: Component, roles, ...props }) {

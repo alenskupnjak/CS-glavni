@@ -1,10 +1,9 @@
 import { makeAutoObservable, runInAction, reaction } from 'mobx';
-import agent from '../api/agent';
+import agent from '../../app/api/agent';
 // import { v4 as uuid } from 'uuid';
 import { find, debounce, isEmpty } from 'lodash-es';
 import { store } from './store';
-import { history } from '../..';
-import { getCookie } from '../util/util';
+import { getCookie } from '../../app/util/util';
 
 export default class ProductStore {
 	listaProdukata = null;
@@ -98,17 +97,14 @@ export default class ProductStore {
 		}
 	};
 
-	// LOAD ONE    LOAD ONE   LOAD ONE   LOAD ONE
-	loadOneItem = async productId => {
-		console.log('%c 00', 'color:green', productId);
-
+	// LOAD ONE  ***  LOAD ONE  **  LOAD ONE **  LOAD ONE
+	loadOneItem = async (productId, navigate) => {
 		try {
 			this.loadingAdd = true;
 			const response = await agent.Catalog.details(productId);
 			console.log('%c response =', 'color:green', response);
 
 			const cookie = getCookie('buyerId');
-			console.log('%c cookie ', 'color:green', cookie);
 			if (cookie) {
 				const responseBasket = await agent.Basket.get();
 				this.basket = responseBasket.data;
@@ -118,7 +114,7 @@ export default class ProductStore {
 			runInAction(() => {
 				this.product = response.data;
 				this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
-				history.push(`/catalog/:${productId}`);
+				navigate(`/catalog/:${productId}`);
 			});
 		} catch (err) {
 			console.log('%c error', 'color:red', err);
@@ -127,16 +123,19 @@ export default class ProductStore {
 		}
 	};
 
-	// ADD ADD ADD ADD ADD ADD
+	// ADD item ADD item ADD item ADD item
 	handleAddItem = async (product, name) => {
-		// console.log('%c product', 'color:green', product);
-		// console.log('%c name=', 'color:green', name);
+		console.log('%c product', 'color:green', product);
+		console.log('%c name=', 'color:green', name);
+		console.log('%c user=', 'color:green', isEmpty(store.userStore.user.email));
 		// console.log('%c this.user', 'color:green', store.userStore?.user);
 
 		try {
 			this.loading = true;
 			this.productName = name;
 			if (store.userStore?.user) {
+				console.log('%c -------------------', 'color:green');
+
 				await agent.Basket.addItem(product.productId || product.id);
 				const responseBasket = await agent.Basket.get();
 				this.basket = responseBasket.data;
@@ -153,6 +152,7 @@ export default class ProductStore {
 				}
 			}
 			this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
+			console.log('%c this.itemCount', 'color:green', this.itemCount);
 		} catch (err) {
 			console.log('%c err', 'color:red', err);
 		} finally {
@@ -264,6 +264,8 @@ export default class ProductStore {
 	// UPDATE chart
 	handleUpdateCart = async (productId, quantity) => {
 		try {
+			console.log('%c 14', 'color:green', productId, quantity);
+
 			this.loading = true;
 			this.item = this.basket.items.find(i => i.productId === this.product.id);
 			if (!this.item || quantity > this.item.quantity) {
@@ -336,15 +338,14 @@ export default class ProductStore {
 	};
 
 	// prelazak na placanje
-	checkout = async () => {
+	checkout = async navigate => {
 		try {
 			this.loading = true;
 			const response = await agent.Payments.createPaymentIntent();
 			console.log('%c 120 response', 'color:gold', response);
 			this.basket = { ...this.basket, clientSecret: response.clientSecret, paymentIntentId: response.paymentIntentId };
 			console.log('%c 121 BASKET', 'color:gold', this.basket);
-
-			history.push(`/checkout`);
+			navigate(`/checkout`);
 		} catch (error) {
 			console.log('%c error', 'color:red', error);
 		} finally {
@@ -365,7 +366,7 @@ export default class ProductStore {
 		}
 	};
 
-	goTo = page => {
+	goTo = (page, navigate) => {
 		if (page === 'Inventory') {
 			this.listaProdukata = null;
 			this.productParams = {
@@ -379,222 +380,7 @@ export default class ProductStore {
 			};
 			console.log('%c 11 this.productParams', 'color:orange', this.productParams);
 			this.filtersFind(this.productParams);
-			history.push(`/inventory`);
+			navigate(`/inventory`);
 		}
 	};
-
-	// function handleUpdateCart() {
-	// console.log('%c 00 item ', 'color:red', item);
-	// setSubmitting(true);
-	// if (!item || quantity > item.quantity) {
-	// 	const updatedQuantity = item ? quantity - item.quantity : quantity;
-	// 	agent.Basket.addItem(product?.id, updatedQuantity)
-	// 		.then(basket => setBasket(basket))
-	// 		.catch(error => console.log(error))
-	// 		.finally(() => setSubmitting(false));
-	// } else {
-	// 	const updatedQuantity = item.quantity - quantity;
-	// 	agent.Basket.removeItem(product?.id, updatedQuantity)
-	// 		.then(() => removeItem(product?.id, updatedQuantity))
-	// 		.catch(error => console.log(error))
-	// 		.finally(() => setSubmitting(false));
-	// }
-	// }
-
-	// function handleAddItem(productId, name) {
-	// setStatus({ loading: true, name });
-	// agent.Basket.addItem(productId)
-	// 	.then(basket => {
-	// 		return setBasket(basket);
-	// 	})
-	// 	.catch(error => console.log(error))
-	// 	.finally(() => setStatus({ loading: false, name: '' }));
-	// }
-
-	// setPagingParams = pagingParams => {
-	// 	this.pagingParams = pagingParams;
-	// };
-
-	// setPredicate = (predicate, value) => {
-	// 	const resetPredicate = () => {
-	// 		Object.entries(this.predicate).forEach(([key, val]) => {
-	// 			console.log('%c 17', 'color:gold', value, key);
-	// 			if (key !== 'startDate') delete this.predicate[key];
-	// 		});
-	// 	};
-
-	// 	switch (predicate) {
-	// 		case 'all':
-	// 			resetPredicate();
-	// 			this.predicate = { ...this.predicate, all: true };
-	// 			break;
-	// 		case 'isGoing':
-	// 			resetPredicate();
-	// 			this.predicate = { ...this.predicate, isGoing: true };
-	// 			break;
-	// 		case 'isHost':
-	// 			resetPredicate();
-	// 			this.predicate = { ...this.predicate, isHost: true };
-	// 			break;
-	// 		case 'startDate':
-	// 			delete this.predicate['startDate'];
-	// 			this.predicate = { ...this.predicate, startDate: value };
-	// 			break;
-	// 		default:
-	// 		// nista
-	// 	}
-	// };
-
-	// handleSubmitFormik = (values, history) => {
-	// 	console.log('%c 043 CREATE createActivity activity ', 'background: #8d6e63; color: #242333', values);
-	// 	if (values.id) {
-	// 		this.updateActivity(values);
-	// 		history.push(`/aktivni/${values.id}`);
-	// 	} else {
-	// 		this.createActivity(values);
-	// 		history.push(`/aktivni`);
-	// 	}
-	// };
-
-	// get axiosParams() {
-	// 	const params = new URLSearchParams();
-	// 	params.append('pageNumber', this.pagingParams.pageNumber.toString());
-	// 	params.append('pageSize', this.pagingParams.pageSize.toString());
-	// 	Object.entries(this.predicate).forEach(([key, val]) => {
-	// 		if (key === 'startDate') {
-	// 			params.append(key, val.toISOString());
-	// 		} else {
-	// 			params.append(key, val);
-	// 		}
-	// 	});
-	// 	return params;
-	// }
-
-	//
-	// Usnimavanje jednog itema
-	// loadActivity = async id => {
-	// 	try {
-	// 		this.selektiran = null;
-	// 		this.loadingInitial = true;
-	// 		let activity = await agent.Servisi.listaJednog(id);
-	// 		activity = activity.data;
-	// 		runInAction(() => {
-	// 			// Povlacim logiranog usera
-	// 			const user = store.userStore.user;
-	// 			if (user) {
-	// 				activity.isGoing = activity.attendees.some(a => a.username === user.username);
-	// 				activity.isHost = activity.hostUsername === user.username;
-	// 				activity.host = activity.attendees?.find(x => x.username === activity.hostUsername);
-	// 			}
-	// 			// activity.date = new Date(activity.date);
-	// 			this.selektiran = activity;
-	// 			console.log('%c 034 loadActivity usnimljen 1 item', 'color:green', this.selektiran);
-	// 		});
-	// 	} catch (err) {
-	// 		console.log('%c error ', 'color:red', err);
-	// 	} finally {
-	// 		this.loadingInitial = false;
-	// 	}
-	// };
-
-	// CREATE CREATE CREATE CREATE CREATE
-	// createActivity = async aktivnost => {
-	// 	console.log('%c 038 CREATE createActivity activity ', 'background: #8d6e63; color: #242333', aktivnost);
-	// 	try {
-	// 		aktivnost.id = uuid();
-	// 		this.loading = true;
-	// 		await agent.Servisi.kreiraj(aktivnost);
-	// 		runInAction(() => {
-	// 			this.loadAllProduct();
-	// 			this.selektiran = null;
-	// 			this.loading = false;
-	// 			this.editMode = false;
-	// 		});
-	// 	} catch (err) {
-	// 		this.loading = false;
-	// 		console.log('%c err Create  ', 'color:red', err);
-	// 	}
-	// };
-
-	// updateActivity = async aktivnost => {
-	// 	console.log('%c 039 UPDATE createActivity activity ', 'background: #8d6e63; color: #242333', aktivnost);
-	// 	delete aktivnost.attendees;
-
-	// 	this.loading = true;
-	// 	try {
-	// 		await agent.Servisi.update(aktivnost);
-	// 		runInAction(() => {
-	// 			this.activities = _.filter(this.activities, data => {
-	// 				return data.id !== aktivnost.id;
-	// 			});
-	// 			this.activities.push(aktivnost);
-	// 			this.activities = _.sortBy(this.activities, ['date']);
-	// 			this.selektiran = aktivnost;
-	// 			this.loading = false;
-	// 			this.editMode = false;
-	// 		});
-	// 	} catch (err) {
-	// 		this.loading = false;
-	// 		console.log('%c err ', 'color:red', err);
-	// 	}
-	// };
-
-	// DELETE DELETE DELETE DELETE
-	// deleteActivity = async id => {
-	// 	console.log('%c 041 DELETE  ', 'background: #8d6e63; color: #242333', id);
-	// 	this.loading = true;
-	// 	try {
-	// 		await agent.Servisi.obrisi(id);
-	// 		runInAction(() => {
-	// 			this.loadAllProduct();
-	// 			// this.cancelSelectedActivity();
-	// 			this.loading = false;
-	// 			this.editMode = false;
-	// 		});
-	// 	} catch (err) {
-	// 		console.log('%c err ', 'color:red', err);
-	// 	}
-	// };
-
-	// Iskljucuje/iskljucije prisutnost dogaraju
-	// updateAttendance = async () => {
-	// 	console.log('%c 040 UPDATE updateAttendance ', 'background: #8d6e63; color: #242333', this.selektiran);
-	// 	const user = store.userStore.user;
-	// 	this.loading = true;
-	// 	try {
-	// 		await agent.Servisi.attend(this.selektiran.id);
-	// 		runInAction(() => {
-	// 			if (this.selektiran?.isGoing) {
-	// 				this.selektiran.attendees = this.selektiran.attendees?.filter(a => a.username !== user?.username);
-	// 				this.selektiran.isGoing = false;
-	// 			} else {
-	// 				this.selektiran?.attendees.push(user);
-	// 				this.selektiran.isGoing = true;
-	// 			}
-	// 		});
-	// 	} catch (error) {
-	// 		console.log(error);
-	// 	} finally {
-	// 		runInAction(() => (this.loading = false));
-	// 	}
-	// };
-
-	// cancelActivityToggle = async () => {
-	// 	console.log('%c 045 CANCEL updateAttendance ', 'background: #8d6e63; color: #242333', this.selektiran);
-	// 	this.loading = true;
-	// 	try {
-	// 		await agent.Servisi.attend(this.selektiran.id);
-	// 		runInAction(() => {
-	// 			this.selektiran.isCancelled = !this.selektiran.isCancelled;
-	// 		});
-	// 	} catch (error) {
-	// 		console.log(error);
-	// 	} finally {
-	// 		runInAction(() => (this.loading = false));
-	// 	}
-	// };
-
-	// clearSelectedActivity = () => {
-	// 	this.selektiran = null;
-	// };
 }

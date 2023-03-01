@@ -4,8 +4,8 @@ import { Avatar, TextField, Box, Paper, useTheme, Typography, Container, Grid } 
 import { LockOutlined } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 
-import { useStore } from '../../app/stores/store';
-import { tokens } from '../../theme';
+import { useStore } from '@app/stores/store';
+import { tokens } from '@app/theme/theme';
 
 export default function Login() {
 	const { userStore } = useStore();

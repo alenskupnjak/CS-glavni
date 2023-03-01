@@ -1,20 +1,27 @@
 import { useContext } from 'react';
 import { observer } from 'mobx-react';
-import { Box, IconButton, useTheme } from '@mui/material';
-import { ColorModeContext, tokens } from '../../theme';
+import { Link, useLocation } from 'react-router-dom';
+import { Box, IconButton, useTheme, Badge } from '@mui/material';
+import { ColorModeContext, tokens } from '../theme/theme';
 import InputBase from '@mui/material/InputBase';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
+import ShoppingCart from '@mui/icons-material/ShoppingCart';
 import SearchIcon from '@mui/icons-material/Search';
 import UserMenu from '@app/layout/UserMenu';
+import { useStore } from '../stores/store';
 
 const Topbar = () => {
+	const { productStore, userStore } = useStore();
+	const { user } = userStore;
+	const { itemCount } = productStore;
 	const theme = useTheme();
 	const colors = tokens(theme.palette.mode);
 	const colorMode = useContext(ColorModeContext);
+	const currentRoutePath = useLocation().pathname;
 
 	return (
 		<Box display="flex" justifyContent="space-between" p={2}>
@@ -40,6 +47,13 @@ const Topbar = () => {
 				<IconButton>
 					<PersonOutlinedIcon />
 				</IconButton>
+				{currentRoutePath.includes('catalog') && (
+					<IconButton component={Link} to="/basket" size="large" sx={{ color: 'inherit' }}>
+						<Badge badgeContent={itemCount} color="secondary">
+							<ShoppingCart />
+						</Badge>
+					</IconButton>
+				)}
 				<UserMenu />
 			</Box>
 		</Box>

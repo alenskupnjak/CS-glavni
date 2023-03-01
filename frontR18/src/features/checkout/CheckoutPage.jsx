@@ -9,7 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { validationSchema } from './checkoutValidation';
 import agent from '../../app/api/agent';
 import { LoadingButton } from '@mui/lab';
-import { useStore } from '../../app/stores/store';
+import { useStore } from '@app/stores/store';
 import { CardNumberElement, useElements, useStripe } from '@stripe/react-stripe-js';
 
 const steps = ['Shipping address', 'Review your order', 'Payment details'];

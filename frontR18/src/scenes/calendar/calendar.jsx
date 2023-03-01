@@ -6,7 +6,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
 import { Box, List, ListItem, ListItemText, Typography, useTheme } from '@mui/material';
 import Header from '../../components/Header';
-import { tokens } from '../../theme';
+import { tokens } from '@app/theme/theme';
 
 const Calendar = () => {
 	const theme = useTheme();

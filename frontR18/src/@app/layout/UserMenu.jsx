@@ -8,8 +8,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import { Link, NavLink } from 'react-router-dom';
-import { useStore } from '../../app/stores/store';
-import FuseSvgIcon from '@app/icons/FuseSvgIcon';
+import { useStore } from '../stores/store';
+import SvgIcon from '@app/icons/SvgIcon';
 
 function UserMenu(props) {
 	const { userStore } = useStore();
@@ -69,13 +69,13 @@ function UserMenu(props) {
 							}}
 						>
 							<ListItemIcon className="min-w-40">
-								<FuseSvgIcon>heroicons-outline:lock-closed</FuseSvgIcon>
+								<SvgIcon>heroicons-outline:lock-closed</SvgIcon>
 							</ListItemIcon>
 							<ListItemText primary="Sign In" />
 						</MenuItem>
 						<MenuItem component={Link} to="/register" role="button">
 							<ListItemIcon className="min-w-40">
-								<FuseSvgIcon>heroicons-outline:user-add </FuseSvgIcon>
+								<SvgIcon>heroicons-outline:user-add </SvgIcon>
 							</ListItemIcon>
 							<ListItemText primary="Sign up" />
 						</MenuItem>
@@ -84,13 +84,13 @@ function UserMenu(props) {
 					<React.Fragment>
 						<MenuItem component={Link} to="/underConstruction" onClick={userMenuClose} role="button">
 							<ListItemIcon className="min-w-40">
-								<FuseSvgIcon>heroicons-outline:user-circle</FuseSvgIcon>
+								<SvgIcon>heroicons-outline:user-circle</SvgIcon>
 							</ListItemIcon>
 							<ListItemText primary="My Profile" />
 						</MenuItem>
 						<MenuItem component={Link} to="/login" onClick={userMenuClose} role="button">
 							<ListItemIcon className="min-w-40">
-								<FuseSvgIcon>heroicons-outline:mail-open</FuseSvgIcon>
+								<SvgIcon>heroicons-outline:mail-open</SvgIcon>
 							</ListItemIcon>
 							<ListItemText primary="Inbox" />
 						</MenuItem>
@@ -103,7 +103,7 @@ function UserMenu(props) {
 							}}
 						>
 							<ListItemIcon className="min-w-40">
-								<FuseSvgIcon color="info">heroicons-outline:logout</FuseSvgIcon>
+								<SvgIcon color="info">heroicons-outline:logout</SvgIcon>
 							</ListItemIcon>
 							<ListItemText primary="Sign out" />
 						</MenuItem>

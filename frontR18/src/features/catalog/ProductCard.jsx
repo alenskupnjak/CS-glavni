@@ -1,16 +1,30 @@
 import { LoadingButton } from '@mui/lab';
 import { observer } from 'mobx-react';
-import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import {
+	Avatar,
+	Button,
+	Card,
+	CardActions,
+	CardContent,
+	CardHeader,
+	CardMedia,
+	Typography,
+	useTheme,
+} from '@mui/material';
+import { tokens } from '@app/theme/theme';
+
 import { currencyFormat } from '../../app/util/util';
-import { useStore } from '../../app/stores/store';
+import { useStore } from '@app/stores/store';
 
 function ProductCard({ product }) {
+	const theme = useTheme();
+	const colors = tokens(theme.palette.mode);
 	const { productStore } = useStore();
 	const { loadOneItem, handleAddItem, loadingAdd, productName } = productStore;
 	const navigate = useNavigate();
 	return (
-		<Card>
+		<Card sx={{ background: colors.blueAccent[600] }}>
 			<CardHeader
 				avatar={<Avatar sx={{ bgcolor: 'secondary.main' }}>{product.name.slice(0, 2).toUpperCase()}</Avatar>}
 				title={product.name}

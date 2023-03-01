@@ -1,7 +1,7 @@
 import { TextField } from '@mui/material';
 import { observer } from 'mobx-react';
 import { useRef } from 'react';
-import { useStore } from '../../app/stores/store';
+import { useStore } from '@app/stores/store';
 
 function ProductSearch() {
 	const { productStore } = useStore();

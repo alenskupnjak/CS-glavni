@@ -1,8 +1,9 @@
+import * as React from 'react';
 import { useState } from 'react';
 import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
-import { Box, IconButton, Typography, useTheme } from '@mui/material';
+import { Box, IconButton, Typography, useTheme, Icon } from '@mui/material';
 import 'react-pro-sidebar/dist/css/styles.css';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
@@ -19,9 +20,10 @@ import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import RunningWithErrorsIcon from '@mui/icons-material/RunningWithErrors';
 import PublishOutlinedIcon from '@mui/icons-material/PublishOutlined';
+import SvgIcon from '@app/icons/SvgIcon';
 
-import { tokens } from '../../theme';
-import { useStore } from '../../app/stores/store';
+import { tokens } from '../theme/theme';
+import { useStore } from '../stores/store';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
 	const theme = useTheme();
@@ -197,10 +199,13 @@ const Sidebar = () => {
 							selected={selected}
 							setSelected={setSelected}
 						/>
+						<Typography variant="h6" color={colors.grey[300]} sx={{ m: '15px 0 5px 20px' }}>
+							Products
+						</Typography>
 						<Item
-							title="Geography Chart"
-							to="/geography"
-							icon={<MapOutlinedIcon />}
+							title="Catalog"
+							to="/catalog"
+							icon={<SvgIcon color="warning">heroicons-outline:newspaper</SvgIcon>}
 							selected={selected}
 							setSelected={setSelected}
 						/>

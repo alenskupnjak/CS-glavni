@@ -10,7 +10,7 @@ import AppSelectList from '../../app/components/AppSelectList';
 import AppTextInput from '../../app/components/AppTextInput';
 import { validationSchema } from './productValidation';
 import agent from '../../app/api/agent';
-import { useStore } from '../../app/stores/store';
+import { useStore } from '@app/stores/store';
 
 function ProductForm({ product, cancelEdit }) {
 	const { productStore } = useStore();

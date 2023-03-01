@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import agent from '../api/agent';
+import agent from '../../app/api/agent';
 import { store } from './store';
 import { isEmpty } from 'lodash-es';
 import { toast } from 'react-toastify';

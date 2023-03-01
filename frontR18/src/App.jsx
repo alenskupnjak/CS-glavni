@@ -9,7 +9,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { CssBaseline, ThemeProvider } from '@mui/material';
-import { ColorModeContext, useMode } from './theme';
+import { ColorModeContext, useMode } from './@app/theme/theme';
 import PrivateRoute from './@app/layout/PrivateRoute';
 import routes from './routes';
 

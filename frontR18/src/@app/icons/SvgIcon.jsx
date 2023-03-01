@@ -3,6 +3,7 @@ import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
+import IconButton from '@mui/material/IconButton';
 import Icon from '@mui/material/Icon';
 
 const Root = styled(Box)(({ theme, ...props }) => {
@@ -27,16 +28,22 @@ const Root = styled(Box)(({ theme, ...props }) => {
 	};
 });
 
-const FuseSvgIcon = forwardRef((props, ref) => {
+function WrappedIcon(props) {
+	return <Icon {...props} />;
+}
+
+WrappedIcon.muiName = 'Icon';
+
+const SvgIcon = forwardRef((props, ref) => {
 	const { children, size, sx, className, color } = props;
+
 	const iconPath = children.replace(':', '.svg#');
 	return (
 		<React.Fragment>
 			{!props.children.includes(':') ? (
-				<div>
-					<p>FuseSvgIcon</p>
-					<Icon ref={ref} {...props} />
-				</div>
+				<IconButton>
+					<WrappedIcon>alarm</WrappedIcon>
+				</IconButton>
 			) : (
 				<Root
 					{...props}
@@ -50,7 +57,7 @@ const FuseSvgIcon = forwardRef((props, ref) => {
 					sx={sx}
 					color={color}
 				>
-					<p>FuseSvgIcon</p>
+					<p>SvgIcon</p>
 					<use xlinkHref={`assets/icons/${iconPath}`} />
 				</Root>
 			)}
@@ -58,7 +65,7 @@ const FuseSvgIcon = forwardRef((props, ref) => {
 	);
 });
 
-FuseSvgIcon.propTypes = {
+SvgIcon.propTypes = {
 	children: PropTypes.string,
 	size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	sx: PropTypes.object,
@@ -75,11 +82,11 @@ FuseSvgIcon.propTypes = {
 	]),
 };
 
-FuseSvgIcon.defaultProps = {
+SvgIcon.defaultProps = {
 	children: '',
 	size: 24,
 	sx: {},
 	color: 'inherit',
 };
 
-export default FuseSvgIcon;
+export default SvgIcon;

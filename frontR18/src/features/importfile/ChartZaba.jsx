@@ -4,18 +4,18 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import Paper from '@mui/material/Paper';
 import { v4 as uuid } from 'uuid';
-
-import { useStore } from '../../app/stores/store';
 import { Grid, Container, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { rootStore } from '@app/stores';
+import { isEmpty } from 'lodash-es';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 function ChartZaba(props) {
-	const { chartStore } = useStore();
-	const { loadAllData, dataLabels, dataLabelsNum, trosakUkupno, dataChart, destroy } = chartStore;
+	const { loadAllData, dataLabels, dataLabelsNum, trosakUkupno, dataChart, destroy } = rootStore.chartStore;
 
 	let initialized = false;
+
 	useEffect(() => {
 		if (!initialized) {
 			loadAllData();
@@ -27,7 +27,7 @@ function ChartZaba(props) {
 			initialized = true;
 			// Call this method when you've finished using an object URL to let the browser know not to keep the reference to the file any longer.
 		};
-	}, [initialized]);
+	}, []);
 
 	const Item = styled(Paper)(({ theme }) => ({
 		backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -70,8 +70,7 @@ function ChartZaba(props) {
 		],
 	};
 
-	// console.log('%c 00 ', 'color:green', dataChart);
-	// if (_.IsEmpty(dataChart)) return null;
+	if (isEmpty(dataChart)) return null;
 
 	return (
 		<React.Fragment>

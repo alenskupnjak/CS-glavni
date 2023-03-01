@@ -1,6 +1,6 @@
 import { Box, Button, Container, Divider, Paper, Typography, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { tokens } from '../../theme';
+import { tokens } from '../theme/theme';
 
 export default function UnderConstruction() {
 	const theme = useTheme();

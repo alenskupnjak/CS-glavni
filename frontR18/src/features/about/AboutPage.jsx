@@ -14,7 +14,7 @@ import {
 	Box,
 } from '@mui/material';
 import agent from '../../app/api/agent';
-import { tokens } from '../../theme';
+import { tokens } from '@app/theme/theme';
 
 export default function AboutPage() {
 	const [validationErrors, setValidationErrors] = useState([]);

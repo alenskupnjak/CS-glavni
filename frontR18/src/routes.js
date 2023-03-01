@@ -27,6 +27,7 @@ const Bar = React.lazy(() => import('./scenes/bar/Bar'));
 const Line = React.lazy(() => import('./scenes/line/Line'));
 const Pie = React.lazy(() => import('./scenes/pie/Pie'));
 const Geography = React.lazy(() => import('./scenes/geography/Geography'));
+const MuiExample = React.lazy(() => import('@app/layout/MuiExample'));
 
 const routes = [
 	{
@@ -219,6 +220,14 @@ const routes = [
 		enabled: true,
 		path: '/',
 		component: HomePage,
+		child: null,
+		exact: false,
+		privateRoute: false,
+	},
+	{
+		enabled: true,
+		path: '/mui-example',
+		component: MuiExample,
 		child: null,
 		exact: false,
 		privateRoute: false,

@@ -1,8 +1,8 @@
 import { createContext, useContext } from 'react';
 import ProductStore from './productStore';
-import DisplayStore from './displayStore';
-import UserStore from './userStore';
-import ChartStore from './chartStore';
+import DisplayStore from '@app/stores/displayStore';
+import UserStore from '@app/stores/userStore';
+import ChartStore from '@app/stores/chartStore';
 
 export const store = {
 	displayStore: new DisplayStore(),
