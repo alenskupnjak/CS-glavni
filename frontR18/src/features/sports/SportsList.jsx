@@ -19,7 +19,6 @@ export default function SportsList() {
 
 		setTableStore(store);
 		return () => tableStore?.reset();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return <SportsListDisplay store={tableStore} />;
