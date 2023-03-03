@@ -116,7 +116,6 @@ function SportsListDisplay() {
 	useEffect(() => {
 		if (!initialized) {
 			loadAllSportsData();
-			// data = [...makeData(20)];
 		}
 
 		// ovaj return se okida kada je komponenta destroyed
