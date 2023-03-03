@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
-import { Box, IconButton, Typography, useTheme, Icon } from '@mui/material';
+import { Box, IconButton, Typography, useTheme } from '@mui/material';
 import 'react-pro-sidebar/dist/css/styles.css';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
@@ -126,6 +126,16 @@ const Sidebar = () => {
 						/>
 
 						<Typography variant="h6" color={colors.grey[300]} sx={{ m: '15px 0 5px 20px' }}>
+							Sport Odds
+						</Typography>
+						<Item
+							title="Sports"
+							to="/sports-list"
+							icon={<SvgIcon fill="currentColor">material-solid:sports</SvgIcon>}
+							selected={selected}
+							setSelected={setSelected}
+						/>
+						<Typography variant="h6" color={colors.grey[300]} sx={{ m: '15px 0 5px 20px' }}>
 							Data
 						</Typography>
 						<Item
@@ -174,31 +184,37 @@ const Sidebar = () => {
 							selected={selected}
 							setSelected={setSelected}
 						/>
+						<SubMenu
+							title="Charts"
+							icon={
+								<SvgIcon fill="currentColor" color="info">
+									material-solid:waterfall_chart
+								</SvgIcon>
+							}
+						>
+							<Item
+								title="Bar Chart"
+								to="/bar"
+								icon={<BarChartOutlinedIcon />}
+								selected={selected}
+								setSelected={setSelected}
+							/>
+							<Item
+								title="Pie Chart"
+								to="/pie"
+								icon={<PieChartOutlineOutlinedIcon />}
+								selected={selected}
+								setSelected={setSelected}
+							/>
+							<Item
+								title="Line Chart"
+								to="/line"
+								icon={<TimelineOutlinedIcon />}
+								selected={selected}
+								setSelected={setSelected}
+							/>
+						</SubMenu>
 
-						<Typography variant="h6" color={colors.grey[300]} sx={{ m: '15px 0 5px 20px' }}>
-							Charts
-						</Typography>
-						<Item
-							title="Bar Chart"
-							to="/bar"
-							icon={<BarChartOutlinedIcon />}
-							selected={selected}
-							setSelected={setSelected}
-						/>
-						<Item
-							title="Pie Chart"
-							to="/pie"
-							icon={<PieChartOutlineOutlinedIcon />}
-							selected={selected}
-							setSelected={setSelected}
-						/>
-						<Item
-							title="Line Chart"
-							to="/line"
-							icon={<TimelineOutlinedIcon />}
-							selected={selected}
-							setSelected={setSelected}
-						/>
 						<Typography variant="h6" color={colors.grey[300]} sx={{ m: '15px 0 5px 20px' }}>
 							Products
 						</Typography>
@@ -216,8 +232,15 @@ const Sidebar = () => {
 							selected={selected}
 							setSelected={setSelected}
 						/>
+						<Item
+							title="React-toastify"
+							to="/react-toastify"
+							icon={<SvgIcon>heroicons-outline:chip</SvgIcon>}
+							selected={selected}
+							setSelected={setSelected}
+						/>
 						{user && user.roles?.includes('Admin') && (
-							<SubMenu title="Admin" icon={<MapOutlinedIcon />}>
+							<SubMenu open={true} title="Admin" icon={<MapOutlinedIcon />}>
 								<Item
 									title="Chart"
 									to="/chartZaba"
@@ -236,6 +259,20 @@ const Sidebar = () => {
 									title="Import File"
 									to="/import-file-old"
 									icon={<PublishOutlinedIcon />}
+									selected={selected}
+									setSelected={setSelected}
+								/>
+								<Item
+									title="Example1"
+									to="/example1"
+									icon={<SvgIcon>heroicons-solid:microphone</SvgIcon>}
+									selected={selected}
+									setSelected={setSelected}
+								/>
+								<Item
+									title="Example2"
+									to="/example2"
+									icon={<SvgIcon>heroicons-solid:moon</SvgIcon>}
 									selected={selected}
 									setSelected={setSelected}
 								/>

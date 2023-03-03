@@ -27,9 +27,19 @@ const Bar = React.lazy(() => import('./scenes/bar/Bar'));
 const Line = React.lazy(() => import('./scenes/line/Line'));
 const Pie = React.lazy(() => import('./scenes/pie/Pie'));
 const Geography = React.lazy(() => import('./scenes/geography/Geography'));
-const MuiExample = React.lazy(() => import('@app/layout/MuiExample'));
+const Example1 = React.lazy(() => import('app/components/Example1'));
+const Example2 = React.lazy(() => import('app/components/Example2'));
+const ReactToastify = React.lazy(() => import('@app/common/ReactToastify'));
+const SportsList = React.lazy(() => import('features/sports/SportsList'));
 
 const routes = [
+	{
+		enabled: true,
+		path: '/sports-list',
+		component: SportsList,
+		child: null,
+		privateRoute: false,
+	},
 	{
 		enabled: true,
 		path: '/line',
@@ -226,8 +236,24 @@ const routes = [
 	},
 	{
 		enabled: true,
-		path: '/mui-example',
-		component: MuiExample,
+		path: '/example1',
+		component: Example1,
+		child: null,
+		exact: false,
+		privateRoute: false,
+	},
+	{
+		enabled: true,
+		path: '/example2',
+		component: Example2,
+		child: null,
+		exact: false,
+		privateRoute: false,
+	},
+	{
+		enabled: true,
+		path: '/react-toastify',
+		component: ReactToastify,
 		child: null,
 		exact: false,
 		privateRoute: false,

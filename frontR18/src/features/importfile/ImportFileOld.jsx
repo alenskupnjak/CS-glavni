@@ -90,10 +90,11 @@ export default class ImportFile extends Component {
 					})
 					.value();
 				const propertyKey = Object.keys(ZabaKategorije);
-				// console.log('%c 5 ', 'color:green', propertyKey);
+				console.log('%c 5 ', 'color:green', propertyKey);
 				const propertyValues = Object.values(ZabaKategorije).map(data => data.key);
-				// console.log('%c 10 ', 'color:green', propertyValues);
+				console.log('%c 10 ', 'color:green', propertyValues);
 				const entries = Object.entries(ZabaKategorije);
+				console.log('%c 20 ', 'color:green', entries);
 				this.setState({ ZabaKategorije: [...propertyValues] });
 			}
 		}
@@ -106,11 +107,11 @@ export default class ImportFile extends Component {
 			data.append('file', this.state.File);
 			if (this.state.FileExtension.toLowerCase() === 'csv') {
 				const response = await agent.ReadWriteDatabase.InsertCsvRecord(data);
-				// console.log('%c 00 ', 'color:red', response);
+				console.log('%c 00 ', 'color:red', response);
 				this.ReadRecord(this.state.PageNumber);
 			} else if (this.state.FileExtension.toLowerCase() === 'xlsx') {
 				const response = await agent.ReadWriteDatabase.InsertExcelRecord(data);
-				// console.log('%c 00 ', 'color:red', response);
+				console.log('%c 00 ', 'color:red', response);
 				this.ReadRecord(this.state.PageNumber);
 			} else {
 				console.log('Invalid File');

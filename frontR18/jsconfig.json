@@ -5,9 +5,10 @@
 		"paths": {
 			"@app/*": ["./src/@app/*"],
 			"components/*": ["./src/components"],
-			"@data": ["./src/@data"],
+			"@data/*": ["./src/@data/*"],
 			"app/stores/*": ["./src/app/store/*"],
-			"app/components/*": ["./src/app/components/*"]
+			"app/components/*": ["./src/app/components/*"],
+			"features/*": ["./src/features/*"]
 		}
 	},
 	"include": ["src/**/*"]

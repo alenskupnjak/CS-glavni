@@ -15,6 +15,8 @@ export default class ChartStore {
 
 	//  Usnimavanje svih podataka
 	loadAllData = async () => {
+		console.log('%c ************** loadAllData *****************', 'color:red');
+
 		const labels = [];
 		const dataLabelsNum = [];
 		try {
@@ -84,6 +86,6 @@ export default class ChartStore {
 	}
 
 	componentWillUnmount() {
-		alert('tut');
+		alert('ChartStore componentWillUnmount');
 	}
 }

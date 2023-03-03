@@ -33,6 +33,12 @@ function Catalog(props) {
 		if (!initialized) {
 			loadAllProduct();
 		}
+		return () => {
+			// if (initialized) destroy();
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+			initialized = true;
+			// Call this method when you've finished using an object URL to let the browser know not to keep the reference to the file any longer.
+		};
 	}, []);
 
 	return (

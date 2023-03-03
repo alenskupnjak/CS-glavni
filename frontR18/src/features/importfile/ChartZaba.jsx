@@ -15,7 +15,6 @@ function ChartZaba(props) {
 	const { loadAllData, dataLabels, dataLabelsNum, trosakUkupno, dataChart, destroy } = rootStore.chartStore;
 
 	let initialized = false;
-
 	useEffect(() => {
 		if (!initialized) {
 			loadAllData();
@@ -24,9 +23,11 @@ function ChartZaba(props) {
 		// ovaj return se okida kada je komponenta destroyed
 		return () => {
 			if (initialized) destroy();
+			// eslint-disable-next-line react-hooks/exhaustive-deps
 			initialized = true;
 			// Call this method when you've finished using an object URL to let the browser know not to keep the reference to the file any longer.
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const Item = styled(Paper)(({ theme }) => ({

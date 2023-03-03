@@ -15,8 +15,7 @@ import UserMenu from '@app/layout/UserMenu';
 import { useStore } from '../stores/store';
 
 const Topbar = () => {
-	const { productStore, userStore } = useStore();
-	const { user } = userStore;
+	const { productStore } = useStore();
 	const { itemCount } = productStore;
 	const theme = useTheme();
 	const colors = tokens(theme.palette.mode);

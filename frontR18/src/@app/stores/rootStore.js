@@ -2,6 +2,7 @@ import DisplayStore from './displayStore';
 import ProductStore from './productStore';
 import UserStore from './userStore';
 import ChartStore from './chartStore';
+import SportsStore from './sportsStore';
 
 export class RootStore {
 	constructor() {
@@ -9,6 +10,7 @@ export class RootStore {
 		this.productStore = new ProductStore();
 		this.userStore = new UserStore();
 		this.chartStore = new ChartStore();
+		this.sportsStore = new SportsStore();
 	}
 
 	pozdrav = () => {
