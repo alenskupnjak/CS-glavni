@@ -111,7 +111,6 @@ const columns = [
 
 function SportsListDisplay() {
 	const { loadAllSportsData, dataSport } = rootStore.sportsStore;
-	// const data = React.useMemo(() => makeData(20), []);
 
 	let initialized = false;
 	useEffect(() => {
