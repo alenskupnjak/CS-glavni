@@ -43,7 +43,6 @@ export default class ProductStore {
 		this.filtersFind = debounce(this.fildFilteredItems, 100);
 
 		//Init application
-		console.log('%c START ***** START   ******** START  ', 'color:green');
 		this.loadAllProduct();
 	}
 

@@ -1,0 +1,19 @@
+{
+	"data": [
+		{ "name": "Football", "slug": "football", "id": 1, "live": 26, "total": 386 },
+		{ "name": "Tennis", "slug": "tennis", "id": 5, "live": 14, "total": 184 },
+		{ "name": "Basketball", "slug": "basketball", "id": 2, "live": 9, "total": 244 },
+		{ "name": "Ice Hockey", "slug": "ice-hockey", "id": 4, "live": 12, "total": 155 },
+		{ "name": "Rugby", "slug": "rugby", "id": 12, "live": 0, "total": 49 },
+		{ "name": "Baseball", "slug": "baseball", "id": 64, "live": 0, "total": 133 },
+		{ "name": "Volleyball", "slug": "volleyball", "id": 23, "live": 1, "total": 36 },
+		{ "name": "Handball", "slug": "handball", "id": 6, "live": 0, "total": 42 },
+		{ "name": "Futsal", "slug": "futsal", "id": 29, "live": 3, "total": 8 },
+		{ "name": "Darts", "slug": "darts", "id": 22, "live": 0, "total": 115 },
+		{ "name": "Cricket", "slug": "cricket", "id": 62, "live": 1, "total": 20 },
+		{ "name": "Bandy", "slug": "bandy", "id": 15, "live": 0, "total": 13 },
+		{ "name": "Floorball", "slug": "floorball", "id": 7, "live": 2, "total": 10 },
+		{ "name": "Table tennis", "slug": "table-tennis", "id": 20, "live": 11, "total": 530 },
+		{ "name": "eSports", "slug": "esports", "id": 72, "live": 19, "total": 245 }
+	]
+}

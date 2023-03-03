@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
-import { useTable } from 'react-table';
+import Table from '@app/tables/Table';
 import { rootStore } from '@app/stores';
 import ColorSet from '@app/theme/colorSet';
 
@@ -36,41 +36,6 @@ const Styles = styled.div`
 		}
 	}
 `;
-
-function Table({ columns, data }) {
-	// Use the state and functions returned from useTable to build your UI
-	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
-		columns,
-		data,
-	});
-
-	// Render the UI for your table
-	return (
-		<table {...getTableProps()}>
-			<thead>
-				{headerGroups.map(headerGroup => (
-					<tr {...headerGroup.getHeaderGroupProps()}>
-						{headerGroup.headers.map(column => (
-							<th {...column.getHeaderProps()}>{column.render('Header')}</th>
-						))}
-					</tr>
-				))}
-			</thead>
-			<tbody {...getTableBodyProps()}>
-				{rows.map((row, i) => {
-					prepareRow(row);
-					return (
-						<tr {...row.getRowProps()}>
-							{row.cells.map(cell => {
-								return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
-							})}
-						</tr>
-					);
-				})}
-			</tbody>
-		</table>
-	);
-}
 
 const columns = [
 	{
@@ -109,29 +74,61 @@ const columns = [
 	},
 ];
 
+// Let's simulate a large dataset on the server (outside of our component)
+// const serverData = makeData(5000);
+
 function SportsListDisplay() {
 	const { loadAllSportsData, dataSport } = rootStore.sportsStore;
+
+	// We'll start our table without any data
+	const [data, setData] = React.useState([]);
+	const [loading, setLoading] = React.useState(false);
+	const [pageCount, setPageCount] = React.useState(0);
+	const fetchIdRef = React.useRef(0);
 
 	let initialized = false;
 	useEffect(() => {
 		if (!initialized) {
 			loadAllSportsData();
 		}
-
 		// ovaj return se okida kada je komponenta destroyed
 		return () => {
 			// if (initialized) destroy();
-			/* eslint-disable */
+			// eslint-disable-next-line
 			initialized = true;
-			/* eslint-enable */
 		};
+		// eslint-disable-next-line
 	}, []);
 
-	if (isEmpty(dataSport)) return null;
+	const fetchData = React.useCallback(async ({ pageSize, pageIndex }) => {
+		// Set the loading state
+		setLoading(true);
+		// This will get called when the table needs new data
+		// You could fetch your data from literally anywhere,
+		// even a server. But for this example, we'll just fake it.
+
+		// Give this fetch an ID
+		const fetchId = ++fetchIdRef.current;
+
+		// Only update the data if this is the latest fetch
+		if (fetchId === fetchIdRef.current) {
+			const response = await loadAllSportsData();
+			const startRow = pageSize * pageIndex;
+			const endRow = startRow + pageSize;
+			setData(response.slice(startRow, endRow));
+
+			// Your server could send back total page count.
+			// For now we'll just fake it, too
+			setPageCount(Math.ceil(response.length / pageSize));
+
+			setLoading(false);
+		}
+	}, []);
+
 	return (
 		<Box sx={{ backgroundColor: ColorSet().blueAccent[600] }}>
 			<Styles>
-				<Table columns={columns} data={dataSport} />
+				<Table columns={columns} data={data} fetchData={fetchData} loading={loading} pageCount={pageCount} />
 			</Styles>
 		</Box>
 	);

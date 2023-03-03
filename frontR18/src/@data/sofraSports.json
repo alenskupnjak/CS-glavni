@@ -1,0 +1,26 @@
+{
+	"data": [
+		{ "name": "Football", "slug": "football", "id": 1 },
+		{ "name": "Basketball", "slug": "basketball", "id": 2 },
+		{ "name": "Ice Hockey", "slug": "ice-hockey", "id": 4 },
+		{ "name": "Tennis", "slug": "tennis", "id": 5 },
+		{ "name": "Handball", "slug": "handball", "id": 6 },
+		{ "name": "Floorball", "slug": "floorball", "id": 7 },
+		{ "name": "Motorsport", "slug": "motorsport", "id": 11 },
+		{ "name": "Rugby", "slug": "rugby", "id": 12 },
+		{ "name": "Aussie rules", "slug": "aussie-rules", "id": 13 },
+		{ "name": "Bandy", "slug": "bandy", "id": 15 },
+		{ "name": "Snooker", "slug": "snooker", "id": 19 },
+		{ "name": "Table tennis", "slug": "table-tennis", "id": 20 },
+		{ "name": "Darts", "slug": "darts", "id": 22 },
+		{ "name": "Volleyball", "slug": "volleyball", "id": 23 },
+		{ "name": "Cricket", "slug": "cricket", "id": 62 },
+		{ "name": "American Football", "slug": "american-football", "id": 63 },
+		{ "name": "Baseball", "slug": "baseball", "id": 64 },
+		{ "name": "Waterpolo", "slug": "waterpolo", "id": 26 },
+		{ "name": "Futsal", "slug": "futsal", "id": 29 },
+		{ "name": "Badminton", "slug": "badminton", "id": 31 },
+		{ "name": "Beach Volley", "slug": "beach-volley", "id": 34 },
+		{ "name": "eSports", "slug": "esports", "id": 72 }
+	]
+}

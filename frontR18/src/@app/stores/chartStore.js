@@ -3,13 +3,10 @@ import _ from 'lodash-es';
 import agent from '../../app/api/agent';
 
 export default class ChartStore {
-	// dataLabels = [];
 	trosakUkupno = 0;
 	dataChart = [];
 	constructor() {
 		makeAutoObservable(this);
-		console.log('%c ***************************', 'color:red');
-
 		// this.loadAllData();
 	}
 

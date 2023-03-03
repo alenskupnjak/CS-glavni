@@ -19,6 +19,7 @@ export default function SportsList() {
 
 		setTableStore(store);
 		return () => tableStore?.reset();
+		// eslint-disable-next-line
 	}, []);
 
 	return <SportsListDisplay store={tableStore} />;

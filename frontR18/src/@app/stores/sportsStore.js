@@ -7,12 +7,10 @@ export default class SportsStore {
 	dataSport = [];
 	constructor() {
 		makeAutoObservable(this);
-
-		// this.loadAllData();
 	}
 
-	//  Usnimavanje svih podataka
-	loadAllSportsData = () => {
+	//  Load all data
+	loadAllSportsData = async () => {
 		try {
 			this.dataSport = map(sportsData, data => {
 				return {
@@ -21,10 +19,7 @@ export default class SportsStore {
 					has_outrights: data.has_outrights ? 'Da' : 'Ne',
 				};
 			});
-
-			// this.dataSport = sportsData;
-
-			// return this.dataSport;
+			return this.dataSport;
 		} catch (err) {
 			console.log('%c Greška u SportsStore ', 'color:red', err);
 		}
