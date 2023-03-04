@@ -1,0 +1,108 @@
+* {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	font-family: arial;
+}
+
+body {
+	background-color: #555;
+	text-align: center;
+	font-family: arial;
+}
+
+.pagination {
+	list-style: none;
+	display: inline-block;
+	padding: 0;
+	margin-top: 10px;
+}
+.pagination li {
+	display: inline;
+	text-align: center;
+}
+.pagination a {
+	float: left;
+	display: block;
+	font-size: 14px;
+	text-decoration: none;
+	padding: 5px 12px;
+	color: #fff;
+	margin-left: -1px;
+	border: 1px solid transparent;
+	line-height: 1.5;
+}
+.pagination a.active {
+	cursor: default;
+}
+.pagination a:active {
+	outline: none;
+}
+
+.pagination a.disabled {
+	background-color: blue;
+}
+
+.modal-1 a {
+	border-color: #ddd;
+	color: #4285f4;
+	background: #fff;
+}
+.modal-1 a:hover {
+	background: #eee;
+}
+.modal-1 a.active,
+.modal-1 a:active {
+	border-color: #4285f4;
+	background: #4285f4;
+	color: #fff;
+}
+
+.modal-1 li:first-child a {
+	-moz-border-radius: 6px 0 0 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px 0 0 6px;
+}
+
+.modal-1 li:last-child a {
+	-moz-border-radius: 0 6px 6px 0;
+	-webkit-border-radius: 0;
+	border-radius: 0 6px 6px 0;
+	margin-right: 10px;
+}
+
+.modal-1 a select {
+	color: blue;
+	/* background-color: red !important; */
+	border: 1px solid transparent;
+	font-family: 'Source Sans Pro' !important;
+}
+
+.modal-1 a input {
+	color: blue;
+	/* background-color: red !important; */
+	border: 1px solid transparent;
+	font-family: 'Source Sans Pro' !important;
+}
+
+/* .modal-1 a select:hover {
+	color: blue;
+	border: 1px solid transparent;
+	font-family: 'Source Sans Pro' !important;
+} */
+
+.modal-1 a select:focus {
+	outline: none;
+	padding: 1px 2px;
+	/* background-color: red !important; */
+	border: 0px solid !important;
+}
+
+.modal-1 a option:focus {
+	border: 0px solid transparent !important;
+	outline: none;
+}
+
+.no-outline:focus {
+	outline: none;
+}

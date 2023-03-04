@@ -5,8 +5,8 @@ import Table from '@app/tables/Table';
 import { rootStore } from '@app/stores';
 import ColorSet from '@app/theme/colorSet';
 
-import { isEmpty } from 'lodash-es';
 import { Box } from '@mui/material';
+import Header from 'components/Header';
 
 const Styles = styled.div`
 	padding: 1rem;
@@ -78,8 +78,6 @@ const columns = [
 // const serverData = makeData(5000);
 
 function SportsListDisplay() {
-	const { loadAllSportsData, dataSport } = rootStore.sportsStore;
-
 	// We'll start our table without any data
 	const [data, setData] = React.useState([]);
 	const [loading, setLoading] = React.useState(false);
@@ -89,7 +87,7 @@ function SportsListDisplay() {
 	let initialized = false;
 	useEffect(() => {
 		if (!initialized) {
-			loadAllSportsData();
+			rootStore.sportsStore.loadAllSportsData();
 		}
 		// ovaj return se okida kada je komponenta destroyed
 		return () => {
@@ -101,7 +99,6 @@ function SportsListDisplay() {
 	}, []);
 
 	const fetchData = React.useCallback(async ({ pageSize, pageIndex }) => {
-		// Set the loading state
 		setLoading(true);
 		// This will get called when the table needs new data
 		// You could fetch your data from literally anywhere,
@@ -112,7 +109,7 @@ function SportsListDisplay() {
 
 		// Only update the data if this is the latest fetch
 		if (fetchId === fetchIdRef.current) {
-			const response = await loadAllSportsData();
+			const response = await rootStore.sportsStore.loadAllSportsData();
 			const startRow = pageSize * pageIndex;
 			const endRow = startRow + pageSize;
 			setData(response.slice(startRow, endRow));
@@ -126,7 +123,8 @@ function SportsListDisplay() {
 	}, []);
 
 	return (
-		<Box sx={{ backgroundColor: ColorSet().blueAccent[600] }}>
+		<Box m="20px" sx={{ backgroundColor: ColorSet().blueAccent[600] }}>
+			<Header title="Sports" subtitle="Managing the Team Members" />
 			<Styles>
 				<Table columns={columns} data={data} fetchData={fetchData} loading={loading} pageCount={pageCount} />
 			</Styles>

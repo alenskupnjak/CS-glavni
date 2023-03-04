@@ -38,6 +38,7 @@ function Table({ columns, data, fetchData, loading, pageCount: controlledPageCou
 	// Listen for changes in pagination and use the state to fetch our new data
 	React.useEffect(() => {
 		onFetchDataDebounced({ pageIndex, pageSize });
+		// eslint-disable-next-line
 	}, [fetchData, pageIndex, pageSize]);
 
 	// Render the UI for your table
