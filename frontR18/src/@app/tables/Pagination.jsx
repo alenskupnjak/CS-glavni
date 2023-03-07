@@ -17,12 +17,12 @@ export default function Pagination(props) {
 	} = props;
 	return (
 		<Box sx={{ textAlign: 'center' }}>
-			<ul class="pagination modal-1">
+			<ul className="pagination modal-1">
 				<li onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-					<a class="prev"> {'<<'}</a>
+					<a className="prev"> {'<<'}</a>
 				</li>
 				<li onClick={() => previousPage()} disabled={!canPreviousPage}>
-					<a class="active"> {'<'}</a>
+					<a className="active"> {'<'}</a>
 				</li>
 				<li onClick={() => previousPage()}>
 					<a className="">
@@ -40,7 +40,7 @@ export default function Pagination(props) {
 					<a>{'>>'}</a>
 				</li>
 				<li>
-					<a class="next">
+					<a className="next">
 						Go to page:{' '}
 						<input
 							type="number"

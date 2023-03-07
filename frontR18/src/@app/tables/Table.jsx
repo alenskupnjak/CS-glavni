@@ -1,11 +1,29 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { useTable, usePagination, useAsyncDebounce } from 'react-table';
+import { useTable, usePagination, useAsyncDebounce, useResizeColumns } from 'react-table';
 import Pagination from './Pagination';
 import { Box } from '@mui/material';
 import ColorSet from '@app/theme/colorSet';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import { isEmpty } from 'lodash-es';
 
 function Table({ columns, data, fetchData, loading, pageCount: controlledPageCount }) {
+	const fakeData = data => {
+		const tempArray = [];
+		for (let index = 0; index < data; index++) {
+			tempArray.push({ fakeData: index });
+		}
+		return tempArray;
+	};
+
+	const defaultColumn = React.useMemo(
+		() => ({
+			minWidth: 30,
+			width: 150,
+			maxWidth: 350,
+		}),
+		[]
+	);
 	// Use the state and functions returned from useTable to build your UI
 	const {
 		getTableProps,
@@ -26,12 +44,14 @@ function Table({ columns, data, fetchData, loading, pageCount: controlledPageCou
 	} = useTable(
 		{
 			columns,
-			data,
-			initialState: { pageIndex: 0, pageSize: 10 },
-			manualPagination: true, // Tell the usePagination hook that we'll handle our own data fetching -> we'll also have to provide our own pageCount.
+			data: !isEmpty(data) ? data : fakeData(20),
+			initialState: { pageIndex: 0, pageSize: 10, hiddenColumns: ['fakeData'] },
+			manualPagination: true, // Tell the usePagination hook that we'll handle our own data fetching -> we'll also have to provide our own
 			pageCount: controlledPageCount,
+			defaultColumn,
 		},
-		usePagination
+		usePagination,
+		useResizeColumns
 	);
 
 	// Debounce our onFetchData call for 100ms
@@ -39,21 +59,21 @@ function Table({ columns, data, fetchData, loading, pageCount: controlledPageCou
 
 	// Listen for changes in pagination and use the state to fetch our new data
 	React.useEffect(() => {
-		onFetchDataDebounced({ pageIndex, pageSize });
+		if (fetchData) {
+			onFetchDataDebounced({ pageIndex, pageSize });
+		}
 		// eslint-disable-next-line
 	}, [fetchData, pageIndex, pageSize]);
 
-	// Render the UI for your table
-	if (loading) return <div>Loading data......</div>;
 	return (
 		<Box
 			sx={{
 				padding: '1rem',
 				'& table': {
 					// color: ' red',
-					// backgroundColor: 'gold',
-					border: '1px solid black',
+					// border: '1px solid black',
 					borderSpacing: '0',
+					width: '100%',
 				},
 				'& table tr:last-child td': {
 					borderBottom: '0',
@@ -62,16 +82,16 @@ function Table({ columns, data, fetchData, loading, pageCount: controlledPageCou
 					margin: '0',
 					padding: '0.5rem',
 					borderBottom: '1px solid black',
-					borderRight: '1px solid black',
+					// borderRight: '1px solid black',
 				},
 				'& table th:last-child': {
 					borderRight: '0',
 				},
 				'& table td': {
 					margin: '0',
-					padding: '0.5rem',
+					padding: '6px',
 					borderBottom: '1px solid black',
-					borderRight: '1px solid black',
+					// borderRight: '1px solid black',
 				},
 				'& table td:last-child': {
 					borderRight: '0',
@@ -81,33 +101,42 @@ function Table({ columns, data, fetchData, loading, pageCount: controlledPageCou
 				},
 			}}
 		>
-			<table {...getTableProps()}>
-				<thead>
-					{headerGroups.map(headerGroup => (
-						<tr {...headerGroup.getHeaderGroupProps()}>
-							{headerGroup.headers.map(column => (
-								<th {...column.getHeaderProps()}>{column.render('Header')}</th>
-							))}
-						</tr>
-					))}
-				</thead>
-				<tbody {...getTableBodyProps()}>
-					{page.map((row, i) => {
-						prepareRow(row);
-						return (
-							<tr
-								{...row.getRowProps()}
-								onClick={() => {
-									console.log('%c 17 ', 'color:green', row);
-								}}
-							>
-								{row.cells.map(cell => {
-									return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
-								})}
+			<SkeletonTheme baseColor={ColorSet().grey[300]} highlightColor="#3e4396" borderRadius="0.5rem" duration={1}>
+				<table {...getTableProps()}>
+					<thead>
+						{headerGroups.map(headerGroup => (
+							<tr {...headerGroup.getHeaderGroupProps()}>
+								{headerGroup.headers.map(column => (
+									<th {...column.getHeaderProps()}>{column.render('Header')}</th>
+								))}
 							</tr>
-						);
-					})}
-					{/* <tr>
+						))}
+					</thead>
+					<tbody {...getTableBodyProps()}>
+						{page.map((row, i) => {
+							prepareRow(row);
+							return (
+								<tr
+									{...row.getRowProps()}
+									onClick={() => {
+										console.log('%c 17 ', 'color:green', row);
+									}}
+								>
+									{row.cells.map(cell => {
+										return (
+											<td
+												{...cell.getCellProps({
+													style: { width: cell.column.width, height: 30 },
+												})}
+											>
+												{loading ? <Skeleton /> : cell.render('Cell')}
+											</td>
+										);
+									})}
+								</tr>
+							);
+						})}
+						{/* <tr>
 						{loading ? (
 							// Use our custom loading state to show a loading indicator
 							<td colSpan="10000">Loading data...</td>
@@ -117,8 +146,9 @@ function Table({ columns, data, fetchData, loading, pageCount: controlledPageCou
 							</td>
 						)}
 					</tr> */}
-				</tbody>
-			</table>
+					</tbody>
+				</table>
+			</SkeletonTheme>
 			{pageCount && (
 				<Pagination
 					pageIndex={pageIndex}

@@ -5,6 +5,7 @@ import { sportsData } from '@data/sportsData';
 
 export default class SportsStore {
 	dataSport = [];
+	dataSportTable = [];
 	loading = false;
 	constructor() {
 		makeAutoObservable(this);
@@ -33,9 +34,12 @@ export default class SportsStore {
 			const resTableData = await agent.Sofa.getTournament();
 			const resLastFive = await agent.Sofa.getLastFive();
 
+			const config = await agent.Sofa.getHRConfig();
+			console.log('%c 00', 'color:green', config);
+
 			const mapedData = this.mapDataForPL(resTableData.data.standings[0], resLastFive.data.tournamentTeamEvents[1]);
 
-			this.dataSport = mapedData;
+			this.dataSportTable = mapedData;
 		} catch (err) {
 			console.log('%c Greška u SportsStore ', 'color:red', err);
 		}
@@ -79,6 +83,7 @@ export default class SportsStore {
 	};
 
 	destroy = () => {
+		this.dataSportTable = [];
 		console.log('%c 007 ODLAZIM iz class SportsStore ', 'color:red');
 	};
 

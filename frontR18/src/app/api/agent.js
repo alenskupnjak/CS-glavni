@@ -155,7 +155,10 @@ const Payments = {
 const Sofa = {
 	getTournament: () => sofaAxios.get('/api/v1/unique-tournament/17/season/41886/standings/total').then(res => res),
 	getLastFive: () => sofaAxios.get('/api/v1/unique-tournament/17/season/41886/team-events/total').then(res => res),
+	getHRConfig: () => sofaAxios.get('/api/v1/config/unique-tournaments/HR/football').then(res => res),
 };
+
+// https://api.sofascore.com/api/v1/config/unique-tournaments/HR/football
 
 const ReadWriteDatabase = {
 	ReadRecord: pageNumber => requests.post('uploadFile/readRecord', pageNumber),

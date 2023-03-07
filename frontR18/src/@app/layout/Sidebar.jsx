@@ -124,6 +124,34 @@ const Sidebar = () => {
 							selected={selected}
 							setSelected={setSelected}
 						/>
+						<Item
+							title="Example1"
+							to="/example1"
+							icon={<SvgIcon>heroicons-solid:microphone</SvgIcon>}
+							selected={selected}
+							setSelected={setSelected}
+						/>
+						<Item
+							title="Example2"
+							to="/example2"
+							icon={<SvgIcon>heroicons-solid:moon</SvgIcon>}
+							selected={selected}
+							setSelected={setSelected}
+						/>
+						<Item
+							title="Example3"
+							to="/example3"
+							icon={<SvgIcon>heroicons-solid:moon</SvgIcon>}
+							selected={selected}
+							setSelected={setSelected}
+						/>
+						<Item
+							title="Example4"
+							to="/example4"
+							icon={<SvgIcon>heroicons-solid:moon</SvgIcon>}
+							selected={selected}
+							setSelected={setSelected}
+						/>
 
 						<Typography variant="h6" color={colors.grey[300]} sx={{ m: '15px 0 5px 20px' }}>
 							Sport Odds
@@ -266,20 +294,6 @@ const Sidebar = () => {
 									title="Import File"
 									to="/import-file-old"
 									icon={<PublishOutlinedIcon />}
-									selected={selected}
-									setSelected={setSelected}
-								/>
-								<Item
-									title="Example1"
-									to="/example1"
-									icon={<SvgIcon>heroicons-solid:microphone</SvgIcon>}
-									selected={selected}
-									setSelected={setSelected}
-								/>
-								<Item
-									title="Example2"
-									to="/example2"
-									icon={<SvgIcon>heroicons-solid:moon</SvgIcon>}
 									selected={selected}
 									setSelected={setSelected}
 								/>

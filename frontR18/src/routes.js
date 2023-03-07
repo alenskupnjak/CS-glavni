@@ -29,6 +29,8 @@ const Pie = React.lazy(() => import('./scenes/pie/Pie'));
 const Geography = React.lazy(() => import('./scenes/geography/Geography'));
 const Example1 = React.lazy(() => import('app/components/Example1'));
 const Example2 = React.lazy(() => import('app/components/Example2'));
+const Example3 = React.lazy(() => import('app/components/Example3'));
+const Example4 = React.lazy(() => import('app/components/Example4'));
 const ReactToastify = React.lazy(() => import('@app/common/ReactToastify'));
 const SportsList = React.lazy(() => import('features/sports/SportsList'));
 const PremierLeagueTable = React.lazy(() => import('features/sports/PremierLeagueTable'));
@@ -254,6 +256,22 @@ const routes = [
 		enabled: true,
 		path: '/example2',
 		component: Example2,
+		child: null,
+		exact: false,
+		privateRoute: false,
+	},
+	{
+		enabled: true,
+		path: '/example3',
+		component: Example3,
+		child: null,
+		exact: false,
+		privateRoute: false,
+	},
+	{
+		enabled: true,
+		path: '/example4',
+		component: Example4,
 		child: null,
 		exact: false,
 		privateRoute: false,
