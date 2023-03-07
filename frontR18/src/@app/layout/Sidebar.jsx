@@ -129,6 +129,13 @@ const Sidebar = () => {
 							Sport Odds
 						</Typography>
 						<Item
+							title="Premiere League EN"
+							to="/table-pl"
+							icon={<img src={'./images/PLdark.png'} width="25px" height="25px" />}
+							selected={selected}
+							setSelected={setSelected}
+						/>
+						<Item
 							title="Sports"
 							to="/sports-list"
 							icon={<SvgIcon fill="currentColor">material-solid:sports</SvgIcon>}

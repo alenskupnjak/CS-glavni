@@ -31,8 +31,16 @@ const Example1 = React.lazy(() => import('app/components/Example1'));
 const Example2 = React.lazy(() => import('app/components/Example2'));
 const ReactToastify = React.lazy(() => import('@app/common/ReactToastify'));
 const SportsList = React.lazy(() => import('features/sports/SportsList'));
+const PremierLeagueTable = React.lazy(() => import('features/sports/PremierLeagueTable'));
 
 const routes = [
+	{
+		enabled: true,
+		path: '/table-pl',
+		component: PremierLeagueTable,
+		child: null,
+		privateRoute: false,
+	},
 	{
 		enabled: true,
 		path: '/sports-list',

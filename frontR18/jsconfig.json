@@ -8,6 +8,7 @@
 			"@data/*": ["./src/@data/*"],
 			"app/stores/*": ["./src/app/store/*"],
 			"app/components/*": ["./src/app/components/*"],
+			"app/*": ["./src/app/*"],
 			"features/*": ["./src/features/*"]
 		}
 	},

@@ -1,41 +1,11 @@
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
-import styled from 'styled-components';
 import Table from '@app/tables/Table';
 import { rootStore } from '@app/stores';
 import ColorSet from '@app/theme/colorSet';
 
-import { Box } from '@mui/material';
+import { Container } from '@mui/material';
 import Header from 'components/Header';
-
-const Styles = styled.div`
-	padding: 1rem;
-	table {
-		background-color: blue;
-		border-spacing: 0;
-		border: 1px solid black;
-
-		tr {
-			:last-child {
-				td {
-					border-bottom: 0;
-				}
-			}
-		}
-
-		th,
-		td {
-			margin: 0;
-			padding: 0.5rem;
-			border-bottom: 1px solid black;
-			border-right: 1px solid black;
-
-			:last-child {
-				border-right: 0;
-			}
-		}
-	}
-`;
 
 const columns = [
 	{
@@ -123,12 +93,10 @@ function SportsListDisplay() {
 	}, []);
 
 	return (
-		<Box m="20px" sx={{ backgroundColor: ColorSet().blueAccent[600] }}>
+		<Container m="20px" sx={{ backgroundColor: ColorSet().primary[400] }}>
 			<Header title="Sports" subtitle="Managing the Team Members" />
-			<Styles>
-				<Table columns={columns} data={data} fetchData={fetchData} loading={loading} pageCount={pageCount} />
-			</Styles>
-		</Box>
+			<Table columns={columns} data={data} fetchData={fetchData} loading={loading} pageCount={pageCount} />
+		</Container>
 	);
 }
 

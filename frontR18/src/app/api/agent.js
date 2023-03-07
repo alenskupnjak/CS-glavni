@@ -5,6 +5,10 @@ import { history } from '../..';
 
 const sleep = () => new Promise(resolve => setTimeout(resolve, 200));
 
+const sofaAxios = axios.create({
+	baseURL: process.env.REACT_APP_SOFA,
+});
+
 // axios.defaults.baseURL = 'http://localhost:5030/api/';
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.withCredentials = true;
@@ -148,6 +152,11 @@ const Payments = {
 	createPaymentIntent: () => requests.post('payments', {}),
 };
 
+const Sofa = {
+	getTournament: () => sofaAxios.get('/api/v1/unique-tournament/17/season/41886/standings/total').then(res => res),
+	getLastFive: () => sofaAxios.get('/api/v1/unique-tournament/17/season/41886/team-events/total').then(res => res),
+};
+
 const ReadWriteDatabase = {
 	ReadRecord: pageNumber => requests.post('uploadFile/readRecord', pageNumber),
 	InsertCsvRecord: file => requests.post('uploadFile/UploadCSVFile', file),
@@ -168,6 +177,7 @@ const agent = {
 	Payments,
 	Admin,
 	ReadWriteDatabase,
+	Sofa,
 };
 
 export default agent;
