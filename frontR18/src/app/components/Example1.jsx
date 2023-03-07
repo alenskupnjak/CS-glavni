@@ -15,7 +15,7 @@ function Post({ loading }) {
 		<div className="post">
 			<div className="left-col">
 				<div className="avatar">
-					{loading && <Skeleton circle height="100%" containerClassName="avatar-skeleton" />}
+					{loading && <Skeleton circle height={40} containerClassName="avatar-skeleton" />}
 					<img src="smile.svg" alt="A user avatar" style={{ display: loading ? 'none' : undefined }} />
 				</div>
 				<div className="user-name">{loading ? <Skeleton width={70} /> : 'John Doe'}</div>

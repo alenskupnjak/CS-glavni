@@ -65,8 +65,12 @@ export default class SportsStore {
 				})
 				.reverse();
 
+			console.log('%c 00', 'color:blue', row);
+			console.log('%c promotion', 'color:blue', row.promotion);
+
 			return {
 				position: row.position,
+				promotion: row.promotion,
 				name: row.team.name,
 				logo: `https://api.sofascore.app/api/v1/team/${row.team.id}/image`,
 				matches: row.matches,

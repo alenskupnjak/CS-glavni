@@ -8,22 +8,41 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { isEmpty } from 'lodash-es';
 
 function Table({ columns, data, fetchData, loading, pageCount: controlledPageCount }) {
-	const fakeData = data => {
+	// const [hoveredRow, setHoveredRow] = useState(null);
+
+	const fakeData = numFakeData => {
 		const tempArray = [];
-		for (let index = 0; index < data; index++) {
+		for (let index = 0; index < numFakeData; index++) {
 			tempArray.push({ fakeData: index });
 		}
 		return tempArray;
 	};
 
-	const defaultColumn = React.useMemo(
-		() => ({
-			minWidth: 30,
-			width: 150,
-			maxWidth: 350,
-		}),
-		[]
-	);
+	// const getTrProps = (state, rowInfo) => {
+	// 	console.log('%c 00 ', 'color:green', rowInfo);
+	// 	if (rowInfo && rowInfo.row) {
+	// 		return {
+	// 			onMouseEnter: e => {
+	// 				setHoveredRow(rowInfo.index);
+	// 			},
+	// 			onMouseLeave: e => {
+	// 				setHoveredRow(null);
+	// 			},
+	// 			style: {
+	// 				background: rowInfo.index === hoveredRow ? '#efefef' : 'white',
+	// 			},
+	// 		};
+	// 	} else return {};
+	// };
+
+	// const defaultColumn = React.useMemo(
+	// 	() => ({
+	// 		minWidth: 30,
+	// 		width: 150,
+	// 		maxWidth: 350,
+	// 	}),
+	// 	[]
+	// );
 	// Use the state and functions returned from useTable to build your UI
 	const {
 		getTableProps,
@@ -48,7 +67,8 @@ function Table({ columns, data, fetchData, loading, pageCount: controlledPageCou
 			initialState: { pageIndex: 0, pageSize: 10, hiddenColumns: ['fakeData'] },
 			manualPagination: true, // Tell the usePagination hook that we'll handle our own data fetching -> we'll also have to provide our own
 			pageCount: controlledPageCount,
-			defaultColumn,
+			// getTrProps: getTrProps,
+			// defaultColumn,
 		},
 		usePagination,
 		useResizeColumns
@@ -68,19 +88,20 @@ function Table({ columns, data, fetchData, loading, pageCount: controlledPageCou
 	return (
 		<Box
 			sx={{
-				padding: '1rem',
+				padding: '6px',
 				'& table': {
 					// color: ' red',
 					// border: '1px solid black',
 					borderSpacing: '0',
 					width: '100%',
+					color: ColorSet().grey[200],
 				},
 				'& table tr:last-child td': {
 					borderBottom: '0',
 				},
 				'& table th': {
 					margin: '0',
-					padding: '0.5rem',
+					padding: '6px',
 					borderBottom: '1px solid black',
 					// borderRight: '1px solid black',
 				},
@@ -91,13 +112,24 @@ function Table({ columns, data, fetchData, loading, pageCount: controlledPageCou
 					margin: '0',
 					padding: '6px',
 					borderBottom: '1px solid black',
+					// backgroundColor: 'gold',
 					// borderRight: '1px solid black',
+				},
+				'& table tbody tr:hover': {
+					margin: '0',
+					padding: '6px',
+					backgroundColor: ColorSet().primary[500],
+					borderBottom: '5px solid red !important',
+				},
+				'& table td:hover': {
+					// borderRight: '5px solid blue',
 				},
 				'& table td:last-child': {
 					borderRight: '0',
 				},
 				'& table thead': {
 					backgroundColor: ColorSet().blueAccent[700],
+					color: ColorSet().grey[200],
 				},
 			}}
 		>
@@ -129,7 +161,7 @@ function Table({ columns, data, fetchData, loading, pageCount: controlledPageCou
 													style: { width: cell.column.width, height: 30 },
 												})}
 											>
-												{loading ? <Skeleton /> : cell.render('Cell')}
+												{loading ? <Skeleton containerClassName="fix-skeleton-height" /> : cell.render('Cell')}
 											</td>
 										);
 									})}

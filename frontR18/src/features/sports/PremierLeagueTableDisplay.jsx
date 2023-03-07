@@ -4,6 +4,7 @@ import Table from '@app/tables/Table';
 import { rootStore } from '@app/stores';
 import ColorSet from '@app/theme/colorSet';
 import LastFiveResults from '@app/common/LastFiveResults';
+import PromotionTeam from '@app/common/PromotionTeam';
 
 import { Box, Typography } from '@mui/material';
 import Header from 'components/Header';
@@ -16,6 +17,10 @@ const columns = [
 				Header: '#',
 				accessor: 'position',
 				width: 20,
+				Cell: props => {
+					if (!props.cell.value) return null;
+					return <PromotionTeam cell={props} />;
+				},
 			},
 			{
 				Header: ' ',
@@ -23,7 +28,7 @@ const columns = [
 				width: 20,
 				Cell: ({ cell }) => {
 					if (!cell.value) return null;
-					return <img src={cell.value} width="20" height="20" className="table-img" alt="Premierie League" />;
+					return <img src={cell.value} width="25" height="25" className="table-img" alt="Premierie League" />;
 				},
 			},
 			{

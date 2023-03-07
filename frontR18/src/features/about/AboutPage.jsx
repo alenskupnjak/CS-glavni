@@ -10,7 +10,6 @@ import {
 	ListItemText,
 	Typography,
 	useTheme,
-	Divider,
 	Box,
 } from '@mui/material';
 import agent from '../../app/api/agent';
@@ -83,28 +82,24 @@ export default function AboutPage() {
 			)}
 			<Box sx={{ mt: 1, border: 2 }}>
 				{times(9, i => (
-					<Typography sx={{ background: colors.greenAccent[(i + 1) * 100], fontSize: 13 }}>
+					<Typography key={i} sx={{ background: colors.greenAccent[(i + 1) * 100], fontSize: 13 }}>
 						greenAccent {(i + 1) * 100} - {colors.greenAccent[(i + 1) * 100]}
 					</Typography>
 				))}
 			</Box>
 			<Box sx={{ mt: 1, border: 2 }}>
 				{times(9, i => (
-					<Typography sx={{ background: colors.grey[(i + 1) * 100], fontSize: 13 }}>
+					<Typography key={i} sx={{ background: colors.grey[(i + 1) * 100], fontSize: 13 }}>
 						grey {(i + 1) * 100} - {colors.grey[(i + 1) * 100]}
 					</Typography>
 				))}
 			</Box>
 			<Box sx={{ mt: 1, border: 2 }}>
-				<Typography sx={{ background: colors.primary[100], fontSize: 13 }}> primary 100</Typography>
-				<Typography sx={{ background: colors.primary[200], fontSize: 13 }}> primary 200</Typography>
-				<Typography sx={{ background: colors.primary[300], fontSize: 13 }}> primary 300</Typography>
-				<Typography sx={{ background: colors.primary[400], fontSize: 13 }}> primary 400</Typography>
-				<Typography sx={{ background: colors.primary[500], fontSize: 13 }}> primary neutral</Typography>
-				<Typography sx={{ background: colors.primary[600], fontSize: 13 }}> primary 600</Typography>
-				<Typography sx={{ background: colors.primary[700], fontSize: 13 }}> primary 700</Typography>
-				<Typography sx={{ background: colors.primary[800], fontSize: 13 }}> primary 800</Typography>
-				<Typography sx={{ background: colors.primary[900], fontSize: 13 }}> primary 900</Typography>
+				{times(9, i => (
+					<Typography key={i} sx={{ background: colors.primary[(i + 1) * 100], fontSize: 13 }}>
+						primary {(i + 1) * 100} - {colors.primary[(i + 1) * 100]}
+					</Typography>
+				))}
 			</Box>
 			<Box sx={{ mt: 1, border: 2 }}>
 				<Typography sx={{ background: colors.redAccent[100], fontSize: 13 }}> redAccent 100</Typography>
@@ -119,7 +114,7 @@ export default function AboutPage() {
 			</Box>
 			<Box sx={{ mt: 1, border: 2 }}>
 				{times(9, i => (
-					<Typography sx={{ background: colors.blueAccent[(i + 1) * 100], fontSize: 13 }}>
+					<Typography key={i} sx={{ background: colors.blueAccent[(i + 1) * 100], fontSize: 13 }}>
 						blueAccent {(i + 1) * 100} - {colors.blueAccent[(i + 1) * 100]}
 					</Typography>
 				))}

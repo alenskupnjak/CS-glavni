@@ -21,7 +21,7 @@ export default function LastFiveResults({ cell }) {
 						);
 					} else {
 						return (
-							<Box className="five-results" key={ind} sx={{ backgroundColor: ColorSet().redAccent[500] }}>
+							<Box className="five-results" key={ind} sx={{ backgroundColor: ColorSet().redAccent[600] }}>
 								{data.res}
 							</Box>
 						);

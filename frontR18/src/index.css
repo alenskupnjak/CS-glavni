@@ -51,6 +51,7 @@ body,
 	width: 20px;
 	height: 20px;
 	font-weight: 600;
+	color: #000;
 }
 
 .five-results:first-child {
@@ -59,4 +60,21 @@ body,
 
 .five-results:last-child {
 	border-radius: 0 5px 5px 0;
+}
+
+.relegation {
+	/* background-color: red; */
+	display: inline-block;
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	justify-content: center !important;
+	text-align: center;
+	align-items: center !important;
+}
+
+.fix-skeleton-height {
+	display: block;
+	line-height: 1;
+	font-size: 25px;
 }
