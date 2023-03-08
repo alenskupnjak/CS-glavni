@@ -14,32 +14,32 @@ const CheckoutWrapper = React.lazy(() => import('./features/checkout/CheckoutWra
 const Orders = React.lazy(() => import('./features/orders/Orders'));
 const Inventory = React.lazy(() => import('./features/admin/Inventory'));
 const HomePage = React.lazy(() => import('./@app/home/HomePage'));
-const Team = React.lazy(() => import('./scenes/team/Team'));
+const Team = React.lazy(() => import('./components/team/Team'));
 const NotFound = React.lazy(() => import('@app/errors/NotFound'));
-const Dashboard = React.lazy(() => import('./scenes/dashboard/Dashboard'));
-const Form = React.lazy(() => import('./scenes/form/Form'));
-const Contacts = React.lazy(() => import('./scenes/contacts/Contacts'));
+const Dashboard = React.lazy(() => import('./components/dashboard/Dashboard'));
+const Form = React.lazy(() => import('./components/form/Form'));
+const Contacts = React.lazy(() => import('./components/contacts/Contacts'));
 const UnderConstruction = React.lazy(() => import('@app/errors/UnderConstruction'));
-const Invoices = React.lazy(() => import('./scenes/invoices/Invoices'));
-const Calendar = React.lazy(() => import('./scenes/calendar/Calendar'));
-const FAQ = React.lazy(() => import('./scenes/faq/FAQ'));
-const Bar = React.lazy(() => import('./scenes/bar/Bar'));
-const Line = React.lazy(() => import('./scenes/line/Line'));
-const Pie = React.lazy(() => import('./scenes/pie/Pie'));
-const Geography = React.lazy(() => import('./scenes/geography/Geography'));
+const Invoices = React.lazy(() => import('./components/invoices/Invoices'));
+const Calendar = React.lazy(() => import('./components/calendar/Calendar'));
+const FAQ = React.lazy(() => import('./components/faq/FAQ'));
+const Bar = React.lazy(() => import('./components/bar/Bar'));
+const Line = React.lazy(() => import('./components/line/Line'));
+const Pie = React.lazy(() => import('./components/pie/Pie'));
+const Geography = React.lazy(() => import('./components/geography/Geography'));
 const Example1 = React.lazy(() => import('app/components/Example1'));
 const Example2 = React.lazy(() => import('app/components/Example2'));
 const Example3 = React.lazy(() => import('app/components/Example3'));
 const Example4 = React.lazy(() => import('app/components/Example4'));
 const ReactToastify = React.lazy(() => import('@app/common/ReactToastify'));
 const SportsList = React.lazy(() => import('features/sports/SportsList'));
-const PremierLeagueTable = React.lazy(() => import('features/sports/PremierLeagueTable'));
+const LeagueTable = React.lazy(() => import('features/sports/LeagueTable'));
 
 const routes = [
 	{
 		enabled: true,
 		path: '/table-pl',
-		component: PremierLeagueTable,
+		component: LeagueTable,
 		child: null,
 		privateRoute: false,
 	},

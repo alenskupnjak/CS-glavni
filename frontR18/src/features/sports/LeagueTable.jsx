@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { TableStore } from '@app/stores/tableStore';
-import PremierLeagueTableDisplay from './PremierLeagueTableDisplay';
+import PremierLeagueTableDisplay from './LeagueTableDisplay';
 
 export default function SportsList() {
 	const [tableStore, setTableStore] = useState(null);

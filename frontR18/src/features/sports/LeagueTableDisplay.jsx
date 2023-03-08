@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
+import { cloneDeep } from 'lodash-es';
+
 import Table from '@app/tables/Table';
 import { rootStore } from '@app/stores';
 import ColorSet from '@app/theme/colorSet';
@@ -11,7 +13,7 @@ import Header from 'components/Header';
 
 const columns = [
 	{
-		Header: 'Premier League Table',
+		Header: '',
 		columns: [
 			{
 				Header: '#',
@@ -80,7 +82,7 @@ const columns = [
 ];
 
 function PremierLeagueTableDisplay() {
-	const { dataSportTable, loading, destroy } = rootStore.sportsStore;
+	const { dataSportTable, loading, destroy, topLeaguesTable, headerTableName } = rootStore.sportsStore;
 	let initialized = false;
 	useEffect(() => {
 		try {
@@ -98,19 +100,43 @@ function PremierLeagueTableDisplay() {
 		// eslint-disable-next-line
 	}, []);
 
+	if (columns && headerTableName) {
+		columns[0].Header = headerTableName;
+	}
+
 	return (
-		<Box m="20px" sx={{ backgroundColor: ColorSet().primary[400] }}>
+		<Box m="20px" sx={{ backgroundColor: ColorSet().primary[600] }}>
 			<Header title="Sports" subtitle="Premiere league" />
 
 			<Box display="flex" justifyContent="space-between">
-				<Box m="10px" flex="1 1 30%" p="15px" borderRadius="4px" sx={{ backgroundColor: ColorSet().grey[400] }}>
+				<Box m="10px" flex="1 1 30%" p="15px" borderRadius="4px" sx={{ backgroundColor: ColorSet().primary[400] }}>
 					<Typography variant="h5">Events</Typography>
+					<Box>Calendar</Box>
+					<Box>
+						<Typography variant="h5">Top Leagues</Typography>
+						{topLeaguesTable &&
+							topLeaguesTable.map(data => {
+								return (
+									<Box
+										m={0.5}
+										sx={{ display: 'flex' }}
+										key={data.idTournament}
+										onClick={() => {
+											rootStore.sportsStore.loadDataTable(data.idTournament);
+										}}
+									>
+										<img src={data.linkImg} alt={data.tournamentName} width="24" height="24" />
+										<Typography ml={1}>{data.tournamentName}</Typography>
+									</Box>
+								);
+							})}
+					</Box>
 				</Box>
 
-				<Box flex="1 1 100%">
-					<Table columns={columns} data={dataSportTable} loading={loading} />
+				<Box m="5px" flex="1 1 100%" p="15px" borderRadius="4px" sx={{ backgroundColor: ColorSet().primary[400] }}>
+					<Table columns={cloneDeep(columns)} data={dataSportTable} loading={loading} />
 				</Box>
-				<Box flex="1 1 30%" sx={{ backgroundColor: ColorSet().greenAccent[400] }}>
+				<Box m="5px" flex="1 1 30%" p="15px" borderRadius="4px" sx={{ backgroundColor: ColorSet().primary[400] }}>
 					<Typography variant="h5">Right</Typography>
 				</Box>
 			</Box>

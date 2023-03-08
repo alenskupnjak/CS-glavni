@@ -157,9 +157,9 @@ const Sidebar = () => {
 							Sport Odds
 						</Typography>
 						<Item
-							title="Premiere League EN"
+							title="Top Football League"
 							to="/table-pl"
-							icon={<img src={'./images/PLdark.png'} width="25px" height="25px" />}
+							icon={<img src={'./images/PLdark.png'} width="25px" height="25px" alt="Top Football League" />}
 							selected={selected}
 							setSelected={setSelected}
 						/>

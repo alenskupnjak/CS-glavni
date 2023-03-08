@@ -152,10 +152,15 @@ const Payments = {
 	createPaymentIntent: () => requests.post('payments', {}),
 };
 
+// https://api.sofascore.com/api/v1/unique-tournament/35/seasons
+
 const Sofa = {
-	getTournament: () => sofaAxios.get('/api/v1/unique-tournament/17/season/41886/standings/total').then(res => res),
-	getLastFive: () => sofaAxios.get('/api/v1/unique-tournament/17/season/41886/team-events/total').then(res => res),
-	getHRConfig: () => sofaAxios.get('/api/v1/config/unique-tournaments/HR/football').then(res => res),
+	getSeason: (id = 17) => sofaAxios.get(`unique-tournament/${id}/seasons`).then(res => res),
+	getTournament: (id = 17, idSeason = 41886) =>
+		sofaAxios.get(`unique-tournament/${id}/season/${idSeason}/standings/total`).then(res => res),
+	getLastFive: (id = 17, idSeason = 41886) =>
+		sofaAxios.get(`unique-tournament/${id}/season/${idSeason}/team-events/total`).then(res => res),
+	getHRConfig: () => sofaAxios.get('config/unique-tournaments/HR/football').then(res => res),
 };
 
 // https://api.sofascore.com/api/v1/config/unique-tournaments/HR/football

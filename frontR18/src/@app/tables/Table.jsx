@@ -10,6 +10,8 @@ import { isEmpty } from 'lodash-es';
 function Table({ columns, data, fetchData, loading, pageCount: controlledPageCount }) {
 	// const [hoveredRow, setHoveredRow] = useState(null);
 
+	console.log('%c 333 ', 'color:green', columns);
+
 	const fakeData = numFakeData => {
 		const tempArray = [];
 		for (let index = 0; index < numFakeData; index++) {
@@ -94,7 +96,7 @@ function Table({ columns, data, fetchData, loading, pageCount: controlledPageCou
 					// border: '1px solid black',
 					borderSpacing: '0',
 					width: '100%',
-					color: ColorSet().grey[200],
+					// color: ColorSet().grey[200],
 				},
 				'& table tr:last-child td': {
 					borderBottom: '0',
