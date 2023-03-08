@@ -35,23 +35,23 @@ export default class SportsStore {
 		try {
 			const season = await agent.Sofa.getSeason(idTournament);
 			this.headerTableName = season?.data?.seasons[0].name;
-			console.log('%c 001', 'color:green', season);
+			// console.log('%c 001', 'color:green', season);
 			const resTableData = await agent.Sofa.getTournament(idTournament, season?.data?.seasons[0].id);
-			console.log('%c 002', 'color:green', resTableData);
+			// console.log('%c 002', 'color:green', resTableData);
 			const resLastFive = await agent.Sofa.getLastFive(idTournament, season?.data?.seasons[0].id);
-			console.log('%c 003', 'color:green', resLastFive);
+			// console.log('%c 003', 'color:green', resLastFive);
 			const resTopLeaguec = await agent.Sofa.getHRConfig();
 			// console.log('%c 004', 'color:green', resTopLeaguec);
 
 			//**************************** */
 
-			const propertyKey = Object.keys(resLastFive.data.tournamentTeamEvents);
-			console.log('%c 4', 'color:gold', resLastFive.data.tournamentTeamEvents);
-			console.log('%c 5 ', 'color:gold', propertyKey);
-			const propertyValues = Object.values(resLastFive.data.tournamentTeamEvents).map(data => data.key);
-			console.log('%c 10 ', 'color:gold', propertyValues);
+			// const propertyKey = Object.keys(resLastFive.data.tournamentTeamEvents);
+			// console.log('%c 4', 'color:gold', resLastFive.data.tournamentTeamEvents);
+			// console.log('%c 5 ', 'color:gold', propertyKey);
+			// const propertyValues = Object.values(resLastFive.data.tournamentTeamEvents).map(data => data.key);
+			// console.log('%c 10 ', 'color:gold', propertyValues);
 			const entriesTournament = head(Object.entries(resLastFive.data.tournamentTeamEvents));
-			console.log('%c 20 ', 'color:gold', entriesTournament);
+			// console.log('%c 20 ', 'color:gold', entriesTournament);
 			//********************************************/// */
 
 			const mapedData = this.mapDataForTable(resTableData.data.standings[0], entriesTournament[1]);

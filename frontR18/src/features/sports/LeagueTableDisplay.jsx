@@ -13,7 +13,7 @@ import Header from 'components/Header';
 
 const columns = [
 	{
-		Header: '',
+		Header: ' ',
 		columns: [
 			{
 				Header: '#',
@@ -103,6 +103,8 @@ function PremierLeagueTableDisplay() {
 	if (columns && headerTableName) {
 		columns[0].Header = headerTableName;
 	}
+	// https://stackoverflow.com/questions/62304713/update-column-headers-dynamically-react-table-v7
+	const cloneColumns = cloneDeep(columns);
 
 	return (
 		<Box m="20px" sx={{ backgroundColor: ColorSet().primary[600] }}>
@@ -134,7 +136,7 @@ function PremierLeagueTableDisplay() {
 				</Box>
 
 				<Box m="5px" flex="1 1 100%" p="15px" borderRadius="4px" sx={{ backgroundColor: ColorSet().primary[400] }}>
-					<Table columns={cloneDeep(columns)} data={dataSportTable} loading={loading} />
+					<Table columns={cloneColumns} data={dataSportTable} loading={loading} />
 				</Box>
 				<Box m="5px" flex="1 1 30%" p="15px" borderRadius="4px" sx={{ backgroundColor: ColorSet().primary[400] }}>
 					<Typography variant="h5">Right</Typography>
