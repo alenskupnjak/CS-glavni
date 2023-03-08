@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 using BasketPrj.Data;
 using API.Extensions;
 using BasketPrj.RequestHelpers;
-using API.Services;
 using AutoMapper;
 using BasketPrj.DTOs;
 using BasketPrj.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using BasketPrj.Services;
 
 namespace API.Controllers
 {

@@ -1,9 +1,9 @@
 using API.DataAccessLayer;
 using API.Middleware;
-using API.Services;
 using BasketPrj.Data;
 using BasketPrj.Entities;
 using BasketPrj.RequestHelpers;
+using BasketPrj.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

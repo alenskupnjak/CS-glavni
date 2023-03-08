@@ -4,7 +4,7 @@ using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
-namespace API.Services
+namespace BasketPrj.Services
 {
   public class ImageService
   {

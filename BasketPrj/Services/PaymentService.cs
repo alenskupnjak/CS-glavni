@@ -5,7 +5,7 @@ using BasketPrj.Entities;
 using Microsoft.Extensions.Configuration;
 using Stripe;
 
-namespace API.Services
+namespace BasketPrj.Services
 {
   public class PaymentService
   {
