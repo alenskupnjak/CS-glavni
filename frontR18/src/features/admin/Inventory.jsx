@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Edit, Delete } from '@mui/icons-material';
-import { currencyFormat } from '../../app/util/util';
+import { currencyFormat } from '../../@app/util/util';
 import AppPagination from '../../app/components/AppPagination';
 import ProductForm from './ProductForm';
 import { useStore } from '@app/stores/store';

@@ -4,9 +4,11 @@ import { PagingStore } from './pagingStore';
 export class TableStore {
 	pagingStore = {};
 	additionalFilter = {};
+	name = null;
 
-	constructor() {
+	constructor(name) {
 		this.pagingStore = new PagingStore(1, 10);
+		this.name = name;
 
 		makeObservable(this, {
 			pagingStore: observable,

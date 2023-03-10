@@ -2,12 +2,8 @@ import React from 'react';
 import { toast } from 'react-toastify';
 
 export default function ReactToastify() {
-	// ne diraj
-
 	const toastId = React.useRef(null);
-
 	const notify = () => (toastId.current = toast('Hello', { autoClose: false }));
-
 	const update = () => toast.update(toastId.current, { type: toast.TYPE.INFO, autoClose: 5000 });
 
 	function toasPromise() {
@@ -49,4 +45,4 @@ export default function ReactToastify() {
 			<button onClick={toasPromise}>Promise</button>
 		</div>
 	);
-} // ne diraj
+}

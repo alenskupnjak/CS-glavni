@@ -2,7 +2,7 @@ import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody
 import { useEffect, useState } from 'react';
 import agent from '../../app/api/agent';
 import LoadingComponent from '@app/layout/LoadingComponent';
-import { currencyFormat } from '../../app/util/util';
+import { currencyFormat } from '../../@app/util/util';
 import OrderDetailed from './OrderDetailed';
 
 export default function Orders() {

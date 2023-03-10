@@ -1,14 +1,17 @@
 import { makeAutoObservable } from 'mobx';
-import { map, find, head } from 'lodash-es';
+import { map, find, head, filter, sortBy } from 'lodash-es';
 import agent from 'app/api/agent';
 import { sportsData } from '@data/sportsData';
+import { parseFraction } from '@app/util/util';
 
 export default class SportsStore {
 	dataSport = [];
 	dataSportTable = [];
 	topLeaguesTable = [];
+	scheduleDay = [];
 	headerTableName = null;
 	loading = false;
+	idTournament = null;
 	constructor() {
 		makeAutoObservable(this);
 	}
@@ -30,18 +33,32 @@ export default class SportsStore {
 	};
 
 	//  Load all need data for table
-	loadDataTable = async (idTournament = 17) => {
+	loadDataTable = async (idTournament = 17, sort = '', colummn = 'tournament.category.name') => {
 		this.loading = true;
+		this.idTournament = idTournament;
+
 		try {
-			const season = await agent.Sofa.getSeason(idTournament);
+			//  API API API
+			if (process.env.NODE_ENV === 'production') {
+				const API = await agent.SofaAPI.getApi(idTournament);
+				console.log('%c Production API=', 'color:red', API);
+			}
+
+			const season = await agent.SofaLoc.getSeason(idTournament);
+
 			this.headerTableName = season?.data?.seasons[0].name;
 			// console.log('%c 001', 'color:green', season);
-			const resTableData = await agent.Sofa.getTournament(idTournament, season?.data?.seasons[0].id);
+			const resTableData = await agent.SofaLoc.getTournament(idTournament, season?.data?.seasons[0].id);
 			// console.log('%c 002', 'color:green', resTableData);
-			const resLastFive = await agent.Sofa.getLastFive(idTournament, season?.data?.seasons[0].id);
+			const resLastFive = await agent.SofaLoc.getLastFive(idTournament, season?.data?.seasons[0].id);
 			// console.log('%c 003', 'color:green', resLastFive);
-			const resTopLeaguec = await agent.Sofa.getHRConfig();
+			const resTopLeaguec = await agent.SofaLoc.getHRConfig();
 			// console.log('%c 004', 'color:green', resTopLeaguec);
+
+			const resScheduleDay = await agent.SofaLoc.getDayScheduleEventBySport('football', '2023-03-10');
+			const resScheduleOddsDayOdds = await agent.SofaLoc.getDayScheduleEventOddsBySport('football', '2023-03-10');
+
+			const scheduleDay = this.mapScheduleDay(resScheduleDay.events, resScheduleOddsDayOdds.odds, colummn, sort);
 
 			//**************************** */
 
@@ -61,16 +78,61 @@ export default class SportsStore {
 
 			this.dataSportTable = mapedData;
 			this.topLeaguesTable = mapeTopLeaguesData;
+			this.scheduleDay = scheduleDay;
+			// return scheduleDay;
 		} catch (err) {
 			console.log('%c Greška u SportsStore ', 'color:red', err);
 		}
 		this.loading = false;
 	};
 
-	mapDataForTable = (data, tournament) => {
-		console.log('%c 00', 'color:blue', data);
-		console.log('%c 01', 'color:blue', tournament);
+	mapScheduleDay = (scheduleDay, resScheduleOddsDayOdds, colummn, sort) => {
+		// console.log('%c 17 scheduleDay= ', 'color:pink', scheduleDay);
+		let sheduleOdds = Object.entries(resScheduleOddsDayOdds);
+		// console.log('%c 18 sheduleOdds= ', 'color:pink', sheduleOdds);
+		let cleanScheduleDay = filter(scheduleDay, data => {
+			// code:60 Posponed, 100-Finished, 7- Live game, 31-HT, 6- additional time
+			return (
+				data.status.code !== 100 &&
+				data.status.code !== 60 &&
+				data.status.code !== 7 &&
+				data.status.code !== 31 &&
+				data.status.code !== 6
+			);
+		});
 
+		cleanScheduleDay = cleanScheduleDay.map((data, i) => {
+			const odds = find(sheduleOdds, dataOdds => +dataOdds[0] === data.id);
+			// console.log('%c odds=', 'color:gold', i, odds, data.id, data);
+			if (odds) {
+				// console.log('%c 00', 'color:red', odds[1]);
+				return { ...data, odds: odds[1] };
+			}
+			return { ...data, odds: null };
+		});
+
+		cleanScheduleDay = filter(cleanScheduleDay, data => data.odds !== null);
+		cleanScheduleDay = sortBy(cleanScheduleDay, colummn);
+		// console.log('%c cleanScheduleDay =', 'color:blue', cleanScheduleDay);
+		const mapData = cleanScheduleDay.map((event, num) => {
+			return {
+				num: num + 1,
+				id: event.id,
+				awayTeam: event.awayTeam.name,
+				homeTeam: event.homeTeam.name,
+				liga: event.tournament.name,
+				category: event.tournament.category.name,
+				status: event.status.code,
+				homeOdd: parseFraction(event.odds.choices[0].fractionalValue) + 1,
+				drawOdd: parseFraction(event.odds.choices[1].fractionalValue) + 1,
+				awayOdd: parseFraction(event.odds.choices[2].fractionalValue) + 1,
+			};
+		});
+
+		return mapData;
+	};
+
+	mapDataForTable = (data, tournament) => {
 		const entriesTournament = Object.entries(tournament);
 		const mapData = data.rows.map(row => {
 			const teamLastFiveMatch = find(entriesTournament, data => +data[0] === row.team.id);

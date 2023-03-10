@@ -3,7 +3,7 @@ import agent from '../../app/api/agent';
 // import { v4 as uuid } from 'uuid';
 import { find, debounce, isEmpty } from 'lodash-es';
 import { store } from './store';
-import { getCookie } from '../../app/util/util';
+import { getCookie } from '@app/util/util';
 
 export default class ProductStore {
 	listaProdukata = null;

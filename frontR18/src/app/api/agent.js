@@ -5,8 +5,26 @@ import { history } from '../..';
 
 const sleep = () => new Promise(resolve => setTimeout(resolve, 200));
 
-const sofaAxios = axios.create({
+const sofaLoc = axios.create({
 	baseURL: process.env.REACT_APP_SOFA,
+});
+sofaLoc.interceptors.request.use(config => {
+	// console.log('%c -----config sofaLoc -----------', 'color:green', config);
+	config.headers.Test = 'special get 001';
+
+	return config;
+});
+
+const sofaAPI = axios.create({
+	// baseURL: process.env.REACT_APP_SOFA,
+});
+sofaAPI.interceptors.request.use(config => {
+	console.log('%c -----config-----------', 'color:pink', config);
+	config.headers['X-RapidAPI-Key'] = '9f578f1b85msh7435be72f29f5dcp1c7dadjsn5324bbe2c60d';
+	config.headers['X-RapidAPI-Host'] = 'sofascores.p.rapidapi.com';
+	config.headers.Test = 'Porsao sam kroz API';
+
+	return config;
 });
 
 // axios.defaults.baseURL = 'http://localhost:5030/api/';
@@ -74,7 +92,7 @@ axios.interceptors.response.use(
 );
 
 const requests = {
-	get: (url, params) => axios.get(url, { params }).then(response => response),
+	get: (url, params) => axios.get(url, { params }).then(res => res),
 	post: (url, body) => axios.post(url, body).then(response => response.data),
 	put: (url, body) => axios.put(url, body).then(response => response.data),
 	delete: url => axios.delete(url).then(response => response.data),
@@ -154,13 +172,35 @@ const Payments = {
 
 // https://api.sofascore.com/api/v1/unique-tournament/35/seasons
 
-const Sofa = {
-	getSeason: id => sofaAxios.get(`unique-tournament/${id}/seasons`).then(res => res),
+const SofaLoc = {
+	getSeason: id => sofaLoc.get(`unique-tournament/${id}/seasons`).then(res => res),
 	getTournament: (id, idSeason) =>
-		sofaAxios.get(`unique-tournament/${id}/season/${idSeason}/standings/total`).then(res => res),
+		sofaLoc.get(`unique-tournament/${id}/season/${idSeason}/standings/total`).then(res => res),
 	getLastFive: (id, idSeason) =>
-		sofaAxios.get(`unique-tournament/${id}/season/${idSeason}/team-events/total`).then(res => res),
-	getHRConfig: () => sofaAxios.get('config/unique-tournaments/HR/football').then(res => res),
+		sofaLoc.get(`unique-tournament/${id}/season/${idSeason}/team-events/total`).then(res => res),
+	getHRConfig: () => sofaLoc.get('config/unique-tournaments/HR/football').then(res => res),
+
+	// https://api.sofascore.com/api/v1/sport/football/scheduled-events/2023-03-10
+	getDayScheduleEventBySport: (sport, day) =>
+		sofaLoc.get(`sport/${sport}/scheduled-events/${day}`).then(res => res.data),
+
+	// https://api.sofascore.com/api/v1/sport/football/odds/9/2023-03-10
+	getDayScheduleEventOddsBySport: (sport, day) => sofaLoc.get(`sport/${sport}/odds/9/${day}`).then(res => res.data),
+};
+
+const SofaAPI = {
+	getApi: id => {
+		const options = {
+			method: 'GET',
+			url: 'https://sofascores.p.rapidapi.com/v1/unique-tournaments/data',
+			params: { unique_tournament_id: id },
+			// headers: {
+			// 	'X-RapidAPI-Key': '9f578f1b85msh7435be72f29f5dcp1c7dadjsn5324bbe2c60d',
+			// 	'X-RapidAPI-Host': 'sofascores.p.rapidapi.com',
+			// },
+		};
+		return sofaAPI.request(options).then(res => res);
+	},
 };
 
 // https://api.sofascore.com/api/v1/config/unique-tournaments/HR/football
@@ -185,7 +225,8 @@ const agent = {
 	Payments,
 	Admin,
 	ReadWriteDatabase,
-	Sofa,
+	SofaLoc,
+	SofaAPI,
 };
 
 export default agent;

@@ -77,6 +77,8 @@ function SportsListDisplay() {
 		// Give this fetch an ID
 		const fetchId = ++fetchIdRef.current;
 
+		console.log('%c current ', 'color:red', fetchId, fetchIdRef);
+
 		// Only update the data if this is the latest fetch
 		if (fetchId === fetchIdRef.current) {
 			const response = await rootStore.sportsStore.loadAllSportsData();

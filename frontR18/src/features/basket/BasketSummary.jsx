@@ -1,7 +1,7 @@
 import React from 'react';
 import { TableContainer, Paper, Table, TableBody, TableRow, TableCell } from '@mui/material';
 import { useStore } from '@app/stores/store';
-import { currencyFormat } from '../../app/util/util';
+import { currencyFormat } from '../../@app/util/util';
 
 export default function BasketSummary() {
 	const { productStore } = useStore();

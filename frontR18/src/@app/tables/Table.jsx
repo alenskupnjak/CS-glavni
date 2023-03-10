@@ -1,16 +1,14 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { useTable, usePagination, useAsyncDebounce, useResizeColumns } from 'react-table';
+import { useTable, usePagination, useAsyncDebounce, useResizeColumns, useSortBy } from 'react-table';
 import Pagination from './Pagination';
 import { Box } from '@mui/material';
 import ColorSet from '@app/theme/colorSet';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { isEmpty } from 'lodash-es';
 
-function Table({ columns, data, fetchData, loading, pageCount: controlledPageCount }) {
-	// const [hoveredRow, setHoveredRow] = useState(null);
-
-	console.log('%c 333 ', 'color:green', columns);
+function Table({ columns, data, fetchData, loading, pageCount: controlledPageCount, sortDir, idTour, store }) {
+	// console.log('%c TABLE store= ', 'color:blue', store);
 
 	const fakeData = numFakeData => {
 		const tempArray = [];
@@ -19,23 +17,6 @@ function Table({ columns, data, fetchData, loading, pageCount: controlledPageCou
 		}
 		return tempArray;
 	};
-
-	// const getTrProps = (state, rowInfo) => {
-	// 	console.log('%c 00 ', 'color:green', rowInfo);
-	// 	if (rowInfo && rowInfo.row) {
-	// 		return {
-	// 			onMouseEnter: e => {
-	// 				setHoveredRow(rowInfo.index);
-	// 			},
-	// 			onMouseLeave: e => {
-	// 				setHoveredRow(null);
-	// 			},
-	// 			style: {
-	// 				background: rowInfo.index === hoveredRow ? '#efefef' : 'white',
-	// 			},
-	// 		};
-	// 	} else return {};
-	// };
 
 	// const defaultColumn = React.useMemo(
 	// 	() => ({
@@ -66,18 +47,20 @@ function Table({ columns, data, fetchData, loading, pageCount: controlledPageCou
 		{
 			columns,
 			data: !isEmpty(data) ? data : fakeData(20),
-			initialState: { pageIndex: 0, pageSize: 10, hiddenColumns: ['fakeData'] },
+			initialState: { pageIndex: 0, pageSize: 10, hiddenColumns: ['fakeData'], idTour, sortDir },
 			manualPagination: true, // Tell the usePagination hook that we'll handle our own data fetching -> we'll also have to provide our own
 			pageCount: controlledPageCount,
-			// getTrProps: getTrProps,
+			autoResetPage: false,
+			store,
 			// defaultColumn,
 		},
-		usePagination,
-		useResizeColumns
+		// useSortBy,
+		useResizeColumns,
+		usePagination
 	);
 
-	// Debounce our onFetchData call for 100ms
-	const onFetchDataDebounced = useAsyncDebounce(fetchData, 100);
+	// Debounce our onFetchData call for 50ms
+	const onFetchDataDebounced = useAsyncDebounce(fetchData, 50);
 
 	// Listen for changes in pagination and use the state to fetch our new data
 	React.useEffect(() => {

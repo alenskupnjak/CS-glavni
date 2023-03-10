@@ -1,26 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { TableStore } from '@app/stores/tableStore';
-import PremierLeagueTableDisplay from './LeagueTableDisplay';
+import LeagueTableDisplay from './LeagueTableDisplay';
 
 export default function SportsList() {
 	const [tableStore, setTableStore] = useState(null);
+	const [tableStoreOdds, setTableStoreOdds] = useState(null);
 
 	useEffect(() => {
-		const store = new TableStore();
+		const store = new TableStore('Table leauge');
+		const storeOdds = new TableStore('odds');
 
 		const filter = {
-			status: 1,
+			statusFilter: 1,
 			isFsr: true,
 			pageSize: 10,
 			pageNumber: 1,
 		};
+		const filterOdds = {
+			statusFilter: 1,
+			isFsr: true,
+			pageSize: 10,
+			pageNumber: 1,
+			sort: '',
+		};
 
 		store.setFilter(filter);
+		storeOdds.setFilter(filterOdds);
 
 		setTableStore(store);
+		setTableStoreOdds(storeOdds);
 		return () => tableStore?.reset();
 		// eslint-disable-next-line
 	}, []);
 
-	return <PremierLeagueTableDisplay store={tableStore} />;
+	return <LeagueTableDisplay store={tableStore} storeOdds={tableStoreOdds} />;
 }

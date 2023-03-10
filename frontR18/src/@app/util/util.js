@@ -11,3 +11,8 @@ export function dateFormat(date) {
 	const formatDate = date.split('T')[0];
 	return formatDate;
 }
+
+export function parseFraction(fraction) {
+	const [numerator, denominator] = fraction.split('/').map(Number);
+	return numerator / denominator;
+}

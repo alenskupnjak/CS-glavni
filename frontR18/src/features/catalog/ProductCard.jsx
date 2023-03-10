@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { useNavigate } from 'react-router-dom';
 import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Typography } from '@mui/material';
 import ColorSet from '@app/theme/colorSet';
-import { currencyFormat } from '../../app/util/util';
+import { currencyFormat } from '../../@app/util/util';
 import { useStore } from '@app/stores/store';
 
 function ProductCard({ product }) {
