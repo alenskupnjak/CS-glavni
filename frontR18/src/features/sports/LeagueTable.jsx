@@ -21,7 +21,7 @@ export default function SportsList() {
 			isFsr: true,
 			pageSize: 10,
 			pageNumber: 1,
-			sort: '',
+			sort: 'sss',
 		};
 
 		store.setFilter(filter);

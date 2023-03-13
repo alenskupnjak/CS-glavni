@@ -78,3 +78,11 @@ body,
 	line-height: 1;
 	font-size: 25px;
 }
+
+/* .MuiButtonBase-root.MuiPickersDay-root:not(.Mui-selected) {
+	border: 1px solid red;
+} */
+
+.MuiButtonBase-root.MuiPickersDay-root.Mui-selected {
+	border: 1px solid gold;
+}

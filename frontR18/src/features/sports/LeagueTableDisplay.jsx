@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import { cloneDeep } from 'lodash-es';
+import dayjs from 'dayjs';
 
 import Table from '@app/tables/Table';
 import { rootStore } from '@app/stores';
@@ -8,6 +9,9 @@ import ColorSet from '@app/theme/colorSet';
 import LastFiveResults from '@app/common/LastFiveResults';
 import Sorting from '@app/common/Sorting';
 import PromotionTeam from '@app/common/PromotionTeam';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
+import moment from 'moment';
 
 import { Box, Typography } from '@mui/material';
 import Header from 'components/Header';
@@ -133,7 +137,7 @@ const columnsEvents = [
 			},
 			{
 				Header: e => {
-					return <Sorting title="2" fetch={rootStore.sportsStore.loadDataTable} data={e} />;
+					return <Sorting title="2" data={e} />;
 				},
 				accessor: 'awayOdd',
 				width: 20,
@@ -143,10 +147,11 @@ const columnsEvents = [
 ];
 
 function LeagueTableDisplay({ store, storeOdds }) {
-	const { dataSportTable, loading, destroy, topLeaguesTable, headerTableName, scheduleDay, sortDir, idTournament } =
+	const [value, setValue] = React.useState(moment());
+	const { dataSportTable, loading, destroy, topLeaguesTable, headerTableName, sortDir, idTournament, changeDay } =
 		rootStore.sportsStore;
 	const [data, setData] = React.useState([]);
-	// const [loadingFetch, setLoading] = React.useState(false);
+	const [loadingFetch, setLoadingFetch] = React.useState(false);
 	const [pageCount, setPageCount] = React.useState(0);
 	const fetchIdRef = React.useRef(0);
 	let initialized = false;
@@ -154,6 +159,7 @@ function LeagueTableDisplay({ store, storeOdds }) {
 		try {
 			if (!initialized) {
 				rootStore.sportsStore.loadDataTable();
+				// rootStore.sportsStore.loadDataOddsTable();
 			}
 		} catch (error) {
 			console.log('%c error ', 'color:red', error);
@@ -162,6 +168,7 @@ function LeagueTableDisplay({ store, storeOdds }) {
 			if (initialized) destroy();
 			// eslint-disable-next-line
 			initialized = true;
+			rootStore.sportsStore.initLoading = false;
 		};
 		// eslint-disable-next-line
 	}, []);
@@ -173,7 +180,7 @@ function LeagueTableDisplay({ store, storeOdds }) {
 	const cloneColumns = cloneDeep(columns);
 
 	const fetchData = React.useCallback(async ({ pageSize, pageIndex }) => {
-		// setLoading(true);
+		setLoadingFetch(true);
 		// This will get called when the table needs new data
 		// You could fetch your data from literally anywhere,
 		// even a server. But for this example, we'll just fake it.
@@ -181,20 +188,18 @@ function LeagueTableDisplay({ store, storeOdds }) {
 		// Give this fetch an ID
 		const fetchId = ++fetchIdRef.current;
 
-		console.log('%c current ', 'color:red', fetchId, fetchIdRef);
-
 		// Only update the data if this is the latest fetch
 		if (fetchId === fetchIdRef.current) {
-			// const response = await rootStore.sportsStore.loadDataTable();
+			const response = await rootStore.sportsStore.loadDataOddsTable();
 			const startRow = pageSize * pageIndex;
 			const endRow = startRow + pageSize;
-			setData(scheduleDay.slice(startRow, endRow));
+			setData(response.slice(startRow, endRow));
 
 			// Your server could send back total page count.
 			// For now we'll just fake it, too
-			setPageCount(Math.ceil(scheduleDay.length / pageSize));
+			setPageCount(Math.ceil(response.length / pageSize));
 
-			// setLoading(false);
+			setLoadingFetch(false);
 		}
 	}, []);
 
@@ -205,7 +210,12 @@ function LeagueTableDisplay({ store, storeOdds }) {
 			<Box display="flex" justifyContent="space-between">
 				<Box m="10px" flex="1 1 30%" p="15px" borderRadius="4px" sx={{ backgroundColor: ColorSet().primary[400] }}>
 					<Typography variant="h5">Events</Typography>
-					<Box>Calendar</Box>
+					<DateCalendar
+						// defaultValue={initialValue}
+						onChange={e => {
+							changeDay(dayjs(e).format('YYYY-MM-DD'));
+						}}
+					/>
 					<Box>
 						<Typography variant="h5">Top Leagues</Typography>
 						{topLeaguesTable &&
@@ -232,7 +242,7 @@ function LeagueTableDisplay({ store, storeOdds }) {
 					<Table
 						columns={columnsEvents}
 						data={data}
-						loading={loading}
+						loading={loadingFetch}
 						sortDir={sortDir}
 						idTour={idTournament}
 						fetchData={fetchData}

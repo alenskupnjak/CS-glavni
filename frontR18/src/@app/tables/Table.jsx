@@ -64,6 +64,8 @@ function Table({ columns, data, fetchData, loading, pageCount: controlledPageCou
 
 	// Listen for changes in pagination and use the state to fetch our new data
 	React.useEffect(() => {
+		console.log('%c ******************* ', 'color:red');
+
 		if (fetchData) {
 			onFetchDataDebounced({ pageIndex, pageSize });
 		}

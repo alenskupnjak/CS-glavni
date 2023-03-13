@@ -1,165 +1,205 @@
-import './example1.css';
-import { useState } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
+import Badge from '@mui/material/Badge';
+// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { PickersDay } from '@mui/x-date-pickers/PickersDay';
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
+import { DayCalendarSkeleton } from '@mui/x-date-pickers/DayCalendarSkeleton';
+import { Box, createTheme, TextField, ThemeProvider, useTheme } from '@mui/material';
+import ColorSet from '@app/theme/colorSet';
+import { tokens } from '@app/theme/theme';
 
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
+function getRandomNumber(min, max) {
+	return Math.round(Math.random() * (max - min) + min);
+}
 
-export const users = [
-	{ id: 11, name: 'Sam', role: 'Admin', active: true },
-	{ id: 19, name: 'Kelly', role: 'Salesperson', active: true },
-	{ id: 23, name: 'John', role: 'Manager', active: false },
-];
+/**
+ * Mimic fetch with abort controller https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort
+ * ⚠️ No IE11 support
+ */
+function fakeFetch(date, { signal }) {
+	return new Promise((resolve, reject) => {
+		const timeout = setTimeout(() => {
+			const daysInMonth = date.daysInMonth();
+			const daysToHighlight = [1, 2, 3].map(() => getRandomNumber(1, daysInMonth));
 
-function Post({ loading }) {
+			resolve({ daysToHighlight });
+		}, 500);
+
+		signal.onabort = () => {
+			clearTimeout(timeout);
+			reject(new DOMException('aborted', 'AbortError'));
+		};
+	});
+}
+
+const initialValue = dayjs(new Date());
+
+const color = '#99010f';
+
+// const themeB = useTheme();
+// const boja = tokens(themeB.palette.mode);
+// const boja = tokens('dark');
+
+// const theme = createTheme({
+// 	components: {
+// 		MuiIconButton: {
+// 			styleOverrides: {
+// 				sizeMedium: {
+// 					color: '#99010f',
+// 				},
+// 			},
+// 		},
+// 		MuiOutlinedInput: {
+// 			styleOverrides: {
+// 				root: {
+// 					color: '#99010f',
+// 				},
+// 			},
+// 		},
+// 		MuiInputLabel: {
+// 			styleOverrides: {
+// 				root: {
+// 					color: '#99010f',
+// 				},
+// 			},
+// 		},
+// 		MuiSvgIcon: {
+// 			styleOverrides: {
+// 				root: {
+// 					color: '#99010f',
+// 				},
+// 			},
+// 		},
+// 		MuiDayCalendar: {
+// 			styleOverrides: {
+// 				weekDayLabel: {
+// 					color: color,
+// 				},
+// 			},
+// 		},
+// 		MuiPickersDay: {
+// 			styleOverrides: {
+// 				root: {
+// 					backgroundColor: 'blue',
+// 				},
+// 			},
+// 		},
+// 	},
+// });
+
+function ServerDay(props) {
+	const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
+
+	const isSelected = !props.outsideCurrentMonth && highlightedDays.indexOf(props.day.date()) > 0;
+
 	return (
-		<div className="post">
-			<div className="left-col">
-				<div className="avatar">
-					{loading && <Skeleton circle height="100%" containerClassName="avatar-skeleton" />}
-					<img src="smile.svg" alt="A user avatar" style={{ display: loading ? 'none' : undefined }} />
-				</div>
-				<div className="user-name">{loading ? <Skeleton width={70} /> : 'John Doe'}</div>
-			</div>
-			<div className="right-col">
-				<h3>{loading ? <Skeleton /> : 'Use React Loading Skeleton!'}</h3>
-				<p className="mb-0">
-					{loading ? (
-						<Skeleton count={3} />
-					) : (
-						<>
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum nec justo feugiat, auctor nunc ac,
-							volutpat arcu. Suspendisse faucibus aliquam ante, sit amet iaculis dolor posuere et. In ut placerat leo.
-						</>
-					)}
-				</p>
-			</div>
-		</div>
+		<Badge key={props.day.toString()} overlap="circular" badgeContent={isSelected ? '🌚' : undefined}>
+			<PickersDay {...other} outsideCurrentMonth={outsideCurrentMonth} day={day} />
+		</Badge>
 	);
 }
 
-function ListItem({ loading, children }) {
-	return <div className="list-item">{loading ? <Skeleton /> : children}</div>;
-}
+ServerDay.propTypes = {
+	/**
+	 * The date to show.
+	 */
+	day: PropTypes.object.isRequired,
+	highlightedDays: PropTypes.arrayOf(PropTypes.number),
+	/**
+	 * If `true`, day is outside of month and will be hidden.
+	 */
+	outsideCurrentMonth: PropTypes.bool.isRequired,
+};
 
-function TableRow({ loading, user }) {
-	const status = user.active ? 'Active' : 'Inactive';
+function DateCalendarServerRequest() {
+	const requestAbortController = React.useRef(null);
+	const [isLoading, setIsLoading] = React.useState(false);
+	const [highlightedDays, setHighlightedDays] = React.useState([1, 2, 15]);
+
+	const fetchHighlightedDays = date => {
+		const controller = new AbortController();
+		fakeFetch(date, {
+			signal: controller.signal,
+		})
+			.then(({ daysToHighlight }) => {
+				// console.log('%c daysToHighlight ', 'color:green', daysToHighlight);
+
+				setHighlightedDays(daysToHighlight);
+				setIsLoading(false);
+			})
+			.catch(error => {
+				// ignore the error if it's caused by `controller.abort`
+				if (error.name !== 'AbortError') {
+					throw error;
+				}
+			});
+
+		requestAbortController.current = controller;
+	};
+
+	React.useEffect(() => {
+		fetchHighlightedDays(initialValue);
+		// abort request on unmount
+		return () => requestAbortController.current?.abort();
+	}, []);
+
+	const handleMonthChange = date => {
+		if (requestAbortController.current) {
+			// make sure that you are aborting useless requests
+			// because it is possible to switch between months pretty quickly
+			requestAbortController.current.abort();
+		}
+
+		setIsLoading(true);
+		setHighlightedDays([]);
+		fetchHighlightedDays(date);
+	};
 
 	return (
-		<tr>
-			<td>{loading ? <Skeleton /> : user.id}</td>
-			<td>{loading ? <Skeleton /> : user.name}</td>
-			<td>{loading ? <Skeleton /> : user.role}</td>
-			<td>{loading ? <Skeleton /> : status}</td>
-		</tr>
-	);
-}
-
-function InlineWrapperWithMargin({ children }) {
-	return <span style={{ marginRight: '0.5rem' }}>{children}</span>;
-}
-
-// Use https://bennettfeely.com/clippy/ to try out other shapes
-function StarWrapper({ children }) {
-	return (
-		<div
-			style={{
-				display: 'inline-block',
-				clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)',
-				width: '100px',
-				height: '100px',
-			}}
-		>
-			{children}
-		</div>
-	);
-}
-
-export default function App() {
-	const [loading, setLoading] = useState(true);
-
-	function renderLoadingControl(i) {
-		return (
-			<div className="form-check mb-4">
-				<input
-					className="form-check-input"
-					type="checkbox"
-					id={`loadingCheckbox${i}`}
-					checked={loading}
-					onChange={() => setLoading(b => !b)}
+		// <LocalizationProvider dateAdapter={AdapterDayjs}>
+		// <ThemeProvider theme={theme}>
+		<Box>
+			<Box>
+				<DateCalendar
+					defaultValue={initialValue}
+					loading={isLoading}
+					onMonthChange={handleMonthChange}
+					renderLoading={() => <DayCalendarSkeleton />}
+					slots={{
+						day: ServerDay,
+					}}
+					slotProps={{
+						day: {
+							highlightedDays,
+						},
+					}}
+					onChange={e => console.log('%c 00 ', 'color:green', dayjs(e).format('YYYY-MM-DD'))}
 				/>
-				<label className="form-check-label" htmlFor={`loadingCheckbox${i}`}>
-					Loading
-				</label>
-			</div>
-		);
-	}
-
-	return (
-		<div className="App">
-			<h1 className="mb-4">React Loading Skeleton</h1>
-
-			{renderLoadingControl(0)}
-
-			<div className="mb-4">
-				<h2>A Blog Post</h2>
-				<Post loading={loading} />
-			</div>
-
-			<div className="mb-4">
-				<h2>A List</h2>
-				<ListItem loading={loading}>List Item 1</ListItem>
-				<ListItem loading={loading}>List Item 2</ListItem>
-				<ListItem loading={loading}>List Item 3</ListItem>
-			</div>
-
-			<div className="mb-4">
-				<h2>A Table with Theming</h2>
-				<SkeletonTheme baseColor="#202020" highlightColor="#96c7ff" borderRadius="0.5rem" duration={4}>
-					<table className="table">
-						<thead>
-							<tr>
-								<th>ID</th>
-								<th>Name</th>
-								<th>Role</th>
-								<th>Status</th>
-							</tr>
-						</thead>
-						<tbody>
-							{users.map(u => (
-								<TableRow key={u.id} user={u} loading={loading} />
-							))}
-						</tbody>
-					</table>
-				</SkeletonTheme>
-			</div>
-
-			<div className="mb-4">
-				<h2>Inline Skeletons</h2>
-				{loading ? (
-					<Skeleton count={5} wrapper={InlineWrapperWithMargin} inline width={90} />
-				) : (
-					'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-				)}
-			</div>
-
-			<div className="mb-4">
-				<h2>
-					Wow!{' '}
-					<span role="img" aria-hidden>
-						🤩
-					</span>
-				</h2>
-				<Skeleton
-					count={5}
-					wrapper={StarWrapper}
-					height="100%"
-					baseColor="#ebab34"
-					highlightColor="#f2cb07"
-					duration={0.9}
-				/>
-			</div>
-
-			{renderLoadingControl(1)}
-		</div>
+			</Box>
+			<Box>
+				<BasicDateCalendar />
+			</Box>
+		</Box>
+		// </ThemeProvider>
+		// </LocalizationProvider>
 	);
 }
+
+function BasicDateCalendar() {
+	const initialValue = dayjs(new Date());
+	return (
+		<Box>
+			<DateCalendar
+				// defaultValue={initialValue}
+				onChange={e => {
+					console.log('%c 17 ', 'color:blue', dayjs(e).format('YYYY-MM-DD'));
+				}}
+			/>
+		</Box>
+	);
+}
+
+export default DateCalendarServerRequest;

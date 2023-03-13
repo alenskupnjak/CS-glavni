@@ -190,8 +190,56 @@ export const themeSettings = mode => {
 				fontSize: 14,
 			},
 		},
+		components: {
+			// MuiIconButton: {
+			// 	styleOverrides: {
+			// 		sizeMedium: {
+			// 			color: '#99010f',
+			// 		},
+			// 	},
+			// },
+			// MuiOutlinedInput: {
+			// 	styleOverrides: {
+			// 		root: {
+			// 			color: '#99010f',
+			// 		},
+			// 	},
+			// },
+			// MuiInputLabel: {
+			// 	styleOverrides: {
+			// 		root: {
+			// 			color: '#99010f',
+			// 		},
+			// 	},
+			// },
+			// MuiSvgIcon: {
+			// 	styleOverrides: {
+			// 		root: {
+			// 			color: '#99010f',
+			// 		},
+			// 	},
+			// },
+			// MuiDayCalendar: {
+			// 	styleOverrides: {
+			// 		weekDayLabel: {
+			// 			color: 'red',
+			// 		},
+			// 	},
+			// },
+			MuiPickersDay: {
+				styleOverrides: {
+					root: {
+						backgroundColor: colors.blueAccent[600],
+					},
+				},
+			},
+		},
 	};
 };
+
+// .MuiButtonBase-root.MuiPickersDay-root.Mui-selected {
+// 	border: 1px solid red;
+// }
 
 // context for color mode
 export const ColorModeContext = createContext({

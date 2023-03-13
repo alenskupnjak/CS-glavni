@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 
 export default function Sorting(props) {
 	const { title, sorting, dir, data } = props;
-	console.log('%c Sorting props ', 'color:red', data);
+	// console.log('%c Sorting props ', 'color:blue', data?.store);
 
 	if (!props) return null;
 	return (
@@ -15,6 +15,7 @@ export default function Sorting(props) {
 			}}
 		>
 			{title}
+			{data?.store?.additionalFilter?.sort}
 		</Box>
 	);
 }

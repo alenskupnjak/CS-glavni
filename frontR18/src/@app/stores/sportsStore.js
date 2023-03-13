@@ -1,5 +1,6 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { map, find, head, filter, sortBy } from 'lodash-es';
+import dayjs from 'dayjs';
 import agent from 'app/api/agent';
 import { sportsData } from '@data/sportsData';
 import { parseFraction } from '@app/util/util';
@@ -12,6 +13,8 @@ export default class SportsStore {
 	headerTableName = null;
 	loading = false;
 	idTournament = null;
+	initLoading = true;
+	searchDay = dayjs(new Date()).format('YYYY-MM-DD');
 	constructor() {
 		makeAutoObservable(this);
 	}
@@ -45,21 +48,27 @@ export default class SportsStore {
 			}
 
 			const season = await agent.SofaLoc.getSeason(idTournament);
+			runInAction(async () => {
+				this.headerTableName = season?.data?.seasons[0].name;
+				const resTableData = this.resTableDataFunc(idTournament, season?.data?.seasons[0].id);
+				const resLastFive = this.resLastFiveFunc(idTournament, season?.data?.seasons[0].id);
+				const resTopLeaguec = this.getHRConfigFunc();
+				await Promise.all([resTableData, resLastFive, resTopLeaguec]);
+				this.entriesTournament = head(Object.entries(this.resLastFive.data?.tournamentTeamEvents));
+				const mapedData = this.mapDataForTable(this.resTableData.data.standings[0], this.entriesTournament[1]);
+				const mapeTopLeaguesData = this.mapDataTopLeagues(this.resTopLeaguec.data);
+				this.dataSportTable = mapedData;
+				this.topLeaguesTable = mapeTopLeaguesData;
+			});
+			// const resTopLeaguec = await agent.SofaLoc.getHRConfig();
 
-			this.headerTableName = season?.data?.seasons[0].name;
 			// console.log('%c 001', 'color:green', season);
-			const resTableData = await agent.SofaLoc.getTournament(idTournament, season?.data?.seasons[0].id);
+			// const resTableData = await agent.SofaLoc.getTournament(idTournament, season?.data?.seasons[0].id);
 			// console.log('%c 002', 'color:green', resTableData);
-			const resLastFive = await agent.SofaLoc.getLastFive(idTournament, season?.data?.seasons[0].id);
+			// const resLastFive = await agent.SofaLoc.getLastFive(idTournament, season?.data?.seasons[0].id);
 			// console.log('%c 003', 'color:green', resLastFive);
-			const resTopLeaguec = await agent.SofaLoc.getHRConfig();
+
 			// console.log('%c 004', 'color:green', resTopLeaguec);
-
-			const resScheduleDay = await agent.SofaLoc.getDayScheduleEventBySport('football', '2023-03-10');
-			const resScheduleOddsDayOdds = await agent.SofaLoc.getDayScheduleEventOddsBySport('football', '2023-03-10');
-
-			const scheduleDay = this.mapScheduleDay(resScheduleDay.events, resScheduleOddsDayOdds.odds, colummn, sort);
-
 			//**************************** */
 
 			// const propertyKey = Object.keys(resLastFive.data.tournamentTeamEvents);
@@ -67,23 +76,53 @@ export default class SportsStore {
 			// console.log('%c 5 ', 'color:gold', propertyKey);
 			// const propertyValues = Object.values(resLastFive.data.tournamentTeamEvents).map(data => data.key);
 			// console.log('%c 10 ', 'color:gold', propertyValues);
-			const entriesTournament = head(Object.entries(resLastFive.data.tournamentTeamEvents));
 			// console.log('%c 20 ', 'color:gold', entriesTournament);
 			//********************************************/// */
+		} catch (err) {
+			console.log('%c Greška u SportsStore ', 'color:red', err);
+		} finally {
+			this.loading = false;
+		}
+	};
 
-			const mapedData = this.mapDataForTable(resTableData.data.standings[0], entriesTournament[1]);
-			const mapeTopLeaguesData = this.mapDataTopLeagues(resTopLeaguec.data);
+	resTableDataFunc = async (idTournament, season) => {
+		const response = await agent.SofaLoc.getTournament(idTournament, season);
+		runInAction(() => {
+			this.resTableData = response;
+		});
+	};
 
-			// console.log('%c 44', 'color:green', mapeTopLeaguesData);
+	resLastFiveFunc = async (idTournament, season) => {
+		const response = await agent.SofaLoc.getLastFive(idTournament, season);
+		runInAction(() => {
+			this.resLastFive = response;
+		});
+	};
 
-			this.dataSportTable = mapedData;
-			this.topLeaguesTable = mapeTopLeaguesData;
-			this.scheduleDay = scheduleDay;
-			// return scheduleDay;
+	getHRConfigFunc = async () => {
+		const response = await agent.SofaLoc.getHRConfig();
+		runInAction(() => {
+			this.resTopLeaguec = response;
+		});
+	};
+
+	changeDay = day => {
+		this.searchDay = day;
+		this.loadDataOddsTable();
+	};
+
+	//  Load all need data for table
+	loadDataOddsTable = async (sort = '', colummn = 'tournament.category.name') => {
+		try {
+			const resScheduleDay = await agent.SofaLoc.getDayScheduleEventBySport('football', this.searchDay);
+			const resScheduleOddsDayOdds = await agent.SofaLoc.getDayScheduleEventOddsBySport('football', this.searchDay);
+			const scheduleDay = this.mapScheduleDay(resScheduleDay.events, resScheduleOddsDayOdds.odds, colummn, sort);
+			// this.scheduleDay = scheduleDay;
+			console.log('%c 44', 'color:green', scheduleDay);
+			return scheduleDay;
 		} catch (err) {
 			console.log('%c Greška u SportsStore ', 'color:red', err);
 		}
-		this.loading = false;
 	};
 
 	mapScheduleDay = (scheduleDay, resScheduleOddsDayOdds, colummn, sort) => {
