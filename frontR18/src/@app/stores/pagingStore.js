@@ -39,6 +39,7 @@ export class PagingStore {
 	get currentPageStart() {
 		return this.currentPage > 1 ? (this.currentPage - 1) * this.pageSize + 1 : 1;
 	}
+
 	get currentPageEnd() {
 		let currentPageEnd = 0;
 		if (this.currentPage <= 1) {
@@ -63,7 +64,7 @@ export class PagingStore {
 	get availablePageSizes() {
 		// NOTE: For now leave it as 10
 		const baseSize = 10;
-		return [baseSize, baseSize * 5, baseSize * 10, baseSize * 50];
+		return [baseSize, baseSize * 3, baseSize * 5];
 	}
 
 	reset() {

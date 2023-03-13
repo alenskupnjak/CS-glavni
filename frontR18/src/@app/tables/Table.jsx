@@ -1,15 +1,18 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { useTable, usePagination, useAsyncDebounce, useResizeColumns, useSortBy } from 'react-table';
+import { useTable, usePagination, useAsyncDebounce, useResizeColumns } from 'react-table';
 import Pagination from './Pagination';
 import { Box } from '@mui/material';
 import ColorSet from '@app/theme/colorSet';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { isEmpty } from 'lodash-es';
 
-function Table({ columns, data, fetchData, loading, pageCount: controlledPageCount, sortDir, idTour, store }) {
-	// console.log('%c TABLE store= ', 'color:blue', store);
+function Table({ columns, data, fetchData, loading, idTable, store, showPaging }) {
+	const { pagingStore, additionalFilter } = store;
 
+	// console.log('%c TABLE store= ', 'color:blue', store);
+	// console.log('%c TABLE store= ', 'color:blue', pagingStore);
+	// console.log('%c TABLE store= ', 'color:blue', pagingStore.pageSize);
 	const fakeData = numFakeData => {
 		const tempArray = [];
 		for (let index = 0; index < numFakeData; index++) {
@@ -18,14 +21,6 @@ function Table({ columns, data, fetchData, loading, pageCount: controlledPageCou
 		return tempArray;
 	};
 
-	// const defaultColumn = React.useMemo(
-	// 	() => ({
-	// 		minWidth: 30,
-	// 		width: 150,
-	// 		maxWidth: 350,
-	// 	}),
-	// 	[]
-	// );
 	// Use the state and functions returned from useTable to build your UI
 	const {
 		getTableProps,
@@ -46,15 +41,21 @@ function Table({ columns, data, fetchData, loading, pageCount: controlledPageCou
 	} = useTable(
 		{
 			columns,
-			data: !isEmpty(data) ? data : fakeData(20),
-			initialState: { pageIndex: 0, pageSize: 10, hiddenColumns: ['fakeData'], idTour, sortDir },
+			data: !isEmpty(data) ? data : fakeData(additionalFilter.pageSize ?? pagingStore.pageSize),
+			initialState: {
+				pageIndex: pagingStore.currentPage - 1 || 0,
+				pageSize: pagingStore.pageSize || 10,
+				hiddenColumns: ['fakeData'],
+				idTable,
+				fetchData: (store, colummn) => {
+					fetchData(store, colummn);
+				},
+			},
 			manualPagination: true, // Tell the usePagination hook that we'll handle our own data fetching -> we'll also have to provide our own
-			pageCount: controlledPageCount,
+			pageCount: pagingStore.totalPages,
 			autoResetPage: false,
 			store,
-			// defaultColumn,
 		},
-		// useSortBy,
 		useResizeColumns,
 		usePagination
 	);
@@ -64,13 +65,11 @@ function Table({ columns, data, fetchData, loading, pageCount: controlledPageCou
 
 	// Listen for changes in pagination and use the state to fetch our new data
 	React.useEffect(() => {
-		console.log('%c ******************* ', 'color:red');
-
 		if (fetchData) {
-			onFetchDataDebounced({ pageIndex, pageSize });
+			onFetchDataDebounced(store, idTable);
 		}
 		// eslint-disable-next-line
-	}, [fetchData, pageIndex, pageSize]);
+	}, [pageIndex, pageSize]);
 
 	return (
 		<Box
@@ -145,7 +144,7 @@ function Table({ columns, data, fetchData, loading, pageCount: controlledPageCou
 										return (
 											<td
 												{...cell.getCellProps({
-													style: { width: cell.column.width, height: 30 },
+													style: { width: cell.column.width, height: 35 },
 												})}
 											>
 												{loading ? <Skeleton containerClassName="fix-skeleton-height" /> : cell.render('Cell')}
@@ -155,20 +154,10 @@ function Table({ columns, data, fetchData, loading, pageCount: controlledPageCou
 								</tr>
 							);
 						})}
-						{/* <tr>
-						{loading ? (
-							// Use our custom loading state to show a loading indicator
-							<td colSpan="10000">Loading data...</td>
-						) : (
-							<td colSpan="10000">
-								Showing {page.length} of ~{controlledPageCount * pageSize} results
-							</td>
-						)}
-					</tr> */}
 					</tbody>
 				</table>
 			</SkeletonTheme>
-			{pageCount && (
+			{showPaging && (
 				<Pagination
 					pageIndex={pageIndex}
 					pageOptions={pageOptions}
@@ -180,6 +169,7 @@ function Table({ columns, data, fetchData, loading, pageCount: controlledPageCou
 					canNextPage={canNextPage}
 					pageSize={pageSize}
 					setPageSize={setPageSize}
+					store={store}
 				/>
 			)}
 		</Box>

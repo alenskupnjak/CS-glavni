@@ -7,12 +7,12 @@ import { parseFraction } from '@app/util/util';
 
 export default class SportsStore {
 	dataSport = [];
-	dataSportTable = [];
+	dataSportTable = null;
 	topLeaguesTable = [];
 	scheduleDay = [];
 	headerTableName = null;
 	loading = false;
-	idTournament = null;
+	idTable = null;
 	initLoading = true;
 	searchDay = dayjs(new Date()).format('YYYY-MM-DD');
 	constructor() {
@@ -20,38 +20,46 @@ export default class SportsStore {
 	}
 
 	//  Load all data
-	loadAllSportsData = async () => {
+	loadAllSportsData = store => {
 		try {
-			this.dataSport = map(sportsData, data => {
+			this.loading = true;
+			const dataTemp = map(sportsData, data => {
 				return {
 					...data,
 					active: data.active ? 'Da' : 'Ne',
 					has_outrights: data.has_outrights ? 'Da' : 'Ne',
 				};
 			});
-			return this.dataSport;
+			const startRow = store.pagingStore.pageSize * (store.pagingStore.currentPage - 1);
+			const endRow = startRow + store.pagingStore.pageSize;
+			store.pagingStore.setTotalRecords(dataTemp.length);
+			const data = dataTemp.slice(startRow, endRow);
+			this.dataSport = [...data];
+			this.loading = false;
+			// return this.dataSport;
 		} catch (err) {
-			console.log('%c Greška u SportsStore ', 'color:red', err);
+			console.log('%c Greška u loadAllSportsData ', 'color:red', err);
 		}
 	};
 
 	//  Load all need data for table
-	loadDataTable = async (idTournament = 17, sort = '', colummn = 'tournament.category.name') => {
+	loadDataTable = async (store, idTable = 17) => {
 		this.loading = true;
-		this.idTournament = idTournament;
+		this.dataSportTable = null;
+		this.idTable = idTable;
 
 		try {
 			//  API API API
 			if (process.env.NODE_ENV === 'production') {
-				const API = await agent.SofaAPI.getApi(idTournament);
+				const API = await agent.SofaAPI.getApi(idTable);
 				console.log('%c Production API=', 'color:red', API);
 			}
 
-			const season = await agent.SofaLoc.getSeason(idTournament);
+			const season = await agent.SofaLoc.getSeason(idTable);
 			runInAction(async () => {
 				this.headerTableName = season?.data?.seasons[0].name;
-				const resTableData = this.resTableDataFunc(idTournament, season?.data?.seasons[0].id);
-				const resLastFive = this.resLastFiveFunc(idTournament, season?.data?.seasons[0].id);
+				const resTableData = this.resTableDataFunc(idTable, season?.data?.seasons[0].id);
+				const resLastFive = this.resLastFiveFunc(idTable, season?.data?.seasons[0].id);
 				const resTopLeaguec = this.getHRConfigFunc();
 				await Promise.all([resTableData, resLastFive, resTopLeaguec]);
 				this.entriesTournament = head(Object.entries(this.resLastFive.data?.tournamentTeamEvents));
@@ -59,41 +67,22 @@ export default class SportsStore {
 				const mapeTopLeaguesData = this.mapDataTopLeagues(this.resTopLeaguec.data);
 				this.dataSportTable = mapedData;
 				this.topLeaguesTable = mapeTopLeaguesData;
+				this.loading = false;
 			});
-			// const resTopLeaguec = await agent.SofaLoc.getHRConfig();
-
-			// console.log('%c 001', 'color:green', season);
-			// const resTableData = await agent.SofaLoc.getTournament(idTournament, season?.data?.seasons[0].id);
-			// console.log('%c 002', 'color:green', resTableData);
-			// const resLastFive = await agent.SofaLoc.getLastFive(idTournament, season?.data?.seasons[0].id);
-			// console.log('%c 003', 'color:green', resLastFive);
-
-			// console.log('%c 004', 'color:green', resTopLeaguec);
-			//**************************** */
-
-			// const propertyKey = Object.keys(resLastFive.data.tournamentTeamEvents);
-			// console.log('%c 4', 'color:gold', resLastFive.data.tournamentTeamEvents);
-			// console.log('%c 5 ', 'color:gold', propertyKey);
-			// const propertyValues = Object.values(resLastFive.data.tournamentTeamEvents).map(data => data.key);
-			// console.log('%c 10 ', 'color:gold', propertyValues);
-			// console.log('%c 20 ', 'color:gold', entriesTournament);
-			//********************************************/// */
 		} catch (err) {
 			console.log('%c Greška u SportsStore ', 'color:red', err);
-		} finally {
-			this.loading = false;
 		}
 	};
 
-	resTableDataFunc = async (idTournament, season) => {
-		const response = await agent.SofaLoc.getTournament(idTournament, season);
+	resTableDataFunc = async (idTable, season) => {
+		const response = await agent.SofaLoc.getTournament(idTable, season);
 		runInAction(() => {
 			this.resTableData = response;
 		});
 	};
 
-	resLastFiveFunc = async (idTournament, season) => {
-		const response = await agent.SofaLoc.getLastFive(idTournament, season);
+	resLastFiveFunc = async (idTable, season) => {
+		const response = await agent.SofaLoc.getLastFive(idTable, season);
 		runInAction(() => {
 			this.resLastFive = response;
 		});
@@ -106,37 +95,45 @@ export default class SportsStore {
 		});
 	};
 
-	changeDay = day => {
+	changeDay = (day, storeOdds) => {
 		this.searchDay = day;
-		this.loadDataOddsTable();
+		this.loadDataOddsTable(storeOdds);
 	};
 
 	//  Load all need data for table
-	loadDataOddsTable = async (sort = '', colummn = 'tournament.category.name') => {
+	loadDataOddsTable = async store => {
+		console.log('%c 00 store', 'color:gold', store);
+
 		try {
 			const resScheduleDay = await agent.SofaLoc.getDayScheduleEventBySport('football', this.searchDay);
 			const resScheduleOddsDayOdds = await agent.SofaLoc.getDayScheduleEventOddsBySport('football', this.searchDay);
-			const scheduleDay = this.mapScheduleDay(resScheduleDay.events, resScheduleOddsDayOdds.odds, colummn, sort);
-			// this.scheduleDay = scheduleDay;
-			console.log('%c 44', 'color:green', scheduleDay);
-			return scheduleDay;
+			runInAction(() => {
+				const scheduleDay = this.mapScheduleDay(resScheduleDay.events, resScheduleOddsDayOdds.odds, store);
+				const startRow = store.pagingStore.pageSize * (store.pagingStore.currentPage - 1);
+				const endRow = startRow + store.pagingStore.pageSize;
+				store.pagingStore.setTotalRecords(scheduleDay.length);
+				const data = scheduleDay.slice(startRow, endRow);
+				this.scheduleDay = data;
+			});
 		} catch (err) {
-			console.log('%c Greška u SportsStore ', 'color:red', err);
+			console.log('%c Greška u loadDataOddsTable ', 'color:red', err);
 		}
 	};
 
-	mapScheduleDay = (scheduleDay, resScheduleOddsDayOdds, colummn, sort) => {
+	mapScheduleDay = (scheduleDay, resScheduleOddsDayOdds, store) => {
 		// console.log('%c 17 scheduleDay= ', 'color:pink', scheduleDay);
 		let sheduleOdds = Object.entries(resScheduleOddsDayOdds);
 		// console.log('%c 18 sheduleOdds= ', 'color:pink', sheduleOdds);
 		let cleanScheduleDay = filter(scheduleDay, data => {
-			// code:60 Posponed, 100-Finished, 7- Live game, 31-HT, 6- additional time
+			// code:60 Posponed, 100-Finished, 7- Live game, 31-HT, 6-additional time
 			return (
 				data.status.code !== 100 &&
 				data.status.code !== 60 &&
 				data.status.code !== 7 &&
 				data.status.code !== 31 &&
-				data.status.code !== 6
+				data.status.code !== 6 &&
+				data.status.code !== 42 && // extensions
+				data.status.code !== 120 // extensions
 			);
 		});
 
@@ -151,8 +148,7 @@ export default class SportsStore {
 		});
 
 		cleanScheduleDay = filter(cleanScheduleDay, data => data.odds !== null);
-		cleanScheduleDay = sortBy(cleanScheduleDay, colummn);
-		// console.log('%c cleanScheduleDay =', 'color:blue', cleanScheduleDay);
+
 		const mapData = cleanScheduleDay.map((event, num) => {
 			return {
 				num: num + 1,
@@ -167,6 +163,15 @@ export default class SportsStore {
 				awayOdd: parseFraction(event.odds.choices[2].fractionalValue) + 1,
 			};
 		});
+
+		console.log('%c SORT', 'color:green', store?.additionalFilter);
+		if (store?.additionalFilter?.sort === 'asc') {
+			const sortData = sortBy(mapData, store?.additionalFilter.column);
+			return sortData;
+		} else if (store?.additionalFilter?.sort === 'desc') {
+			const sortData = sortBy(mapData, store?.additionalFilter.column).reverse();
+			return sortData;
+		}
 
 		return mapData;
 	};
@@ -209,26 +214,26 @@ export default class SportsStore {
 
 	mapDataTopLeagues = data => {
 		const { topUniqueTournamentIds, uniqueTournaments } = data;
-		const mapData = topUniqueTournamentIds.map(idTournament => {
-			const tournament = find(uniqueTournaments, data => +data.id === idTournament);
-
-			// console.log('%c 00', 'color:green', tournament);
-			const linkImg = `https://api.sofascore.app/api/v1/unique-tournament/${idTournament}/image/dark`;
-			return { idTournament, tournamentName: tournament.name, linkImg };
+		const mapData = topUniqueTournamentIds.map(idTable => {
+			const tournament = find(uniqueTournaments, data => +data.id === idTable);
+			const linkImg = `https://api.sofascore.app/api/v1/unique-tournament/${idTable}/image/dark`;
+			return { idTable, tournamentName: tournament.name, linkImg };
 		});
 		return mapData;
 	};
 
 	destroy = () => {
-		this.dataSportTable = [];
-		console.log('%c 007 ODLAZIM iz class SportsStore ', 'color:red');
+		this.dataSportTable = null;
+		console.log('%c 007 ODLAZIM iz class SportsStore ', 'color:red', this.dataSportTable);
 	};
 
 	componentDidMount() {
+		alert('xxx');
 		console.log('%c 008 componentDidMount BOOM', 'color:gold');
 	}
 
 	componentWillUnmount() {
+		alert('errr');
 		console.log('%c 009 componentWillUnmount BOOM', 'color:gold');
 	}
 }

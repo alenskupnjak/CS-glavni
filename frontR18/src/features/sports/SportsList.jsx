@@ -6,18 +6,17 @@ export default function SportsList() {
 	const [tableStore, setTableStore] = useState(null);
 
 	useEffect(() => {
-		const store = new TableStore();
-
+		const store = new TableStore('Sport List');
 		const filter = {
 			status: 1,
 			isFsr: true,
 			pageSize: 10,
 			pageNumber: 1,
+			sort: '',
 		};
-
 		store.setFilter(filter);
-
 		setTableStore(store);
+
 		return () => tableStore?.reset();
 		// eslint-disable-next-line
 	}, []);

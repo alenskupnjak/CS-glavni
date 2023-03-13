@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { TableStore } from '@app/stores/tableStore';
 import LeagueTableDisplay from './LeagueTableDisplay';
 
-export default function SportsList() {
+export default function LeagueTable() {
 	const [tableStore, setTableStore] = useState(null);
 	const [tableStoreOdds, setTableStoreOdds] = useState(null);
 
@@ -13,7 +13,7 @@ export default function SportsList() {
 		const filter = {
 			statusFilter: 1,
 			isFsr: true,
-			pageSize: 10,
+			pageSize: 20,
 			pageNumber: 1,
 		};
 		const filterOdds = {
@@ -21,7 +21,8 @@ export default function SportsList() {
 			isFsr: true,
 			pageSize: 10,
 			pageNumber: 1,
-			sort: 'sss',
+			sort: '',
+			column: '',
 		};
 
 		store.setFilter(filter);

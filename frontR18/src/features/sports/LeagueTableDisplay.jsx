@@ -9,9 +9,7 @@ import ColorSet from '@app/theme/colorSet';
 import LastFiveResults from '@app/common/LastFiveResults';
 import Sorting from '@app/common/Sorting';
 import PromotionTeam from '@app/common/PromotionTeam';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import moment from 'moment';
 
 import { Box, Typography } from '@mui/material';
 import Header from 'components/Header';
@@ -126,49 +124,51 @@ const columnsEvents = [
 				width: 20,
 			},
 			{
-				Header: '1',
+				Header: e => {
+					return <Sorting title="1" column="homeOdd" data={e} />;
+				},
 				accessor: 'homeOdd',
 				width: 20,
 			},
 			{
-				Header: 'X',
+				Header: e => {
+					return <Sorting title="X" column="drawOdd" data={e} />;
+				},
 				accessor: 'drawOdd',
 				width: 20,
 			},
 			{
 				Header: e => {
-					return <Sorting title="2" data={e} />;
+					return <Sorting title="2" column="awayOdd" data={e} />;
 				},
 				accessor: 'awayOdd',
 				width: 20,
 			},
+			{ accessor: 'fakeData', width: 0 },
 		],
 	},
 ];
 
 function LeagueTableDisplay({ store, storeOdds }) {
-	const [value, setValue] = React.useState(moment());
-	const { dataSportTable, loading, destroy, topLeaguesTable, headerTableName, sortDir, idTournament, changeDay } =
-		rootStore.sportsStore;
-	const [data, setData] = React.useState([]);
-	const [loadingFetch, setLoadingFetch] = React.useState(false);
-	const [pageCount, setPageCount] = React.useState(0);
-	const fetchIdRef = React.useRef(0);
+	const {
+		dataSportTable,
+		loading,
+		destroy,
+		topLeaguesTable,
+		headerTableName,
+		idTable,
+		changeDay,
+		loadDataOddsTable,
+		scheduleDay,
+		loadDataTable,
+	} = rootStore.sportsStore;
+
 	let initialized = false;
 	useEffect(() => {
-		try {
-			if (!initialized) {
-				rootStore.sportsStore.loadDataTable();
-				// rootStore.sportsStore.loadDataOddsTable();
-			}
-		} catch (error) {
-			console.log('%c error ', 'color:red', error);
-		}
 		return () => {
 			if (initialized) destroy();
 			// eslint-disable-next-line
 			initialized = true;
-			rootStore.sportsStore.initLoading = false;
 		};
 		// eslint-disable-next-line
 	}, []);
@@ -179,30 +179,6 @@ function LeagueTableDisplay({ store, storeOdds }) {
 	// https://stackoverflow.com/questions/62304713/update-column-headers-dynamically-react-table-v7
 	const cloneColumns = cloneDeep(columns);
 
-	const fetchData = React.useCallback(async ({ pageSize, pageIndex }) => {
-		setLoadingFetch(true);
-		// This will get called when the table needs new data
-		// You could fetch your data from literally anywhere,
-		// even a server. But for this example, we'll just fake it.
-
-		// Give this fetch an ID
-		const fetchId = ++fetchIdRef.current;
-
-		// Only update the data if this is the latest fetch
-		if (fetchId === fetchIdRef.current) {
-			const response = await rootStore.sportsStore.loadDataOddsTable();
-			const startRow = pageSize * pageIndex;
-			const endRow = startRow + pageSize;
-			setData(response.slice(startRow, endRow));
-
-			// Your server could send back total page count.
-			// For now we'll just fake it, too
-			setPageCount(Math.ceil(response.length / pageSize));
-
-			setLoadingFetch(false);
-		}
-	}, []);
-
 	return (
 		<Box m="20px" sx={{ backgroundColor: ColorSet().primary[600] }}>
 			<Header title="Sports" subtitle="Premiere league" />
@@ -211,22 +187,21 @@ function LeagueTableDisplay({ store, storeOdds }) {
 				<Box m="10px" flex="1 1 30%" p="15px" borderRadius="4px" sx={{ backgroundColor: ColorSet().primary[400] }}>
 					<Typography variant="h5">Events</Typography>
 					<DateCalendar
-						// defaultValue={initialValue}
 						onChange={e => {
-							changeDay(dayjs(e).format('YYYY-MM-DD'));
+							changeDay(dayjs(e).format('YYYY-MM-DD'), storeOdds);
 						}}
 					/>
 					<Box>
-						<Typography variant="h5">Top Leagues</Typography>
+						<Typography variant="h4">Top Leagues</Typography>
 						{topLeaguesTable &&
 							topLeaguesTable.map(data => {
 								return (
 									<Box
 										m={0.5}
 										sx={{ display: 'flex' }}
-										key={data.idTournament}
+										key={data.idTable}
 										onClick={() => {
-											rootStore.sportsStore.loadDataTable(data.idTournament);
+											rootStore.sportsStore.loadDataTable(null, data.idTable);
 										}}
 									>
 										<img src={data.linkImg} alt={data.tournamentName} width="24" height="24" />
@@ -238,17 +213,27 @@ function LeagueTableDisplay({ store, storeOdds }) {
 				</Box>
 
 				<Box m="5px" flex="1 1 100%" p="15px" borderRadius="4px" sx={{ backgroundColor: ColorSet().primary[400] }}>
-					<Table columns={cloneColumns} data={dataSportTable} loading={loading} store={store} />
-					<Table
-						columns={columnsEvents}
-						data={data}
-						loading={loadingFetch}
-						sortDir={sortDir}
-						idTour={idTournament}
-						fetchData={fetchData}
-						store={storeOdds}
-						pageCount={pageCount}
-					/>
+					{store && (
+						<Table
+							columns={cloneColumns}
+							data={dataSportTable}
+							fetchData={loadDataTable}
+							loading={loading}
+							store={store}
+							showPaging={false}
+						/>
+					)}
+					{storeOdds && (
+						<Table
+							columns={columnsEvents}
+							data={scheduleDay}
+							// loading={loadingFetch}
+							idTable={idTable}
+							fetchData={loadDataOddsTable}
+							store={storeOdds}
+							showPaging={true}
+						/>
+					)}
 				</Box>
 				<Box m="5px" flex="1 1 30%" p="15px" borderRadius="4px" sx={{ backgroundColor: ColorSet().primary[400] }}>
 					<Typography variant="h5">Right</Typography>

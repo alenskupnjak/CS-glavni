@@ -14,14 +14,29 @@ export default function Pagination(props) {
 		canNextPage,
 		pageSize,
 		setPageSize,
+		store,
 	} = props;
+
 	return (
 		<Box sx={{ textAlign: 'center' }}>
 			<ul className="pagination modal-1">
-				<li onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+				<li
+					onClick={() => {
+						store.pagingStore.currentPage = 1;
+						gotoPage(0);
+					}}
+					disabled={!canPreviousPage}
+				>
 					<a className="prev"> {'<<'}</a>
 				</li>
-				<li onClick={() => previousPage()} disabled={!canPreviousPage}>
+				<li
+					onClick={() => {
+						if (store.pagingStore.currentPage === 1) return;
+						store.pagingStore.currentPage--;
+						previousPage();
+					}}
+					disabled={!canPreviousPage}
+				>
 					<a className="active"> {'<'}</a>
 				</li>
 				<li onClick={() => previousPage()}>
@@ -29,25 +44,40 @@ export default function Pagination(props) {
 						{' '}
 						Page{' '}
 						<strong>
-							{pageIndex + 1} of {pageOptions.length}
+							{store.pagingStore.currentPage} of {pageOptions.length}
 						</strong>{' '}
 					</a>
 				</li>
-				<li onClick={() => nextPage()} disabled={!canNextPage}>
+				<li
+					onClick={() => {
+						if (store.pagingStore.currentPage === store.pagingStore.totalPages) return;
+						store.pagingStore.currentPage++;
+						nextPage();
+					}}
+					disabled={!canNextPage}
+				>
 					<a> {'>'}</a>
 				</li>
-				<li onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-					<a>{'>>'}</a>
+				<li
+					onClick={() => {
+						store.pagingStore.currentPage = store.pagingStore.totalPages;
+						gotoPage(store.pagingStore.totalPages - 1);
+					}}
+					disabled={!canNextPage}
+				>
+					<a>{' Kraj >>'}</a>
 				</li>
 				<li>
 					<a className="next">
 						Go to page:{' '}
 						<input
+							min="1"
+							max={store.pagingStore.totalPages}
 							type="number"
-							defaultValue={pageIndex + 1}
+							defaultValue={store.pagingStore.currentPage}
 							onChange={e => {
-								const page = e.target.value ? Number(e.target.value) - 1 : 0;
-								gotoPage(page);
+								store.pagingStore.setCurrentPage(Number(e.target.value));
+								gotoPage(store.pagingStore.currentPage);
 							}}
 							style={{ width: '100px' }}
 						/>
@@ -59,9 +89,10 @@ export default function Pagination(props) {
 							value={pageSize}
 							onChange={e => {
 								setPageSize(Number(e.target.value));
+								store.pagingStore.pageSize = Number(e.target.value);
 							}}
 						>
-							{[10, 20, 30, 40, 50].map(pageSize => (
+							{store.pagingStore?.availablePageSizes.map(pageSize => (
 								<option className="select-box" key={pageSize} value={pageSize}>
 									Show {pageSize}
 								</option>
