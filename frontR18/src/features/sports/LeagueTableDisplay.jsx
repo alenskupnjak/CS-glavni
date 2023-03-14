@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { createRef, useEffect, useRef } from 'react';
 import { observer } from 'mobx-react';
 import { cloneDeep } from 'lodash-es';
 import dayjs from 'dayjs';
@@ -11,7 +11,7 @@ import Sorting from '@app/common/Sorting';
 import PromotionTeam from '@app/common/PromotionTeam';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 
-import { Box, Typography } from '@mui/material';
+import { Box, setRef, Typography } from '@mui/material';
 import Header from 'components/Header';
 
 const columns = [
@@ -84,72 +84,84 @@ const columns = [
 	},
 ];
 
-const columnsEvents = [
-	{
-		Header: 'Data day ',
-		columns: [
-			{
-				Header: ' ',
-				accessor: 'num',
-				width: 1,
-			},
-			{
-				Header: 'Id',
-				accessor: 'id',
-				width: 10,
-			},
-			{
-				Header: 'Home',
-				accessor: 'homeTeam',
-				width: 15,
-			},
-			{
-				Header: 'Away',
-				accessor: 'awayTeam',
-				width: 15,
-			},
-			{
-				Header: 'Liga',
-				accessor: 'liga',
-				width: 25,
-			},
-			{
-				Header: 'Category',
-				accessor: 'category',
-				width: 20,
-			},
-			{
-				Header: 'Status',
-				accessor: 'status',
-				width: 20,
-			},
-			{
-				Header: e => {
-					return <Sorting title="1" column="homeOdd" data={e} />;
-				},
-				accessor: 'homeOdd',
-				width: 20,
-			},
-			{
-				Header: e => {
-					return <Sorting title="X" column="drawOdd" data={e} />;
-				},
-				accessor: 'drawOdd',
-				width: 20,
-			},
-			{
-				Header: e => {
-					return <Sorting title="2" column="awayOdd" data={e} />;
-				},
-				accessor: 'awayOdd',
-				width: 20,
-			},
-			{ accessor: 'fakeData', width: 0 },
-		],
-	},
-];
-
 function LeagueTableDisplay({ store, storeOdds }) {
+	const columnsEvents = [
+		{
+			Header: 'Data day ',
+			columns: [
+				{
+					Header: ' ',
+					accessor: 'num',
+					width: 1,
+				},
+				{
+					Header: 'Id',
+					accessor: 'id',
+					width: 10,
+				},
+				{
+					Header: 'Home',
+					accessor: 'homeTeam',
+					width: 15,
+				},
+				{
+					Header: 'Away',
+					accessor: 'awayTeam',
+					width: 15,
+				},
+				{
+					Header: 'Liga',
+					accessor: 'liga',
+					width: 25,
+				},
+				{
+					Header: 'Category',
+					accessor: 'category',
+					width: 20,
+				},
+				{
+					Header: 'Status',
+					accessor: 'status',
+					width: 20,
+				},
+				{
+					Header: e => {
+						return (
+							<Box onClick={() => (sortRef.current = '1')}>
+								<Sorting ref={sortRef} title="1" column="1" data={e} />
+							</Box>
+						);
+					},
+					accessor: 'homeOdd',
+					width: 20,
+				},
+				{
+					Header: e => {
+						return (
+							<Box onClick={() => (sortRef.current = 'X')}>
+								<Sorting ref={sortRef} title="X" column="X" data={e} />
+							</Box>
+						);
+					},
+					accessor: 'drawOdd',
+					width: 20,
+				},
+				{
+					Header: e => {
+						return (
+							<Box onClick={e => (sortRef.current = '2')}>
+								<Sorting ref={sortRef} title="2" column="2" data={e} />
+							</Box>
+						);
+					},
+					accessor: 'awayOdd',
+					width: 20,
+				},
+				{ accessor: 'fakeData', width: 0 },
+			],
+		},
+	];
+
 	const {
 		dataSportTable,
 		loading,
@@ -162,6 +174,7 @@ function LeagueTableDisplay({ store, storeOdds }) {
 		scheduleDay,
 		loadDataTable,
 	} = rootStore.sportsStore;
+	const sortRef = useRef(null);
 
 	let initialized = false;
 	useEffect(() => {
@@ -178,6 +191,8 @@ function LeagueTableDisplay({ store, storeOdds }) {
 	}
 	// https://stackoverflow.com/questions/62304713/update-column-headers-dynamically-react-table-v7
 	const cloneColumns = cloneDeep(columns);
+
+	console.log('%c 00 ', 'color:green', dataSportTable);
 
 	return (
 		<Box m="20px" sx={{ backgroundColor: ColorSet().primary[600] }}>

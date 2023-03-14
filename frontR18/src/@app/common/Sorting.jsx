@@ -1,32 +1,36 @@
 import React from 'react';
-import ColorSet from '@app/theme/colorSet';
+import { observer } from 'mobx-react';
 import { Box } from '@mui/material';
 
-export default function Sorting(props) {
+const Sorting = React.forwardRef((props, ref) => {
 	const { title, data, column } = props;
-	console.log('%c Sorting props ', 'color:blue', data);
-	console.log('%c Sorting column ', 'color:gold', column, data.column.id);
 
 	if (!props) return null;
 	return (
-		<Box
-			className="sorting"
-			onClick={() => {
-				data.store.additionalFilter.column = data.column.id;
-				if (data.store?.additionalFilter?.sort === '') {
-					data.store.additionalFilter.sort = 'asc';
-				} else if (data.store?.additionalFilter?.sort === 'asc') {
-					data.store.additionalFilter.sort = 'desc';
-				} else if (data.store?.additionalFilter?.sort === 'desc') {
-					data.store.additionalFilter.sort = '';
-				}
+		<Box>
+			<Box
+				id={column}
+				// ref={ref}
+				className="sorting"
+				onClick={() => {
+					data.store.additionalFilter.column = data.column.id;
+					if (data.store?.additionalFilter?.sort === '') {
+						data.store.additionalFilter.sort = 'asc';
+					} else if (data.store?.additionalFilter?.sort === 'asc') {
+						data.store.additionalFilter.sort = 'desc';
+					} else if (data.store?.additionalFilter?.sort === 'desc') {
+						data.store.additionalFilter.sort = '';
+					}
 
-				console.log('%c Sorting= ', 'color:blue', data, data.column.id);
-				data.state.fetchData(data.store);
-			}}
-		>
-			{title}
-			{column === data.column.id && data?.store?.additionalFilter?.sort}
+					console.log('%c Sorting= ', 'color:red', ref.current);
+					data.state.fetchData(data.store);
+				}}
+			>
+				{title}
+			</Box>
+			<Box>{column === ref?.current ? data.store.additionalFilter.sort : null}</Box>
 		</Box>
 	);
-}
+});
+
+export default Sorting;

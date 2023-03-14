@@ -124,9 +124,11 @@ function Table({ columns, data, fetchData, loading, idTable, store, showPaging }
 					<thead>
 						{headerGroups.map(headerGroup => (
 							<tr {...headerGroup.getHeaderGroupProps()}>
-								{headerGroup.headers.map(column => (
-									<th {...column.getHeaderProps()}>{column.render('Header')}</th>
-								))}
+								{headerGroup.headers.map(column => {
+									// console.log('%c column ', 'color:green', column);
+
+									return <th {...column.getHeaderProps()}>{column.render('Header')}</th>;
+								})}
 							</tr>
 						))}
 					</thead>

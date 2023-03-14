@@ -62,7 +62,13 @@ export default class SportsStore {
 				const resLastFive = this.resLastFiveFunc(idTable, season?.data?.seasons[0].id);
 				const resTopLeaguec = this.getHRConfigFunc();
 				await Promise.all([resTableData, resLastFive, resTopLeaguec]);
+
+				console.log('%c entriesTournament', 'color:green', Object.entries(this.resLastFive.data?.tournamentTeamEvents));
+
 				this.entriesTournament = head(Object.entries(this.resLastFive.data?.tournamentTeamEvents));
+				console.log('%c standings', 'color:green', this.resTableData.data.standings);
+				console.log('%c entriesTournament=', 'color:green', this.entriesTournament);
+
 				const mapedData = this.mapDataForTable(this.resTableData.data.standings[0], this.entriesTournament[1]);
 				const mapeTopLeaguesData = this.mapDataTopLeagues(this.resTopLeaguec.data);
 				this.dataSportTable = mapedData;
