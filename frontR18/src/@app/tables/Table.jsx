@@ -7,7 +7,7 @@ import ColorSet from '@app/theme/colorSet';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { isEmpty } from 'lodash-es';
 
-function Table({ columns, data, fetchData, loading, idTable, store, showPaging }) {
+function Table({ columns, data, fetchData, loading, idTable, store, showPaging, hideHeader }) {
 	const { pagingStore, additionalFilter } = store;
 
 	// console.log('%c TABLE store= ', 'color:blue', store);
@@ -121,17 +121,19 @@ function Table({ columns, data, fetchData, loading, idTable, store, showPaging }
 		>
 			<SkeletonTheme baseColor={ColorSet().grey[300]} highlightColor="#3e4396" borderRadius="0.5rem" duration={1}>
 				<table {...getTableProps()}>
-					<thead>
-						{headerGroups.map(headerGroup => (
-							<tr {...headerGroup.getHeaderGroupProps()}>
-								{headerGroup.headers.map(column => {
-									// console.log('%c column ', 'color:green', column);
+					{!hideHeader && (
+						<thead>
+							{headerGroups.map(headerGroup => (
+								<tr {...headerGroup.getHeaderGroupProps()}>
+									{headerGroup.headers.map(column => {
+										// console.log('%c column ', 'color:green', column);
 
-									return <th {...column.getHeaderProps()}>{column.render('Header')}</th>;
-								})}
-							</tr>
-						))}
-					</thead>
+										return <th {...column.getHeaderProps()}>{column.render('Header')}</th>;
+									})}
+								</tr>
+							))}
+						</thead>
+					)}
 					<tbody {...getTableBodyProps()}>
 						{page.map((row, i) => {
 							prepareRow(row);
@@ -139,7 +141,7 @@ function Table({ columns, data, fetchData, loading, idTable, store, showPaging }
 								<tr
 									{...row.getRowProps()}
 									onClick={() => {
-										console.log('%c 17 ', 'color:green', row);
+										console.log('%c getRowProps= ', 'color:green', row);
 									}}
 								>
 									{row.cells.map(cell => {

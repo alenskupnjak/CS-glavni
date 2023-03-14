@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { observer } from 'mobx-react';
 import { cloneDeep } from 'lodash-es';
 import dayjs from 'dayjs';
@@ -11,7 +11,7 @@ import Sorting from '@app/common/Sorting';
 import PromotionTeam from '@app/common/PromotionTeam';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 
-import { Box, setRef, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Header from 'components/Header';
 
 const columns = [
@@ -71,6 +71,7 @@ const columns = [
 				accessor: 'lastFive',
 				width: 140,
 				Cell: ({ cell }) => {
+					if (!cell.value) return null;
 					return <LastFiveResults cell={cell.value} />;
 				},
 			},
@@ -173,11 +174,19 @@ function LeagueTableDisplay({ store, storeOdds }) {
 		loadDataOddsTable,
 		scheduleDay,
 		loadDataTable,
+		dataSportTableNew,
 	} = rootStore.sportsStore;
 	const sortRef = useRef(null);
 
 	let initialized = false;
 	useEffect(() => {
+		try {
+			if (!initialized) {
+				rootStore.sportsStore.loadDataTable();
+			}
+		} catch (err) {
+			console.log('%c error useEffect ', 'color:red', err);
+		}
 		return () => {
 			if (initialized) destroy();
 			// eslint-disable-next-line
@@ -189,10 +198,8 @@ function LeagueTableDisplay({ store, storeOdds }) {
 	if (columns && headerTableName) {
 		columns[0].Header = headerTableName;
 	}
-	// https://stackoverflow.com/questions/62304713/update-column-headers-dynamically-react-table-v7
-	const cloneColumns = cloneDeep(columns);
 
-	console.log('%c 00 ', 'color:green', dataSportTable);
+	const cloneColumns = cloneDeep(columns);
 
 	return (
 		<Box m="20px" sx={{ backgroundColor: ColorSet().primary[600] }}>
@@ -228,16 +235,44 @@ function LeagueTableDisplay({ store, storeOdds }) {
 				</Box>
 
 				<Box m="5px" flex="1 1 100%" p="15px" borderRadius="4px" sx={{ backgroundColor: ColorSet().primary[400] }}>
-					{store && (
+					<Typography variant="h4">{headerTableName}</Typography>
+					{/* {store && (
 						<Table
 							columns={cloneColumns}
 							data={dataSportTable}
-							fetchData={loadDataTable}
+							// fetchData={loadDataTable}
 							loading={loading}
 							store={store}
 							showPaging={false}
 						/>
-					)}
+					)} */}
+					{store &&
+						dataSportTableNew &&
+						dataSportTableNew.map((data, idx) => {
+							{
+								return (
+									<Box alignItems="center" key={idx}>
+										{data.groupName && (
+											<Typography
+												alignItems="center"
+												variant="h4"
+												sx={{ justifyContent: 'center', textAlign: 'center' }}
+											>
+												{data.groupName}
+											</Typography>
+										)}
+										<Table
+											columns={cloneColumns}
+											data={data.mapData}
+											loading={loading}
+											store={store}
+											showPaging={false}
+											hideHeader={true}
+										/>
+									</Box>
+								);
+							}
+						})}
 					{storeOdds && (
 						<Table
 							columns={columnsEvents}

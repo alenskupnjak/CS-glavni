@@ -5,6 +5,8 @@ import agent from 'app/api/agent';
 import { sportsData } from '@data/sportsData';
 import { parseFraction } from '@app/util/util';
 
+const removeEvent = [384];
+
 export default class SportsStore {
 	dataSport = [];
 	dataSportTable = null;
@@ -62,17 +64,19 @@ export default class SportsStore {
 				const resLastFive = this.resLastFiveFunc(idTable, season?.data?.seasons[0].id);
 				const resTopLeaguec = this.getHRConfigFunc();
 				await Promise.all([resTableData, resLastFive, resTopLeaguec]);
-
-				console.log('%c entriesTournament', 'color:green', Object.entries(this.resLastFive.data?.tournamentTeamEvents));
-
 				this.entriesTournament = head(Object.entries(this.resLastFive.data?.tournamentTeamEvents));
-				console.log('%c standings', 'color:green', this.resTableData.data.standings);
-				console.log('%c entriesTournament=', 'color:green', this.entriesTournament);
 
-				const mapedData = this.mapDataForTable(this.resTableData.data.standings[0], this.entriesTournament[1]);
+				const mapedDataNew = this.mapDataForTableNew(
+					this.resTableData?.data?.standings,
+					Object.entries(this.resLastFive?.data?.tournamentTeamEvents)
+				);
+				this.dataSportTableNew = mapedDataNew;
+
 				const mapeTopLeaguesData = this.mapDataTopLeagues(this.resTopLeaguec.data);
-				this.dataSportTable = mapedData;
 				this.topLeaguesTable = mapeTopLeaguesData;
+
+				// const mapedData = this.mapDataForTable(this.resTableData.data.standings[0], this.entriesTournament[1]);
+				// this.dataSportTable = mapedData;
 				this.loading = false;
 			});
 		} catch (err) {
@@ -108,8 +112,6 @@ export default class SportsStore {
 
 	//  Load all need data for table
 	loadDataOddsTable = async store => {
-		console.log('%c 00 store', 'color:gold', store);
-
 		try {
 			const resScheduleDay = await agent.SofaLoc.getDayScheduleEventBySport('football', this.searchDay);
 			const resScheduleOddsDayOdds = await agent.SofaLoc.getDayScheduleEventOddsBySport('football', this.searchDay);
@@ -169,8 +171,6 @@ export default class SportsStore {
 				awayOdd: parseFraction(event.odds.choices[2].fractionalValue) + 1,
 			};
 		});
-
-		console.log('%c SORT', 'color:green', store?.additionalFilter);
 		if (store?.additionalFilter?.sort === 'asc') {
 			const sortData = sortBy(mapData, store?.additionalFilter.column);
 			return sortData;
@@ -182,49 +182,100 @@ export default class SportsStore {
 		return mapData;
 	};
 
-	mapDataForTable = (data, tournament) => {
-		const entriesTournament = Object.entries(tournament);
-		const mapData = data.rows.map(row => {
-			const teamLastFiveMatch = find(entriesTournament, data => +data[0] === row.team.id);
-			const lastFive = teamLastFiveMatch[1]
-				.map(data => {
-					if (+data.winnerCode === 3) {
-						return { res: 'D' };
-					} else if (
-						(+data.winnerCode === 1 && +data.homeTeam.id === +teamLastFiveMatch[0]) ||
-						(+data.winnerCode === 2 && +data.awayTeam.id === +teamLastFiveMatch[0])
-					) {
-						return { res: 'W' };
-					} else {
-						return { res: 'L' };
-					}
-				})
-				.reverse();
+	mapDataForTableNew = (standings, tournament) => {
+		const mapDataStand = standings.map((data, idx) => {
+			const entriesTournament = Object.entries(tournament[idx][1]);
+			const mapData = data.rows.map(row => {
+				const teamLastFiveMatch = find(entriesTournament, data => +data[0] === row.team.id);
+				let lastFive;
+				if (teamLastFiveMatch) {
+					lastFive = teamLastFiveMatch[1]
+						.map(data => {
+							if (+data.winnerCode === 3) {
+								return { res: 'D' };
+							} else if (
+								(+data.winnerCode === 1 && +data.homeTeam.id === +teamLastFiveMatch[0]) ||
+								(+data.winnerCode === 2 && +data.awayTeam.id === +teamLastFiveMatch[0])
+							) {
+								return { res: 'W' };
+							} else {
+								return { res: 'L' };
+							}
+						})
+						.reverse();
+				}
 
-			return {
-				position: row.position,
-				promotion: row.promotion,
-				name: row.team.name,
-				logo: `https://api.sofascore.app/api/v1/team/${row.team.id}/image`,
-				matches: row.matches,
-				wins: row.wins,
-				draws: row.draws,
-				losses: row.losses,
-				goals: `${row.scoresFor}:${row.scoresAgainst}`,
-				lastFive: lastFive,
-				pts: row.points,
-			};
+				return {
+					position: row.position,
+					promotion: row.promotion,
+					name: row.team.name,
+					logo: `https://api.sofascore.app/api/v1/team/${row.team.id}/image`,
+					matches: row.matches,
+					wins: row.wins,
+					draws: row.draws,
+					losses: row.losses,
+					goals: `${row.scoresFor}:${row.scoresAgainst}`,
+					lastFive: lastFive ?? null,
+					pts: row.points,
+				};
+			});
+			return { mapData, groupName: Object.keys(standings).length > 1 ? data.name : null };
 		});
-		return mapData;
+		return mapDataStand;
 	};
+
+	// mapDataForTable = (data, tournament) => {
+	// 	const entriesTournament = Object.entries(tournament);
+	// 	const mapData = data.rows.map(row => {
+	// 		const teamLastFiveMatch = find(entriesTournament, data => +data[0] === row.team.id);
+	// 		let lastFive;
+	// 		if (teamLastFiveMatch) {
+	// 			lastFive = teamLastFiveMatch[1]
+	// 				.map(data => {
+	// 					if (+data.winnerCode === 3) {
+	// 						return { res: 'D' };
+	// 					} else if (
+	// 						(+data.winnerCode === 1 && +data.homeTeam.id === +teamLastFiveMatch[0]) ||
+	// 						(+data.winnerCode === 2 && +data.awayTeam.id === +teamLastFiveMatch[0])
+	// 					) {
+	// 						return { res: 'W' };
+	// 					} else {
+	// 						return { res: 'L' };
+	// 					}
+	// 				})
+	// 				.reverse();
+	// 		}
+
+	// 		return {
+	// 			position: row.position,
+	// 			promotion: row.promotion,
+	// 			name: row.team.name,
+	// 			logo: `https://api.sofascore.app/api/v1/team/${row.team.id}/image`,
+	// 			matches: row.matches,
+	// 			wins: row.wins,
+	// 			draws: row.draws,
+	// 			losses: row.losses,
+	// 			goals: `${row.scoresFor}:${row.scoresAgainst}`,
+	// 			lastFive: lastFive,
+	// 			pts: row.points,
+	// 		};
+	// 	});
+	// 	return mapData;
+	// };
 
 	mapDataTopLeagues = data => {
 		const { topUniqueTournamentIds, uniqueTournaments } = data;
-		const mapData = topUniqueTournamentIds.map(idTable => {
+		let mapData = topUniqueTournamentIds.map(idTable => {
+			const removeItem = find(removeEvent, data => data === idTable);
+			if (removeItem) {
+				return null;
+			}
 			const tournament = find(uniqueTournaments, data => +data.id === idTable);
 			const linkImg = `https://api.sofascore.app/api/v1/unique-tournament/${idTable}/image/dark`;
 			return { idTable, tournamentName: tournament.name, linkImg };
 		});
+
+		mapData = filter(mapData, data => data !== null);
 		return mapData;
 	};
 

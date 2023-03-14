@@ -1,5 +1,4 @@
 import React from 'react';
-import { observer } from 'mobx-react';
 import { Box } from '@mui/material';
 
 const Sorting = React.forwardRef((props, ref) => {
@@ -21,8 +20,6 @@ const Sorting = React.forwardRef((props, ref) => {
 					} else if (data.store?.additionalFilter?.sort === 'desc') {
 						data.store.additionalFilter.sort = '';
 					}
-
-					console.log('%c Sorting= ', 'color:red', ref.current);
 					data.state.fetchData(data.store);
 				}}
 			>
