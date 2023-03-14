@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import { observer } from 'mobx-react';
 import { cloneDeep } from 'lodash-es';
 import dayjs from 'dayjs';
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
+import { Box, Divider, Grid, Typography } from '@mui/material';
 
 import Table from '@app/tables/Table';
 import { rootStore } from '@app/stores';
@@ -9,10 +11,8 @@ import ColorSet from '@app/theme/colorSet';
 import LastFiveResults from '@app/common/LastFiveResults';
 import Sorting from '@app/common/Sorting';
 import PromotionTeam from '@app/common/PromotionTeam';
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-
-import { Box, Typography } from '@mui/material';
-import Header from 'components/Header';
+import Header from 'app/components/Header';
+import SportsHeader from './SportsHeader';
 
 const columns = [
 	{
@@ -173,7 +173,7 @@ function LeagueTableDisplay({ store, storeOdds }) {
 		changeDay,
 		loadDataOddsTable,
 		scheduleDay,
-		loadDataTable,
+		loadFootballTable,
 		dataSportTableNew,
 	} = rootStore.sportsStore;
 	const sortRef = useRef(null);
@@ -182,7 +182,7 @@ function LeagueTableDisplay({ store, storeOdds }) {
 	useEffect(() => {
 		try {
 			if (!initialized) {
-				rootStore.sportsStore.loadDataTable();
+				rootStore.sportsStore.loadFootballTable();
 			}
 		} catch (err) {
 			console.log('%c error useEffect ', 'color:red', err);
@@ -202,18 +202,26 @@ function LeagueTableDisplay({ store, storeOdds }) {
 	const cloneColumns = cloneDeep(columns);
 
 	return (
-		<Box m="20px" sx={{ backgroundColor: ColorSet().primary[600] }}>
-			<Header title="Sports" subtitle="Premiere league" />
-
+		<Box m="20px">
+			<SportsHeader />
 			<Box display="flex" justifyContent="space-between">
-				<Box m="10px" flex="1 1 30%" p="15px" borderRadius="4px" sx={{ backgroundColor: ColorSet().primary[400] }}>
-					<Typography variant="h5">Events</Typography>
-					<DateCalendar
-						onChange={e => {
-							changeDay(dayjs(e).format('YYYY-MM-DD'), storeOdds);
-						}}
-					/>
-					<Box>
+				<Box
+					m="5px"
+					flex="1 1 30%"
+					// p="15px"
+					borderRadius="4px"
+					justifyContent="space-between"
+					// sx={{ backgroundColor: ColorSet().primary[400], p: 1 }}
+				>
+					<Box marginBottom={'10px'} borderRadius="5px" sx={{ backgroundColor: ColorSet().primary[400] }}>
+						<DateCalendar
+							onChange={e => {
+								changeDay(dayjs(e).format('YYYY-MM-DD'), storeOdds);
+							}}
+						/>
+					</Box>
+
+					<Box p="15px" borderRadius="5px" sx={{ backgroundColor: ColorSet().primary[400] }}>
 						<Typography variant="h4">Top Leagues</Typography>
 						{topLeaguesTable &&
 							topLeaguesTable.map(data => {
@@ -223,7 +231,7 @@ function LeagueTableDisplay({ store, storeOdds }) {
 										sx={{ display: 'flex' }}
 										key={data.idTable}
 										onClick={() => {
-											rootStore.sportsStore.loadDataTable(null, data.idTable);
+											rootStore.sportsStore.loadFootballTable(data.idTable);
 										}}
 									>
 										<img src={data.linkImg} alt={data.tournamentName} width="24" height="24" />
@@ -234,13 +242,13 @@ function LeagueTableDisplay({ store, storeOdds }) {
 					</Box>
 				</Box>
 
-				<Box m="5px" flex="1 1 100%" p="15px" borderRadius="4px" sx={{ backgroundColor: ColorSet().primary[400] }}>
+				<Box m="5px" flex="1 1 100%" p="15px" borderRadius="5px" sx={{ backgroundColor: ColorSet().primary[400] }}>
 					<Typography variant="h4">{headerTableName}</Typography>
 					{/* {store && (
 						<Table
 							columns={cloneColumns}
 							data={dataSportTable}
-							// fetchData={loadDataTable}
+							// fetchData={loadFootballTable}
 							loading={loading}
 							store={store}
 							showPaging={false}

@@ -5,7 +5,7 @@ import { rootStore } from '@app/stores';
 import ColorSet from '@app/theme/colorSet';
 
 import { Container } from '@mui/material';
-import Header from 'components/Header';
+import Header from 'app/components/Header';
 
 const columns = [
 	{

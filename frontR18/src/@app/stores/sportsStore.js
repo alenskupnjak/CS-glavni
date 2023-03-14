@@ -17,6 +17,7 @@ export default class SportsStore {
 	idTable = null;
 	initLoading = true;
 	searchDay = dayjs(new Date()).format('YYYY-MM-DD');
+	sport = 'football';
 	constructor() {
 		makeAutoObservable(this);
 	}
@@ -45,11 +46,43 @@ export default class SportsStore {
 	};
 
 	//  Load all need data for table
-	loadDataTable = async (store, idTable = 17) => {
+	loadBasketballTable = async (idTable = 132) => {
 		this.loading = true;
 		this.dataSportTable = null;
 		this.idTable = idTable;
+		try {
+			const season = await agent.SofaLoc.getSeason(idTable);
+			runInAction(async () => {
+				this.headerTableName = season?.data?.seasons[0].name;
+				const resTableData = this.resTableDataFunc(idTable, season?.data?.seasons[0].id);
+				const resLastFive = this.resLastFiveFunc(idTable, season?.data?.seasons[0].id);
+				const resTopLeaguec = this.getHRConfigFunc();
+				await Promise.all([resTableData, resLastFive, resTopLeaguec]);
+				this.entriesTournament = head(Object.entries(this.resLastFive.data?.tournamentTeamEvents));
 
+				const mapedDataNew = this.mapDataForTableNew(
+					this.resTableData?.data?.standings,
+					Object.entries(this.resLastFive?.data?.tournamentTeamEvents)
+				);
+				this.dataSportTableNew = mapedDataNew;
+
+				const mapeTopLeaguesData = this.mapDataTopLeagues(this.resTopLeaguec.data);
+				this.topLeaguesTable = mapeTopLeaguesData;
+
+				// const mapedData = this.mapDataForTable(this.resTableData.data.standings[0], this.entriesTournament[1]);
+				// this.dataSportTable = mapedData;
+				this.loading = false;
+			});
+		} catch (err) {
+			console.log('%c Greška u SportsStore ', 'color:red', err);
+		}
+	};
+
+	//  Load all need data for table
+	loadFootballTable = async (idTable = 17) => {
+		this.loading = true;
+		this.dataSportTable = null;
+		this.idTable = idTable;
 		try {
 			//  API API API
 			if (process.env.NODE_ENV === 'production') {
@@ -105,6 +138,10 @@ export default class SportsStore {
 		});
 	};
 
+	changeSport = sport => {
+		this.sport = sport;
+	};
+
 	changeDay = (day, storeOdds) => {
 		this.searchDay = day;
 		this.loadDataOddsTable(storeOdds);
@@ -113,8 +150,8 @@ export default class SportsStore {
 	//  Load all need data for table
 	loadDataOddsTable = async store => {
 		try {
-			const resScheduleDay = await agent.SofaLoc.getDayScheduleEventBySport('football', this.searchDay);
-			const resScheduleOddsDayOdds = await agent.SofaLoc.getDayScheduleEventOddsBySport('football', this.searchDay);
+			const resScheduleDay = await agent.SofaLoc.getDayScheduleEventBySport(this.sport, this.searchDay);
+			const resScheduleOddsDayOdds = await agent.SofaLoc.getDayScheduleEventOddsBySport(this.sport, this.searchDay);
 			runInAction(() => {
 				const scheduleDay = this.mapScheduleDay(resScheduleDay.events, resScheduleOddsDayOdds.odds, store);
 				const startRow = store.pagingStore.pageSize * (store.pagingStore.currentPage - 1);

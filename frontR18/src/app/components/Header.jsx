@@ -1,5 +1,5 @@
 import { Typography, Box, useTheme } from '@mui/material';
-import { tokens } from '../@app/theme/theme';
+import { tokens } from '@app/theme/theme';
 
 const Header = ({ title, subtitle }) => {
 	const theme = useTheme();

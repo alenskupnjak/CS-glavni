@@ -6,7 +6,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import TrafficIcon from '@mui/icons-material/Traffic';
-import Header from '../Header';
+import Header from 'app/components/Header';
 import LineChart from '../LineChart';
 import GeographyChart from '../GeographyChart';
 import BarChart from '../BarChart';
