@@ -45,10 +45,8 @@ export default class SportsStore {
 				const resSportCategoriesDay = this.getSportCategoriesDay();
 				await Promise.all([resTableData, resLastFive, resTopLeaguec, resSportCategories, resSportCategoriesDay]);
 				this.entriesTournament = head(Object.entries(this.resLastFive.data?.tournamentTeamEvents));
-
 				const mapeTopLeaguesData = this.mapDataTopLeagues(this.resTopLeaguec);
 				this.topLeaguesTable = mapeTopLeaguesData;
-
 				const mapedDataNew = this.mapDataForTableNew(
 					this.resTableData?.data?.standings,
 					Object.entries(this.resLastFive?.data?.tournamentTeamEvents)
@@ -107,14 +105,11 @@ export default class SportsStore {
 
 		cleanScheduleDay = cleanScheduleDay.map((data, i) => {
 			const odds = find(sheduleOdds, dataOdds => +dataOdds[0] === data.id);
-			// console.log('%c odds=', 'color:gold', i, odds, data.id, data);
 			if (odds) {
-				// console.log('%c 00', 'color:red', odds[1]);
 				return { ...data, odds: odds[1] };
 			}
 			return { ...data, odds: null };
 		});
-
 		cleanScheduleDay = filter(cleanScheduleDay, data => data.odds !== null);
 
 		const mapData = cleanScheduleDay.map((event, num) => {
@@ -143,13 +138,13 @@ export default class SportsStore {
 			const sortData = sortBy(mapData, store?.additionalFilter.column).reverse();
 			return sortData;
 		}
-
-		console.log('%c mapData mapData for ODDS', 'color:pink', mapData);
-
+		// console.log('%c mapData mapData for ODDS', 'color:pink', mapData);
 		return mapData;
 	};
 
 	mapDataForTableNew = (standings, tournament) => {
+		// console.log('%c 140 standings', 'color:green', standings.length, standings);
+		// console.log('%c 141 tournament', 'color:green', tournament.length, tournament);
 		this.sportCategories = this.sportCategories.map(data => {
 			const thisDay = find(this.sportCategoriesDay, day => day.category.id === data.id);
 			return {
@@ -162,7 +157,12 @@ export default class SportsStore {
 		});
 
 		const mapDataStand = standings.map((data, idx) => {
-			const entriesTournament = Object.entries(tournament[idx][1]);
+			let entriesTournament;
+			if (tournament.length === standings.length) {
+				entriesTournament = Object.entries(tournament[idx][1]);
+			} else {
+				entriesTournament = Object.entries(tournament[0][1]);
+			}
 			const mapData = data.rows.map(row => {
 				let lastFive;
 				const teamLastFiveMatch = find(entriesTournament, data => +data[0] === row.team.id);
@@ -182,7 +182,6 @@ export default class SportsStore {
 						})
 						.reverse();
 				}
-
 				return {
 					position: row.position,
 					promotion: row.promotion,
@@ -193,8 +192,11 @@ export default class SportsStore {
 					draws: row.draws,
 					losses: row.losses,
 					goals: `${row.scoresFor}:${row.scoresAgainst}`,
-					lastFive: { lastFive: lastFive ?? null, homeTeam: row?.team?.name, idToolTip: lastFive ? lastFive[0] : null },
-					pts: row.points,
+					lastFive: {
+						lastFive: lastFive ?? null,
+						homeTeam: row?.team?.name,
+					},
+					pts: row.points ?? Math.round((row.wins / row.matches) * 100) / 100,
 				};
 			});
 			return { mapData, groupName: Object.keys(standings).length > 1 ? data.name : null };

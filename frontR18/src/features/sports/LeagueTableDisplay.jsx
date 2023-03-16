@@ -71,7 +71,7 @@ function LeagueTableDisplay({ store, storeOdds }) {
 					accessor: 'lastFive',
 					width: 140,
 					Cell: ({ cell }) => {
-						if (!cell.value) return null;
+						if (!cell.value.lastFive) return null;
 						return <LastFiveResults cell={cell.value} />;
 					},
 				},
@@ -261,12 +261,16 @@ function LeagueTableDisplay({ store, storeOdds }) {
 				<Box m="5px" flex="1 1 100%" p="15px" borderRadius="5px" sx={{ backgroundColor: ColorSet().primary[400] }}>
 					<Typography variant="h4">{headerTableName}</Typography>
 					{store &&
-						(sport === 'football' || sport === 'basketball' || sport === 'ice-hockey') &&
+						(sport === 'football' ||
+							sport === 'basketball' ||
+							sport === 'ice-hockey' ||
+							sport === 'handball' ||
+							sport === 'american-football') &&
 						dataSportTableNew &&
 						dataSportTableNew.map((data, idx) => {
 							return (
 								<Box alignItems="center" key={idx}>
-									{data.groupName && (
+									{data?.groupName && (
 										<Typography alignItems="center" variant="h4" sx={{ justifyContent: 'center', textAlign: 'center' }}>
 											{data.groupName}
 										</Typography>
