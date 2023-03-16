@@ -1,9 +1,8 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { history } from '../..';
-// import { store } from '../stores/store';
 
-const sleep = () => new Promise(resolve => setTimeout(resolve, 200));
+// const sleep = () => new Promise(resolve => setTimeout(resolve, 200));
 
 const sofaLoc = axios.create({
 	baseURL: process.env.REACT_APP_SOFA,
@@ -46,7 +45,7 @@ axios.interceptors.request.use(config => {
 // ERORS ERRORS ERRORS
 axios.interceptors.response.use(
 	async response => {
-		if (process.env.NODE_ENV === 'development') await sleep();
+		// if (process.env.NODE_ENV === 'development') await sleep();
 		// console.log('%c axios.interceptors', 'color:gold', response);
 		return response;
 	},
@@ -170,22 +169,18 @@ const Payments = {
 	createPaymentIntent: () => requests.post('payments', {}),
 };
 
-// https://api.sofascore.com/api/v1/unique-tournament/35/seasons
-
 const SofaLoc = {
 	getSeason: id => sofaLoc.get(`unique-tournament/${id}/seasons`).then(res => res),
 	getTournament: (id, idSeason) =>
 		sofaLoc.get(`unique-tournament/${id}/season/${idSeason}/standings/total`).then(res => res),
 	getLastFive: (id, idSeason) =>
 		sofaLoc.get(`unique-tournament/${id}/season/${idSeason}/team-events/total`).then(res => res),
-	getHRConfig: () => sofaLoc.get('config/unique-tournaments/HR/football').then(res => res),
-
-	// https://api.sofascore.com/api/v1/sport/football/scheduled-events/2023-03-10
+	getHRConfig: sport => sofaLoc.get(`config/unique-tournaments/HR/${sport}`).then(res => res),
 	getDayScheduleEventBySport: (sport, day) =>
 		sofaLoc.get(`sport/${sport}/scheduled-events/${day}`).then(res => res.data),
-
-	// https://api.sofascore.com/api/v1/sport/football/odds/9/2023-03-10
 	getDayScheduleEventOddsBySport: (sport, day) => sofaLoc.get(`sport/${sport}/odds/9/${day}`).then(res => res.data),
+	getSportCategories: sport => sofaLoc.get(`sport/${sport}/categories`).then(res => res.data),
+	getSportCategoriesDay: (sport, day) => sofaLoc.get(`sport/${sport}/${day}/3600/categories`).then(res => res.data),
 };
 
 const SofaAPI = {
@@ -202,8 +197,6 @@ const SofaAPI = {
 		return sofaAPI.request(options).then(res => res);
 	},
 };
-
-// https://api.sofascore.com/api/v1/config/unique-tournaments/HR/football
 
 const ReadWriteDatabase = {
 	ReadRecord: pageNumber => requests.post('uploadFile/readRecord', pageNumber),

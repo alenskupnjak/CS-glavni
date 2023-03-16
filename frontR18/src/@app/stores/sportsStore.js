@@ -14,6 +14,7 @@ export default class SportsStore {
 	scheduleDay = [];
 	headerTableName = null;
 	loading = false;
+	loadingOdds = false;
 	idTable = null;
 	initLoading = true;
 	searchDay = dayjs(new Date()).format('YYYY-MM-DD');
@@ -22,69 +23,13 @@ export default class SportsStore {
 		makeAutoObservable(this);
 	}
 
-	//  Load all data
-	loadAllSportsData = store => {
-		try {
-			this.loading = true;
-			const dataTemp = map(sportsData, data => {
-				return {
-					...data,
-					active: data.active ? 'Da' : 'Ne',
-					has_outrights: data.has_outrights ? 'Da' : 'Ne',
-				};
-			});
-			const startRow = store.pagingStore.pageSize * (store.pagingStore.currentPage - 1);
-			const endRow = startRow + store.pagingStore.pageSize;
-			store.pagingStore.setTotalRecords(dataTemp.length);
-			const data = dataTemp.slice(startRow, endRow);
-			this.dataSport = [...data];
-			this.loading = false;
-			// return this.dataSport;
-		} catch (err) {
-			console.log('%c Greška u loadAllSportsData ', 'color:red', err);
-		}
-	};
-
-	//  Load all need data for table
-	loadBasketballTable = async (idTable = 132) => {
+	//  Load all data for SPORT table
+	loadSportsTable = async (idTable = 17) => {
 		this.loading = true;
 		this.dataSportTable = null;
 		this.idTable = idTable;
 		try {
-			const season = await agent.SofaLoc.getSeason(idTable);
-			runInAction(async () => {
-				this.headerTableName = season?.data?.seasons[0].name;
-				const resTableData = this.resTableDataFunc(idTable, season?.data?.seasons[0].id);
-				const resLastFive = this.resLastFiveFunc(idTable, season?.data?.seasons[0].id);
-				const resTopLeaguec = this.getHRConfigFunc();
-				await Promise.all([resTableData, resLastFive, resTopLeaguec]);
-				this.entriesTournament = head(Object.entries(this.resLastFive.data?.tournamentTeamEvents));
-
-				const mapedDataNew = this.mapDataForTableNew(
-					this.resTableData?.data?.standings,
-					Object.entries(this.resLastFive?.data?.tournamentTeamEvents)
-				);
-				this.dataSportTableNew = mapedDataNew;
-
-				const mapeTopLeaguesData = this.mapDataTopLeagues(this.resTopLeaguec.data);
-				this.topLeaguesTable = mapeTopLeaguesData;
-
-				// const mapedData = this.mapDataForTable(this.resTableData.data.standings[0], this.entriesTournament[1]);
-				// this.dataSportTable = mapedData;
-				this.loading = false;
-			});
-		} catch (err) {
-			console.log('%c Greška u SportsStore ', 'color:red', err);
-		}
-	};
-
-	//  Load all need data for table
-	loadFootballTable = async (idTable = 17) => {
-		this.loading = true;
-		this.dataSportTable = null;
-		this.idTable = idTable;
-		try {
-			//  API API API
+			//  SOFA API SOFA API
 			if (process.env.NODE_ENV === 'production') {
 				const API = await agent.SofaAPI.getApi(idTable);
 				console.log('%c Production API=', 'color:red', API);
@@ -93,23 +38,22 @@ export default class SportsStore {
 			const season = await agent.SofaLoc.getSeason(idTable);
 			runInAction(async () => {
 				this.headerTableName = season?.data?.seasons[0].name;
-				const resTableData = this.resTableDataFunc(idTable, season?.data?.seasons[0].id);
-				const resLastFive = this.resLastFiveFunc(idTable, season?.data?.seasons[0].id);
-				const resTopLeaguec = this.getHRConfigFunc();
-				await Promise.all([resTableData, resLastFive, resTopLeaguec]);
+				const resTableData = this.getTournament(idTable, season?.data?.seasons[0].id);
+				const resLastFive = this.getLastFive(idTable, season?.data?.seasons[0].id);
+				const resTopLeaguec = this.getHRConfig();
+				const resSportCategories = this.getSportCategories();
+				const resSportCategoriesDay = this.getSportCategoriesDay();
+				await Promise.all([resTableData, resLastFive, resTopLeaguec, resSportCategories, resSportCategoriesDay]);
 				this.entriesTournament = head(Object.entries(this.resLastFive.data?.tournamentTeamEvents));
+
+				const mapeTopLeaguesData = this.mapDataTopLeagues(this.resTopLeaguec);
+				this.topLeaguesTable = mapeTopLeaguesData;
 
 				const mapedDataNew = this.mapDataForTableNew(
 					this.resTableData?.data?.standings,
 					Object.entries(this.resLastFive?.data?.tournamentTeamEvents)
 				);
 				this.dataSportTableNew = mapedDataNew;
-
-				const mapeTopLeaguesData = this.mapDataTopLeagues(this.resTopLeaguec.data);
-				this.topLeaguesTable = mapeTopLeaguesData;
-
-				// const mapedData = this.mapDataForTable(this.resTableData.data.standings[0], this.entriesTournament[1]);
-				// this.dataSportTable = mapedData;
 				this.loading = false;
 			});
 		} catch (err) {
@@ -117,39 +61,10 @@ export default class SportsStore {
 		}
 	};
 
-	resTableDataFunc = async (idTable, season) => {
-		const response = await agent.SofaLoc.getTournament(idTable, season);
-		runInAction(() => {
-			this.resTableData = response;
-		});
-	};
-
-	resLastFiveFunc = async (idTable, season) => {
-		const response = await agent.SofaLoc.getLastFive(idTable, season);
-		runInAction(() => {
-			this.resLastFive = response;
-		});
-	};
-
-	getHRConfigFunc = async () => {
-		const response = await agent.SofaLoc.getHRConfig();
-		runInAction(() => {
-			this.resTopLeaguec = response;
-		});
-	};
-
-	changeSport = sport => {
-		this.sport = sport;
-	};
-
-	changeDay = (day, storeOdds) => {
-		this.searchDay = day;
-		this.loadDataOddsTable(storeOdds);
-	};
-
 	//  Load all need data for table
 	loadDataOddsTable = async store => {
 		try {
+			this.loadingOdds = true;
 			const resScheduleDay = await agent.SofaLoc.getDayScheduleEventBySport(this.sport, this.searchDay);
 			const resScheduleOddsDayOdds = await agent.SofaLoc.getDayScheduleEventOddsBySport(this.sport, this.searchDay);
 			runInAction(() => {
@@ -159,6 +74,7 @@ export default class SportsStore {
 				store.pagingStore.setTotalRecords(scheduleDay.length);
 				const data = scheduleDay.slice(startRow, endRow);
 				this.scheduleDay = data;
+				this.loadingOdds = false;
 			});
 		} catch (err) {
 			console.log('%c Greška u loadDataOddsTable ', 'color:red', err);
@@ -166,18 +82,25 @@ export default class SportsStore {
 	};
 
 	mapScheduleDay = (scheduleDay, resScheduleOddsDayOdds, store) => {
-		// console.log('%c 17 scheduleDay= ', 'color:pink', scheduleDay);
 		let sheduleOdds = Object.entries(resScheduleOddsDayOdds);
-		// console.log('%c 18 sheduleOdds= ', 'color:pink', sheduleOdds);
 		let cleanScheduleDay = filter(scheduleDay, data => {
 			// code:60 Posponed, 100-Finished, 7- Live game, 31-HT, 6-additional time
 			return (
-				data.status.code !== 100 &&
-				data.status.code !== 60 &&
-				data.status.code !== 7 &&
-				data.status.code !== 31 &&
 				data.status.code !== 6 &&
+				data.status.code !== 7 &&
+				data.status.code !== 8 && // in game tennis
+				data.status.code !== 9 && // in game tennis
+				data.status.code !== 10 && // in game tennis
+				data.status.code !== 31 &&
 				data.status.code !== 42 && // extensions
+				data.status.code !== 60 &&
+				data.status.code !== 70 && // canceled
+				data.status.code !== 80 && // in game tennis WOMEN
+				data.status.code !== 81 && // extensions
+				data.status.code !== 91 &&
+				data.status.code !== 92 && // retired
+				data.status.code !== 100 &&
+				data.status.code !== 110 && // in hockey finished
 				data.status.code !== 120 // extensions
 			);
 		});
@@ -201,11 +124,16 @@ export default class SportsStore {
 				awayTeam: event.awayTeam.name,
 				homeTeam: event.homeTeam.name,
 				liga: event.tournament.name,
-				category: event.tournament.category.name,
-				status: event.status.code,
+				category: event?.tournament?.category?.name,
+				status: event.status?.code,
 				homeOdd: parseFraction(event.odds.choices[0].fractionalValue) + 1,
-				drawOdd: parseFraction(event.odds.choices[1].fractionalValue) + 1,
-				awayOdd: parseFraction(event.odds.choices[2].fractionalValue) + 1,
+				drawOdd: event.odds.choices.length === 3 ? parseFraction(event.odds.choices[1].fractionalValue) + 1 : '-',
+				awayOdd:
+					parseFraction(
+						event.odds.choices.length === 3
+							? event.odds.choices[2].fractionalValue
+							: event.odds.choices[1].fractionalValue
+					) + 1,
 			};
 		});
 		if (store?.additionalFilter?.sort === 'asc') {
@@ -216,15 +144,28 @@ export default class SportsStore {
 			return sortData;
 		}
 
+		console.log('%c mapData mapData for ODDS', 'color:pink', mapData);
+
 		return mapData;
 	};
 
 	mapDataForTableNew = (standings, tournament) => {
+		this.sportCategories = this.sportCategories.map(data => {
+			const thisDay = find(this.sportCategoriesDay, day => day.category.id === data.id);
+			return {
+				...data,
+				eventsNum: thisDay ? thisDay.totalEvents : 0,
+				linkImg: data?.alpha2
+					? `https://www.sofascore.com/static/images/flags/${data?.alpha2.toLowerCase()}.png`
+					: null,
+			};
+		});
+
 		const mapDataStand = standings.map((data, idx) => {
 			const entriesTournament = Object.entries(tournament[idx][1]);
 			const mapData = data.rows.map(row => {
-				const teamLastFiveMatch = find(entriesTournament, data => +data[0] === row.team.id);
 				let lastFive;
+				const teamLastFiveMatch = find(entriesTournament, data => +data[0] === row.team.id);
 				if (teamLastFiveMatch) {
 					lastFive = teamLastFiveMatch[1]
 						.map(data => {
@@ -252,7 +193,7 @@ export default class SportsStore {
 					draws: row.draws,
 					losses: row.losses,
 					goals: `${row.scoresFor}:${row.scoresAgainst}`,
-					lastFive: { lastFive: lastFive ?? null, homeTeam: row.team.name, idToolTip: lastFive[0] },
+					lastFive: { lastFive: lastFive ?? null, homeTeam: row?.team?.name, idToolTip: lastFive ? lastFive[0] : null },
 					pts: row.points,
 				};
 			});
@@ -260,51 +201,6 @@ export default class SportsStore {
 		});
 		return mapDataStand;
 	};
-
-	createTooltip = data => {
-		return (
-			data.homeTeam.name + '-' + data.awayTeam.name + '-' + data.homeScore.normaltime + ':' + data.awayScore.normaltime
-		);
-	};
-
-	// mapDataForTable = (data, tournament) => {
-	// 	const entriesTournament = Object.entries(tournament);
-	// 	const mapData = data.rows.map(row => {
-	// 		const teamLastFiveMatch = find(entriesTournament, data => +data[0] === row.team.id);
-	// 		let lastFive;
-	// 		if (teamLastFiveMatch) {
-	// 			lastFive = teamLastFiveMatch[1]
-	// 				.map(data => {
-	// 					if (+data.winnerCode === 3) {
-	// 						return { res: 'D' };
-	// 					} else if (
-	// 						(+data.winnerCode === 1 && +data.homeTeam.id === +teamLastFiveMatch[0]) ||
-	// 						(+data.winnerCode === 2 && +data.awayTeam.id === +teamLastFiveMatch[0])
-	// 					) {
-	// 						return { res: 'W' };
-	// 					} else {
-	// 						return { res: 'L' };
-	// 					}
-	// 				})
-	// 				.reverse();
-	// 		}
-
-	// 		return {
-	// 			position: row.position,
-	// 			promotion: row.promotion,
-	// 			name: row.team.name,
-	// 			logo: `https://api.sofascore.app/api/v1/team/${row.team.id}/image`,
-	// 			matches: row.matches,
-	// 			wins: row.wins,
-	// 			draws: row.draws,
-	// 			losses: row.losses,
-	// 			goals: `${row.scoresFor}:${row.scoresAgainst}`,
-	// 			lastFive: lastFive,
-	// 			pts: row.points,
-	// 		};
-	// 	});
-	// 	return mapData;
-	// };
 
 	mapDataTopLeagues = data => {
 		const { topUniqueTournamentIds, uniqueTournaments } = data;
@@ -317,9 +213,80 @@ export default class SportsStore {
 			const linkImg = `https://api.sofascore.app/api/v1/unique-tournament/${idTable}/image/dark`;
 			return { idTable, tournamentName: tournament.name, linkImg };
 		});
-
 		mapData = filter(mapData, data => data !== null);
 		return mapData;
+	};
+
+	//  Load all SOFA data
+	loadAllSportsData = store => {
+		try {
+			this.loading = true;
+			const dataTemp = map(sportsData, data => {
+				return {
+					...data,
+					active: data.active ? 'Da' : 'Ne',
+					has_outrights: data.has_outrights ? 'Da' : 'Ne',
+				};
+			});
+			const startRow = store.pagingStore.pageSize * (store.pagingStore.currentPage - 1);
+			const endRow = startRow + store.pagingStore.pageSize;
+			store.pagingStore.setTotalRecords(dataTemp.length);
+			const data = dataTemp.slice(startRow, endRow);
+			this.dataSport = [...data];
+			this.loading = false;
+		} catch (err) {
+			console.log('%c Greška u loadAllSportsData ', 'color:red', err);
+		}
+	};
+
+	getSportCategoriesDay = async () => {
+		const response = await agent.SofaLoc.getSportCategoriesDay(this.sport, this.searchDay);
+		runInAction(() => {
+			this.sportCategoriesDay = response.categories;
+		});
+	};
+
+	getSportCategories = async () => {
+		const response = await agent.SofaLoc.getSportCategories(this.sport);
+		runInAction(() => {
+			this.sportCategories = sortBy(response.categories, 'name');
+		});
+	};
+
+	getTournament = async (idTable, season) => {
+		const response = await agent.SofaLoc.getTournament(idTable, season);
+		runInAction(() => {
+			this.resTableData = response;
+		});
+	};
+
+	getLastFive = async (idTable, season) => {
+		const response = await agent.SofaLoc.getLastFive(idTable, season);
+		runInAction(() => {
+			this.resLastFive = response;
+		});
+	};
+
+	getHRConfig = async () => {
+		const response = await agent.SofaLoc.getHRConfig(this.sport);
+		runInAction(() => {
+			this.resTopLeaguec = response.data;
+		});
+	};
+
+	createTooltip = data => {
+		return (
+			data.homeTeam.name + '-' + data.awayTeam.name + '-' + data.homeScore.normaltime + ':' + data.awayScore.normaltime
+		);
+	};
+
+	changeDay = (day, storeOdds) => {
+		this.searchDay = day;
+		this.loadDataOddsTable(storeOdds);
+	};
+
+	changeSport = sport => {
+		this.sport = sport;
 	};
 
 	destroy = () => {

@@ -3,19 +3,8 @@ import React from 'react';
 import './pagination.css';
 
 export default function Pagination(props) {
-	const {
-		pageIndex,
-		pageOptions,
-		gotoPage,
-		canPreviousPage,
-		previousPage,
-		pageCount,
-		nextPage,
-		canNextPage,
-		pageSize,
-		setPageSize,
-		store,
-	} = props;
+	const { pageOptions, gotoPage, canPreviousPage, previousPage, nextPage, canNextPage, pageSize, setPageSize, store } =
+		props;
 
 	return (
 		<Box sx={{ textAlign: 'center' }}>

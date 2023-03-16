@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { cloneDeep } from 'lodash-es';
 import dayjs from 'dayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import { Box, Divider, Grid, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import Table from '@app/tables/Table';
 import { rootStore } from '@app/stores';
@@ -11,81 +11,79 @@ import ColorSet from '@app/theme/colorSet';
 import LastFiveResults from '@app/common/LastFiveResults';
 import Sorting from '@app/common/Sorting';
 import PromotionTeam from '@app/common/PromotionTeam';
-import Header from 'app/components/Header';
 import SportsHeader from './SportsHeader';
 
-const columns = [
-	{
-		Header: ' ',
-		columns: [
-			{
-				Header: '#',
-				accessor: 'position',
-				width: 20,
-				Cell: props => {
-					if (!props.cell.value) return null;
-					return <PromotionTeam cell={props} />;
-				},
-			},
-			{
-				Header: ' ',
-				accessor: 'logo',
-				width: 20,
-				Cell: ({ cell }) => {
-					if (!cell.value) return null;
-					return <img src={cell.value} width="25" height="25" className="table-img" alt="Premierie League" />;
-				},
-			},
-			{
-				Header: 'Team',
-				accessor: 'name',
-				width: 350,
-			},
-			{
-				Header: 'P',
-				accessor: 'matches',
-				width: 20,
-			},
-			{
-				Header: 'W',
-				accessor: 'wins',
-				width: 20,
-			},
-			{
-				Header: 'D',
-				accessor: 'draws',
-				width: 20,
-			},
-			{
-				Header: 'L',
-				accessor: 'losses',
-				width: 20,
-			},
-			{
-				Header: 'Goals',
-				accessor: 'goals',
-				width: 30,
-			},
-			{
-				Header: 'Last',
-				accessor: 'lastFive',
-				width: 140,
-				Cell: ({ cell }) => {
-					if (!cell.value) return null;
-					return <LastFiveResults cell={cell.value} />;
-				},
-			},
-			{
-				Header: 'Pts',
-				accessor: 'pts',
-				width: 30,
-			},
-			{ accessor: 'fakeData', width: 0 },
-		],
-	},
-];
-
 function LeagueTableDisplay({ store, storeOdds }) {
+	const columns = [
+		{
+			Header: ' ',
+			columns: [
+				{
+					Header: '#',
+					accessor: 'position',
+					width: 10,
+					Cell: props => {
+						if (!props.cell.value) return null;
+						return <PromotionTeam cell={props} />;
+					},
+				},
+				{
+					Header: ' ',
+					accessor: 'logo',
+					width: 15,
+					Cell: ({ cell }) => {
+						if (!cell.value) return null;
+						return <img src={cell.value} width="25" height="25" className="table-img" alt="Premierie League" />;
+					},
+				},
+				{
+					Header: 'Team',
+					accessor: 'name',
+					width: 350,
+				},
+				{
+					Header: 'P',
+					accessor: 'matches',
+					width: 20,
+				},
+				{
+					Header: 'W',
+					accessor: 'wins',
+					width: 20,
+				},
+				{
+					Header: 'D',
+					accessor: 'draws',
+					width: 20,
+				},
+				{
+					Header: 'L',
+					accessor: 'losses',
+					width: 20,
+				},
+				{
+					Header: 'Goals',
+					accessor: 'goals',
+					width: 30,
+				},
+				{
+					Header: 'Last',
+					accessor: 'lastFive',
+					width: 140,
+					Cell: ({ cell }) => {
+						if (!cell.value) return null;
+						return <LastFiveResults cell={cell.value} />;
+					},
+				},
+				{
+					Header: 'Pts',
+					accessor: 'pts',
+					width: 10,
+				},
+				{ accessor: 'fakeData', width: 0 },
+			],
+		},
+	];
 	const columnsEvents = [
 		{
 			Header: 'Data day ',
@@ -93,12 +91,12 @@ function LeagueTableDisplay({ store, storeOdds }) {
 				{
 					Header: ' ',
 					accessor: 'num',
-					width: 1,
+					width: 5,
 				},
 				{
 					Header: 'Id',
 					accessor: 'id',
-					width: 10,
+					width: 8,
 				},
 				{
 					Header: 'Home',
@@ -123,7 +121,7 @@ function LeagueTableDisplay({ store, storeOdds }) {
 				{
 					Header: 'Status',
 					accessor: 'status',
-					width: 20,
+					width: 5,
 				},
 				{
 					Header: e => {
@@ -164,7 +162,6 @@ function LeagueTableDisplay({ store, storeOdds }) {
 	];
 
 	const {
-		dataSportTable,
 		loading,
 		destroy,
 		topLeaguesTable,
@@ -173,8 +170,10 @@ function LeagueTableDisplay({ store, storeOdds }) {
 		changeDay,
 		loadDataOddsTable,
 		scheduleDay,
-		loadFootballTable,
+		loadingOdds,
 		dataSportTableNew,
+		sport,
+		sportCategories,
 	} = rootStore.sportsStore;
 	const sortRef = useRef(null);
 
@@ -182,7 +181,7 @@ function LeagueTableDisplay({ store, storeOdds }) {
 	useEffect(() => {
 		try {
 			if (!initialized) {
-				rootStore.sportsStore.loadFootballTable();
+				rootStore.sportsStore.loadSportsTable();
 			}
 		} catch (err) {
 			console.log('%c error useEffect ', 'color:red', err);
@@ -201,18 +200,13 @@ function LeagueTableDisplay({ store, storeOdds }) {
 
 	const cloneColumns = cloneDeep(columns);
 
+	// console.log('%c LeagueTableDisplay LeagueTableDisplay ', 'color:blue', dataSportTableNew);
+
 	return (
 		<Box m="20px">
-			<SportsHeader />
+			<SportsHeader storeOdds={storeOdds} />
 			<Box display="flex" justifyContent="space-between">
-				<Box
-					m="5px"
-					flex="1 1 30%"
-					// p="15px"
-					borderRadius="4px"
-					justifyContent="space-between"
-					// sx={{ backgroundColor: ColorSet().primary[400], p: 1 }}
-				>
+				<Box m="5px" flex="1 1 30%" borderRadius="4px" justifyContent="space-between">
 					<Box marginBottom={'10px'} borderRadius="5px" sx={{ backgroundColor: ColorSet().primary[400] }}>
 						<DateCalendar
 							onChange={e => {
@@ -229,9 +223,9 @@ function LeagueTableDisplay({ store, storeOdds }) {
 									<Box
 										m={0.5}
 										sx={{ display: 'flex' }}
-										key={data.idTable}
+										key={data?.idTable}
 										onClick={() => {
-											rootStore.sportsStore.loadFootballTable(data.idTable);
+											rootStore.sportsStore.loadSportsTable(data.idTable);
 										}}
 									>
 										<img src={data.linkImg} alt={data.tournamentName} width="24" height="24" />
@@ -240,52 +234,59 @@ function LeagueTableDisplay({ store, storeOdds }) {
 								);
 							})}
 					</Box>
+
+					<Box p="15px" borderRadius="5px" sx={{ backgroundColor: ColorSet().primary[400] }}>
+						<Typography variant="h4">All Leagues</Typography>
+						{sportCategories &&
+							sportCategories.map(data => {
+								return (
+									<Box
+										m={0.5}
+										sx={{ display: 'flex' }}
+										key={data.id}
+										onClick={() => {
+											console.log('%c Id table ', 'color:green', data.id);
+
+											// rootStore.sportsStore.loadFootballTable(data.idTable);
+										}}
+									>
+										<img src={data.linkImg} alt={data.name} width="24" height="24" />
+										<Typography ml={1}>{data.name}</Typography>
+									</Box>
+								);
+							})}
+					</Box>
 				</Box>
 
 				<Box m="5px" flex="1 1 100%" p="15px" borderRadius="5px" sx={{ backgroundColor: ColorSet().primary[400] }}>
 					<Typography variant="h4">{headerTableName}</Typography>
-					{/* {store && (
-						<Table
-							columns={cloneColumns}
-							data={dataSportTable}
-							// fetchData={loadFootballTable}
-							loading={loading}
-							store={store}
-							showPaging={false}
-						/>
-					)} */}
 					{store &&
+						(sport === 'football' || sport === 'basketball' || sport === 'ice-hockey') &&
 						dataSportTableNew &&
 						dataSportTableNew.map((data, idx) => {
-							{
-								return (
-									<Box alignItems="center" key={idx}>
-										{data.groupName && (
-											<Typography
-												alignItems="center"
-												variant="h4"
-												sx={{ justifyContent: 'center', textAlign: 'center' }}
-											>
-												{data.groupName}
-											</Typography>
-										)}
-										<Table
-											columns={cloneColumns}
-											data={data.mapData}
-											loading={loading}
-											store={store}
-											showPaging={false}
-											hideHeader={true}
-										/>
-									</Box>
-								);
-							}
+							return (
+								<Box alignItems="center" key={idx}>
+									{data.groupName && (
+										<Typography alignItems="center" variant="h4" sx={{ justifyContent: 'center', textAlign: 'center' }}>
+											{data.groupName}
+										</Typography>
+									)}
+									<Table
+										columns={cloneColumns}
+										data={data.mapData}
+										loading={loading}
+										store={store}
+										showPaging={false}
+										hideHeader={false}
+									/>
+								</Box>
+							);
 						})}
 					{storeOdds && (
 						<Table
 							columns={columnsEvents}
 							data={scheduleDay}
-							// loading={loadingFetch}
+							loading={loadingOdds}
 							idTable={idTable}
 							fetchData={loadDataOddsTable}
 							store={storeOdds}

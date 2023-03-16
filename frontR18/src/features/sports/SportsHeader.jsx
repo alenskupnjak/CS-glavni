@@ -9,7 +9,7 @@ import SportsHockeyIcon from '@mui/icons-material/SportsHockey';
 import SportsHandballIcon from '@mui/icons-material/SportsHandball';
 import { rootStore } from '@app/stores';
 
-export default function ColorTabs() {
+export default function SportsHeader({ storeOdds }) {
 	const [value, setValue] = React.useState('one');
 
 	const handleChange = (event, newValue) => {
@@ -31,8 +31,10 @@ export default function ColorTabs() {
 					value="one"
 					label="Footbal"
 					onClick={() => {
+						storeOdds.pagingStore.currentPage = 1;
 						rootStore.sportsStore.changeSport('football');
-						rootStore.sportsStore.loadFootballTable(17);
+						rootStore.sportsStore.loadSportsTable(17);
+						rootStore.sportsStore.loadDataOddsTable(storeOdds);
 					}}
 				/>
 				<Tab
@@ -40,8 +42,10 @@ export default function ColorTabs() {
 					value="two"
 					label="Basketbal"
 					onClick={() => {
+						storeOdds.pagingStore.currentPage = 1;
 						rootStore.sportsStore.changeSport('basketball');
-						rootStore.sportsStore.loadBasketballTable(132);
+						rootStore.sportsStore.loadSportsTable(138);
+						rootStore.sportsStore.loadDataOddsTable(storeOdds);
 					}}
 				/>
 				<Tab
@@ -50,11 +54,34 @@ export default function ColorTabs() {
 					value="three"
 					label="Tennis"
 					onClick={() => {
+						storeOdds.pagingStore.currentPage = 1;
 						rootStore.sportsStore.changeSport('tennis');
+						rootStore.sportsStore.loadDataOddsTable(storeOdds);
 					}}
 				/>
-				<Tab icon={<SportsHockeyIcon />} iconPosition="top" label="Hockey" />
-				<Tab icon={<SportsHandballIcon />} iconPosition="top" label="HandBall" />
+				<Tab
+					icon={<SportsHockeyIcon />}
+					iconPosition="top"
+					value="four"
+					label="Hockey"
+					onClick={() => {
+						storeOdds.pagingStore.currentPage = 1;
+						rootStore.sportsStore.changeSport('ice-hockey');
+						rootStore.sportsStore.loadSportsTable(225);
+						rootStore.sportsStore.loadDataOddsTable(storeOdds);
+					}}
+				/>
+				<Tab
+					icon={<SportsHandballIcon />}
+					iconPosition="top"
+					value="five"
+					label="Handball"
+					onClick={() => {
+						// rootStore.sportsStore.changeSport('ice-hockey');
+						// rootStore.sportsStore.loadSportsTable(225);
+						// rootStore.sportsStore.loadDataOddsTable(storeOdds);
+					}}
+				/>
 			</Tabs>
 		</Box>
 	);

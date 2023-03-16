@@ -6,7 +6,6 @@ import { Box } from '@mui/material';
 export default function PromotionTeam(props) {
 	const { cell } = props;
 	if (!cell) return null;
-
 	const dataCell = cell.data[cell.value - 1]?.promotion?.text;
 
 	if (dataCell === 'Relegation') {
