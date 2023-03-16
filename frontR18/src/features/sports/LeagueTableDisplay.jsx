@@ -216,7 +216,7 @@ function LeagueTableDisplay({ store, storeOdds }) {
 					</Box>
 
 					<Box p="15px" borderRadius="5px" sx={{ backgroundColor: ColorSet().primary[400] }}>
-						<Typography variant="h4">Top Leagues</Typography>
+						<Typography variant="h3">Top Leagues</Typography>
 						{topLeaguesTable &&
 							topLeaguesTable.map(data => {
 								return (
@@ -229,14 +229,16 @@ function LeagueTableDisplay({ store, storeOdds }) {
 										}}
 									>
 										<img src={data.linkImg} alt={data.tournamentName} width="24" height="24" />
-										<Typography ml={1}>{data.tournamentName}</Typography>
+										<Typography variant="h4" ml={1}>
+											{data.tournamentName}
+										</Typography>
 									</Box>
 								);
 							})}
 					</Box>
 
 					<Box p="15px" borderRadius="5px" sx={{ backgroundColor: ColorSet().primary[400] }}>
-						<Typography variant="h4">All Leagues</Typography>
+						<Typography variant="h3">All Leagues</Typography>
 						{sportCategories &&
 							sportCategories.map(data => {
 								return (
@@ -251,7 +253,9 @@ function LeagueTableDisplay({ store, storeOdds }) {
 										}}
 									>
 										<img src={data.linkImg} alt={data.name} width="24" height="24" />
-										<Typography ml={1}>{data.name}</Typography>
+										<Typography variant="h4" ml={1}>
+											{data.name}
+										</Typography>
 									</Box>
 								);
 							})}

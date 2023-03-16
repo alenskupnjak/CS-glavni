@@ -46,8 +46,7 @@ body,
 	align-items: center;
 	justify-content: center;
 	text-align: center;
-	/* margin-left: 1px;
-	margin-right: 1px; */
+	font-size: 0.9rem !important;
 	width: 20px;
 	height: 20px;
 	font-weight: 600;
@@ -87,9 +86,15 @@ body,
 }
 
 /* .MuiButtonBase-root.MuiPickersDay-root:not(.Mui-selected) {
-	border: 1px solid red;
+	border: 1px solid rgba(43, 255, 0, 0.603);
 } */
 
 .MuiButtonBase-root.MuiPickersDay-root.Mui-selected {
 	border: 1px solid gold;
+}
+
+.MuiButtonBase-root.MuiPickersDay-root {
+	font-size: 1rem !important;
+	/* color: red; */
+	border-color: rgb(255, 81, 0);
 }

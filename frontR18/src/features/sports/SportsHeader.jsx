@@ -9,6 +9,7 @@ import SportsHockeyIcon from '@mui/icons-material/SportsHockey';
 import SportsHandballIcon from '@mui/icons-material/SportsHandball';
 import SportsFootballIcon from '@mui/icons-material/SportsFootball';
 import { rootStore } from '@app/stores';
+import ColorSet from '@app/theme/colorSet';
 
 export default function SportsHeader({ storeOdds }) {
 	const [value, setValue] = React.useState('1');
@@ -17,17 +18,17 @@ export default function SportsHeader({ storeOdds }) {
 	};
 
 	return (
-		<Box sx={{ width: '100%' }}>
+		<Box sx={{ width: '100%', backgroundColor: ColorSet().blueAccent[800], margin: '5px' }}>
 			<Tabs
 				value={value}
 				onChange={handleChange}
 				textColor="secondary"
 				indicatorColor="secondary"
 				aria-label="secondary tabs example"
-				sx={{}}
+				sx={{ fontSize: '30px' }}
 			>
 				<Tab
-					sx={{ textTransform: 'none' }}
+					sx={{ textTransform: 'none', fontSize: '1.1rem' }}
 					icon={<SportsSoccerIcon />}
 					iconPosition="top"
 					value="1"
@@ -40,7 +41,7 @@ export default function SportsHeader({ storeOdds }) {
 					}}
 				/>
 				<Tab
-					sx={{ textTransform: 'none' }}
+					sx={{ textTransform: 'none', fontSize: '1.1rem' }}
 					icon={<SportsBasketballIcon />}
 					value="2"
 					label="Basketbal"
@@ -52,7 +53,7 @@ export default function SportsHeader({ storeOdds }) {
 					}}
 				/>
 				<Tab
-					sx={{ textTransform: 'none' }}
+					sx={{ textTransform: 'none', fontSize: '1.1rem' }}
 					icon={<SportsTennisIcon />}
 					iconPosition="top"
 					value="3"
@@ -64,7 +65,7 @@ export default function SportsHeader({ storeOdds }) {
 					}}
 				/>
 				<Tab
-					sx={{ textTransform: 'none' }}
+					sx={{ textTransform: 'none', fontSize: '1.1rem' }}
 					icon={<SportsHockeyIcon />}
 					iconPosition="top"
 					value="4"
@@ -77,7 +78,7 @@ export default function SportsHeader({ storeOdds }) {
 					}}
 				/>
 				<Tab
-					sx={{ textTransform: 'none' }}
+					sx={{ textTransform: 'none', fontSize: '1.1rem' }}
 					icon={<SportsHandballIcon />}
 					iconPosition="top"
 					value="5"
@@ -89,7 +90,7 @@ export default function SportsHeader({ storeOdds }) {
 					}}
 				/>
 				<Tab
-					sx={{ textTransform: 'none' }}
+					sx={{ textTransform: 'none', fontSize: '1.1rem' }}
 					icon={<SportsFootballIcon />}
 					iconPosition="top"
 					value="6"

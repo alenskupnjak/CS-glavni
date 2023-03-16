@@ -96,10 +96,10 @@ function Table({ columns, data, fetchData, loading, idTable, store, showPaging, 
 				},
 				'& table td': {
 					margin: '0',
-					padding: '6px',
+					padding: '3px',
 					borderBottom: '1px solid black',
-					// backgroundColor: 'gold',
-					// borderRight: '1px solid black',
+
+					fontSize: '1.1rem',
 				},
 				'& table tbody tr:hover': {
 					margin: '0',
@@ -114,8 +114,9 @@ function Table({ columns, data, fetchData, loading, idTable, store, showPaging, 
 					borderRight: '0',
 				},
 				'& table thead': {
-					backgroundColor: ColorSet().blueAccent[700],
-					color: ColorSet().grey[200],
+					backgroundColor: ColorSet().blueAccent[800],
+					// color: ColorSet().grey[200],
+					fontSize: '1rem',
 				},
 			}}
 		>

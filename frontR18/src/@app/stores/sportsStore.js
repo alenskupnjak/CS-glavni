@@ -84,11 +84,13 @@ export default class SportsStore {
 		let cleanScheduleDay = filter(scheduleDay, data => {
 			// code:60 Posponed, 100-Finished, 7- Live game, 31-HT, 6-additional time
 			return (
+				data.status.code !== 1 &&
 				data.status.code !== 6 &&
 				data.status.code !== 7 &&
 				data.status.code !== 8 && // in game tennis
 				data.status.code !== 9 && // in game tennis
 				data.status.code !== 10 && // in game tennis
+				data.status.code !== 13 && // in game tennis
 				data.status.code !== 31 &&
 				data.status.code !== 42 && // extensions
 				data.status.code !== 60 &&

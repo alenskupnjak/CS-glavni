@@ -20,6 +20,7 @@ import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import RunningWithErrorsIcon from '@mui/icons-material/RunningWithErrors';
 import PublishOutlinedIcon from '@mui/icons-material/PublishOutlined';
+import SportsBaseballIcon from '@mui/icons-material/SportsBaseball';
 import SvgIcon from '@app/icons/SvgIcon';
 
 import { tokens } from '../theme/theme';
@@ -157,14 +158,14 @@ const Sidebar = () => {
 							Sport Odds
 						</Typography>
 						<Item
-							title="Top Football League"
+							title="Sports"
 							to="/table-pl"
-							icon={<img src={'./images/PLdark.png'} width="25px" height="25px" alt="Top Football League" />}
+							icon={<SportsBaseballIcon />}
 							selected={selected}
 							setSelected={setSelected}
 						/>
 						<Item
-							title="Sports"
+							title="Sports List"
 							to="/sports-list"
 							icon={<SvgIcon fill="currentColor">material-solid:sports</SvgIcon>}
 							selected={selected}
