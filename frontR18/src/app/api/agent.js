@@ -181,6 +181,7 @@ const SofaLoc = {
 	getDayScheduleEventOddsBySport: (sport, day) => sofaLoc.get(`sport/${sport}/odds/9/${day}`).then(res => res.data),
 	getSportCategories: sport => sofaLoc.get(`sport/${sport}/categories`).then(res => res.data),
 	getSportCategoriesDay: (sport, day) => sofaLoc.get(`sport/${sport}/${day}/3600/categories`).then(res => res.data),
+	getUniqueTournaments: id => sofaLoc.get(`category/${id}/unique-tournaments`).then(res => res.data),
 };
 
 const SofaAPI = {

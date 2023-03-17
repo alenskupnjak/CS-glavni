@@ -12,6 +12,7 @@ import LastFiveResults from '@app/common/LastFiveResults';
 import Sorting from '@app/common/Sorting';
 import PromotionTeam from '@app/common/PromotionTeam';
 import SportsHeader from './SportsHeader';
+import MenuCollapse from '@app/common/MenuCollapse';
 
 function LeagueTableDisplay({ store, storeOdds }) {
 	const columns = [
@@ -221,7 +222,7 @@ function LeagueTableDisplay({ store, storeOdds }) {
 							topLeaguesTable.map(data => {
 								return (
 									<Box
-										m={0.5}
+										m={1}
 										sx={{ display: 'flex' }}
 										key={data?.idTable}
 										onClick={() => {
@@ -241,23 +242,7 @@ function LeagueTableDisplay({ store, storeOdds }) {
 						<Typography variant="h3">All Leagues</Typography>
 						{sportCategories &&
 							sportCategories.map(data => {
-								return (
-									<Box
-										m={0.5}
-										sx={{ display: 'flex' }}
-										key={data.id}
-										onClick={() => {
-											console.log('%c Id table ', 'color:green', data.id);
-
-											// rootStore.sportsStore.loadFootballTable(data.idTable);
-										}}
-									>
-										<img src={data.linkImg} alt={data.name} width="24" height="24" />
-										<Typography variant="h4" ml={1}>
-											{data.name}
-										</Typography>
-									</Box>
-								);
+								return <MenuCollapse data={data} key={data.id} />;
 							})}
 					</Box>
 				</Box>
