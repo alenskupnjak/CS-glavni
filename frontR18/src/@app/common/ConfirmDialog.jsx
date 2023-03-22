@@ -2,11 +2,11 @@ import React from 'react';
 import { Dialog, DialogContent, DialogTitle, Typography, Button, DialogActions } from '@mui/material';
 
 const ConfirmDialog = props => {
-	const { dataDialog, text, textCaption, onClose, deleteItem, data } = props;
+	const { title, dataDialog, text, textCaption, onClose, deleteItem, data } = props;
 
 	return (
 		<Dialog open={dataDialog ?? false} fullWidth={true} sx={{ position: 'absolute' }}>
-			<DialogTitle></DialogTitle>
+			<DialogTitle>{title}</DialogTitle>
 			<DialogContent>
 				<Typography variant="h3">{text}</Typography>
 				<Typography variant="caption">{textCaption}</Typography>

@@ -1,14 +1,18 @@
 import { useEffect } from 'react';
 import CartItem from './CartItem';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Container, Divider, Typography } from '@mui/material';
+import { Box, Container, Typography, Modal } from '@mui/material';
 import ColorSet from '@app/theme/colorSet';
 import Button from '@mui/material/Button';
 import { clearCart, calculateTotals } from 'features/cart/cartSlice';
+import { openModal, closeModal } from 'features/modal/modalSlice';
+import { Close } from '@mui/icons-material';
+import ConfirmDialog from '@app/common/ConfirmDialog';
 
 const CartContainer = () => {
 	const dispatch = useDispatch();
 	const { cartItems, total, amount } = useSelector(store => store.cart);
+	const { isOpen } = useSelector(store => store.modal);
 
 	useEffect(() => {
 		dispatch(calculateTotals());
@@ -41,13 +45,23 @@ const CartContainer = () => {
 				<Button
 					variant="contained"
 					onClick={() => {
-						dispatch(clearCart());
+						dispatch(openModal());
 					}}
 					sx={{ marginBottom: '10px' }}
 				>
 					Clear cart
 				</Button>
 			</Box>
+			{/* CONFIRM DIALOG */}
+			<ConfirmDialog
+				dataDialog={isOpen}
+				title="Naslov"
+				onClose={() => dispatch(closeModal())}
+				text={'Želiš li obrisati zapis?'}
+				// data={this.state.modalOpenConfirmData}
+				deleteItem={() => dispatch(clearCart())}
+				textCaption={'Text some description'}
+			></ConfirmDialog>
 		</Container>
 	);
 };

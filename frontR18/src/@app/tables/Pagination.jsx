@@ -16,7 +16,9 @@ export default function Pagination(props) {
 					}}
 					disabled={!canPreviousPage}
 				>
-					<a className="prev"> {'<<'}</a>
+					<a className="prev" href={() => false}>
+						{'<<'}
+					</a>
 				</li>
 				<li
 					onClick={() => {
@@ -26,10 +28,12 @@ export default function Pagination(props) {
 					}}
 					disabled={!canPreviousPage}
 				>
-					<a className="active"> {'<'}</a>
+					<a className="active" href={() => false}>
+						{'<'}
+					</a>
 				</li>
 				<li onClick={() => previousPage()}>
-					<a className="">
+					<a className="" href={() => false}>
 						{' '}
 						Page{' '}
 						<strong>
@@ -45,7 +49,7 @@ export default function Pagination(props) {
 					}}
 					disabled={!canNextPage}
 				>
-					<a> {'>'}</a>
+					<a href={() => false}> {'>'}</a>
 				</li>
 				<li
 					onClick={() => {
@@ -54,10 +58,10 @@ export default function Pagination(props) {
 					}}
 					disabled={!canNextPage}
 				>
-					<a>{' Kraj >>'}</a>
+					<a href={() => false}>{' Kraj >>'}</a>
 				</li>
 				<li>
-					<a className="next">
+					<a className="next" href={() => false}>
 						Go to page:{' '}
 						<input
 							min="1"
@@ -73,7 +77,7 @@ export default function Pagination(props) {
 					</a>
 				</li>
 				<li>
-					<a>
+					<a href={() => false}>
 						<select
 							value={pageSize}
 							onChange={e => {

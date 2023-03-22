@@ -20,7 +20,9 @@ export default function LastFiveResults({ cell }) {
 								key={ind}
 								sx={{ backgroundColor: ColorSet().grey[500] }}
 							>
-								<a data-tooltip-id={idTooltip}>{data.res}</a>
+								<a data-tooltip-id={idTooltip} href={() => false}>
+									{data.res}
+								</a>
 							</Box>
 						);
 					} else if (data.res === 'W') {
@@ -31,7 +33,9 @@ export default function LastFiveResults({ cell }) {
 								key={ind}
 								sx={{ backgroundColor: ColorSet().greenAccent[600] }}
 							>
-								<a data-tooltip-id={idTooltip}>{data.res}</a>
+								<a data-tooltip-id={idTooltip} href={() => false}>
+									{data.res}
+								</a>
 							</Box>
 						);
 					} else {
@@ -42,7 +46,9 @@ export default function LastFiveResults({ cell }) {
 								key={ind}
 								sx={{ backgroundColor: ColorSet().redAccent[600] }}
 							>
-								<a data-tooltip-id={idTooltip}>{data.res}</a>
+								<a data-tooltip-id={idTooltip} href={() => false}>
+									{data.res}
+								</a>
 							</Box>
 						);
 					}

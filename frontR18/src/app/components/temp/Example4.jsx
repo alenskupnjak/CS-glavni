@@ -7,10 +7,7 @@ import Badge from '@mui/material/Badge';
 import { PickersDay } from '@mui/x-date-pickers/PickersDay';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { DayCalendarSkeleton } from '@mui/x-date-pickers/DayCalendarSkeleton';
-import { Box, createTheme, TextField, ThemeProvider, useTheme } from '@mui/material';
-import ColorSet from '@app/theme/colorSet';
-import { tokens } from '@app/theme/theme';
-import { CartIcon } from '@app/icons/icons';
+import { Box } from '@mui/material';
 
 function getRandomNumber(min, max) {
 	return Math.round(Math.random() * (max - min) + min);
@@ -37,59 +34,6 @@ function fakeFetch(date, { signal }) {
 }
 
 const initialValue = dayjs(new Date());
-
-const color = '#99010f';
-
-// const themeB = useTheme();
-// const boja = tokens(themeB.palette.mode);
-// const boja = tokens('dark');
-
-// const theme = createTheme({
-// 	components: {
-// 		MuiIconButton: {
-// 			styleOverrides: {
-// 				sizeMedium: {
-// 					color: '#99010f',
-// 				},
-// 			},
-// 		},
-// 		MuiOutlinedInput: {
-// 			styleOverrides: {
-// 				root: {
-// 					color: '#99010f',
-// 				},
-// 			},
-// 		},
-// 		MuiInputLabel: {
-// 			styleOverrides: {
-// 				root: {
-// 					color: '#99010f',
-// 				},
-// 			},
-// 		},
-// 		MuiSvgIcon: {
-// 			styleOverrides: {
-// 				root: {
-// 					color: '#99010f',
-// 				},
-// 			},
-// 		},
-// 		MuiDayCalendar: {
-// 			styleOverrides: {
-// 				weekDayLabel: {
-// 					color: color,
-// 				},
-// 			},
-// 		},
-// 		MuiPickersDay: {
-// 			styleOverrides: {
-// 				root: {
-// 					backgroundColor: 'blue',
-// 				},
-// 			},
-// 		},
-// 	},
-// });
 
 function ServerDay(props) {
 	const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
@@ -163,7 +107,6 @@ function DateCalendarServerRequest() {
 		// <LocalizationProvider dateAdapter={AdapterDayjs}>
 		// <ThemeProvider theme={theme}>
 		<Box>
-			<CartIcon />
 			<Box>
 				<DateCalendar
 					defaultValue={initialValue}
@@ -191,7 +134,6 @@ function DateCalendarServerRequest() {
 }
 
 function BasicDateCalendar() {
-	const initialValue = dayjs(new Date());
 	return (
 		<Box>
 			<DateCalendar
