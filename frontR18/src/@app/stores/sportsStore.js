@@ -19,6 +19,7 @@ export default class SportsStore {
 	initLoading = true;
 	searchDay = dayjs(new Date()).format('YYYY-MM-DD');
 	sport = 'football';
+	scheduleDayAll = null;
 	constructor() {
 		makeAutoObservable(this);
 	}
@@ -26,34 +27,43 @@ export default class SportsStore {
 	//  Load all data for SPORT table
 	loadSportsTable = async (idTable = 17) => {
 		this.loading = true;
+		this.dataSportTableNew = null;
 		this.dataSportTable = null;
 		this.idTable = idTable;
 		try {
 			//  SOFA API SOFA API
 			if (process.env.NODE_ENV === 'production') {
-				const API = await agent.SofaAPI.getApi(idTable);
-				console.log('%c Production API=', 'color:red', API);
-			}
+				// const API = await agent.SofaAPI.getTournamentData(idTable);
+				// console.log('%c Production API=', 'color:red', API);
+				const season = await agent.SofaAPI.getSeason(idTable);
+				console.log('%c season API=', 'color:red', season);
+				const resTableData = await agent.SofaAPI.getTournament(idTable, season?.data?.seasons[0].id);
+				console.log('%c resTableData API=', 'color:red', resTableData);
+			} else {
+				const season = await agent.SofaLoc.getSeason(idTable);
+				runInAction(async () => {
+					this.headerTableName = season?.data?.seasons[0].name;
+					const resTableData = this.getTournament(idTable, season?.data?.seasons[0].id);
+					const resLastFive = this.getLastFive(idTable, season?.data?.seasons[0].id);
+					const resTopLeaguec = this.getHRConfig();
+					const resSportCategories = this.getSportCategories();
+					const resSportCategoriesDay = this.getSportCategoriesDay();
+					await Promise.all([resTableData, resLastFive, resTopLeaguec, resSportCategories, resSportCategoriesDay]);
+					this.entriesTournament = head(Object.entries(this.resLastFive.data?.tournamentTeamEvents));
+					const mapTopLeaguesData = this.mapDataTopLeagues(this.resTopLeaguec);
+					this.topLeaguesTable = mapTopLeaguesData;
+					const mapedDataNew = this.mapDataForTableNew(
+						this.resTableData?.data?.standings,
+						Object.entries(this.resLastFive?.data?.tournamentTeamEvents)
+					);
 
-			const season = await agent.SofaLoc.getSeason(idTable);
-			runInAction(async () => {
-				this.headerTableName = season?.data?.seasons[0].name;
-				const resTableData = this.getTournament(idTable, season?.data?.seasons[0].id);
-				const resLastFive = this.getLastFive(idTable, season?.data?.seasons[0].id);
-				const resTopLeaguec = this.getHRConfig();
-				const resSportCategories = this.getSportCategories();
-				const resSportCategoriesDay = this.getSportCategoriesDay();
-				await Promise.all([resTableData, resLastFive, resTopLeaguec, resSportCategories, resSportCategoriesDay]);
-				this.entriesTournament = head(Object.entries(this.resLastFive.data?.tournamentTeamEvents));
-				const mapeTopLeaguesData = this.mapDataTopLeagues(this.resTopLeaguec);
-				this.topLeaguesTable = mapeTopLeaguesData;
-				const mapedDataNew = this.mapDataForTableNew(
-					this.resTableData?.data?.standings,
-					Object.entries(this.resLastFive?.data?.tournamentTeamEvents)
-				);
-				this.dataSportTableNew = mapedDataNew;
+					if (this.scheduleDayAll) {
+						this.tablePairs = filter(this.scheduleDayAll, data => data.idTournament === idTable);
+					}
+					this.dataSportTableNew = mapedDataNew;
+				});
 				this.loading = false;
-			});
+			}
 		} catch (err) {
 			console.log('%c Greška u SportsStore ', 'color:red', err);
 		}
@@ -66,11 +76,11 @@ export default class SportsStore {
 			const resScheduleDay = await agent.SofaLoc.getDayScheduleEventBySport(this.sport, this.searchDay);
 			const resScheduleOddsDayOdds = await agent.SofaLoc.getDayScheduleEventOddsBySport(this.sport, this.searchDay);
 			runInAction(() => {
-				const scheduleDay = this.mapScheduleDay(resScheduleDay.events, resScheduleOddsDayOdds.odds, store);
+				this.scheduleDayAll = this.mapScheduleDay(resScheduleDay.events, resScheduleOddsDayOdds.odds, store);
 				const startRow = store.pagingStore.pageSize * (store.pagingStore.currentPage - 1);
 				const endRow = startRow + store.pagingStore.pageSize;
-				store.pagingStore.setTotalRecords(scheduleDay.length);
-				const data = scheduleDay.slice(startRow, endRow);
+				store.pagingStore.setTotalRecords(this.scheduleDayAll.length);
+				const data = this.scheduleDayAll.slice(startRow, endRow);
 				this.scheduleDay = data;
 				this.loadingOdds = false;
 			});
@@ -118,6 +128,7 @@ export default class SportsStore {
 			return {
 				num: num + 1,
 				id: event.id,
+				idTournament: event.tournament.uniqueTournament.id,
 				awayTeam: event.awayTeam.name,
 				homeTeam: event.homeTeam.name,
 				liga: event.tournament.name,
@@ -141,7 +152,7 @@ export default class SportsStore {
 			return sortData;
 		}
 		// console.log('%c mapData mapData for ODDS', 'color:pink', mapData);
-		return mapData;
+		return sortBy(mapData, 'category');
 	};
 
 	mapDataForTableNew = (standings, tournament) => {

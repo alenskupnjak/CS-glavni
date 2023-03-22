@@ -185,11 +185,39 @@ const SofaLoc = {
 };
 
 const SofaAPI = {
-	getApi: id => {
+	// getTournamentData: id => {
+	// 	const options = {
+	// 		method: 'GET',
+	// 		url: 'https://sofascores.p.rapidapi.com/v1/unique-tournaments/data',
+	// 		params: { unique_tournament_id: id },
+	// 		// tournaments - Uniqe tournament data
+	// 		// headers: {
+	// 		// 	'X-RapidAPI-Key': '9f578f1b85msh7435be72f29f5dcp1c7dadjsn5324bbe2c60d',
+	// 		// 	'X-RapidAPI-Host': 'sofascores.p.rapidapi.com',
+	// 		// },
+	// 	};
+	// 	return sofaAPI.request(options).then(res => res);
+	// },
+	getSeason: id => {
 		const options = {
 			method: 'GET',
-			url: 'https://sofascores.p.rapidapi.com/v1/unique-tournaments/data',
+			url: 'https://sofascores.p.rapidapi.com/v1/unique-tournaments/seasons',
 			params: { unique_tournament_id: id },
+			// API -season -> standing
+			// headers: {
+			// 	'X-RapidAPI-Key': '9f578f1b85msh7435be72f29f5dcp1c7dadjsn5324bbe2c60d',
+			// 	'X-RapidAPI-Host': 'sofascores.p.rapidapi.com',
+			// },
+		};
+		return sofaAPI.request(options).then(res => res);
+	},
+	getTournament: (id, idSeasons) => {
+		console.log('%c 17=', 'color:green', id, idSeasons);
+
+		const options = {
+			method: 'GET',
+			url: 'https://sofascores.p.rapidapi.com/v1/seasons/standings',
+			params: { standing_type: 'total', seasons_id: idSeasons, unique_tournament_id: id },
 			// headers: {
 			// 	'X-RapidAPI-Key': '9f578f1b85msh7435be72f29f5dcp1c7dadjsn5324bbe2c60d',
 			// 	'X-RapidAPI-Host': 'sofascores.p.rapidapi.com',

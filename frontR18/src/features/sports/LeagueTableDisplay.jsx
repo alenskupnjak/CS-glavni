@@ -175,6 +175,7 @@ function LeagueTableDisplay({ store, storeOdds }) {
 		dataSportTableNew,
 		sport,
 		sportCategories,
+		tablePairs,
 	} = rootStore.sportsStore;
 	const sortRef = useRef(null);
 
@@ -202,6 +203,9 @@ function LeagueTableDisplay({ store, storeOdds }) {
 	const cloneColumns = cloneDeep(columns);
 
 	// console.log('%c LeagueTableDisplay LeagueTableDisplay ', 'color:blue', dataSportTableNew);
+	// console.log('%c LeagueTableDisplay LeagueTableDisplay ', 'color:blue', scheduleDay);
+	// console.log('%c LeagueTableDisplay LeagueTableDisplay ', 'color:blue', scheduleDayAll);
+	console.log('%c LeagueTableDisplay LeagueTableDisplay ', 'color:blue', tablePairs);
 
 	return (
 		<Box m="20px">
@@ -275,6 +279,17 @@ function LeagueTableDisplay({ store, storeOdds }) {
 								</Box>
 							);
 						})}
+					{storeOdds && tablePairs?.length > 0 && (
+						<Table
+							columns={columnsEvents}
+							data={tablePairs}
+							loading={loadingOdds}
+							idTable={idTable}
+							fetchData={loadDataOddsTable}
+							store={storeOdds}
+							showPaging={false}
+						/>
+					)}
 					{storeOdds && (
 						<Table
 							columns={columnsEvents}
