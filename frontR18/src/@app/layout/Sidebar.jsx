@@ -21,7 +21,7 @@ import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import RunningWithErrorsIcon from '@mui/icons-material/RunningWithErrors';
 import PublishOutlinedIcon from '@mui/icons-material/PublishOutlined';
 import SportsBaseballIcon from '@mui/icons-material/SportsBaseball';
-import SvgIcon from '@app/icons/SvgIcon';
+import SvgIcon from '../icons/SvgIcon';
 
 import { tokens } from '../theme/theme';
 import { useStore } from '../stores/store';
@@ -142,14 +142,21 @@ const Sidebar = () => {
 						<Item
 							title="Example3"
 							to="/example3"
-							icon={<SvgIcon>heroicons-solid:moon</SvgIcon>}
+							icon={<SvgIcon>heroicons-solid:ticket</SvgIcon>}
 							selected={selected}
 							setSelected={setSelected}
 						/>
 						<Item
 							title="Example4"
 							to="/example4"
-							icon={<SvgIcon>heroicons-solid:moon</SvgIcon>}
+							icon={<SvgIcon>heroicons-solid:trash</SvgIcon>}
+							selected={selected}
+							setSelected={setSelected}
+						/>
+						<Item
+							title="Redux"
+							to="/cart-container"
+							icon={<SvgIcon>heroicons-solid:view-grid</SvgIcon>}
 							selected={selected}
 							setSelected={setSelected}
 						/>

@@ -1,5 +1,5 @@
 import './example1.css';
-import { PropsWithChildren, useState } from 'react';
+import { useState } from 'react';
 
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';

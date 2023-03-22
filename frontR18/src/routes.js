@@ -31,6 +31,7 @@ const Example1 = React.lazy(() => import('app/components/temp/Example1'));
 const Example2 = React.lazy(() => import('app/components/temp/Example2'));
 const Example3 = React.lazy(() => import('app/components/temp/Example3'));
 const Example4 = React.lazy(() => import('app/components/temp/Example4'));
+const CartContainer = React.lazy(() => import('app/components/cart/CartContainer'));
 const ReactToastify = React.lazy(() => import('@app/common/ReactToastify'));
 const SportsList = React.lazy(() => import('features/sports/SportsList'));
 const LeagueTable = React.lazy(() => import('features/sports/LeagueTable'));
@@ -272,6 +273,14 @@ const routes = [
 		enabled: true,
 		path: '/example4',
 		component: Example4,
+		child: null,
+		exact: false,
+		privateRoute: false,
+	},
+	{
+		enabled: true,
+		path: '/cart-container',
+		component: CartContainer,
 		child: null,
 		exact: false,
 		privateRoute: false,

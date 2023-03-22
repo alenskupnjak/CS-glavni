@@ -205,7 +205,7 @@ function LeagueTableDisplay({ store, storeOdds }) {
 	// console.log('%c LeagueTableDisplay LeagueTableDisplay ', 'color:blue', dataSportTableNew);
 	// console.log('%c LeagueTableDisplay LeagueTableDisplay ', 'color:blue', scheduleDay);
 	// console.log('%c LeagueTableDisplay LeagueTableDisplay ', 'color:blue', scheduleDayAll);
-	console.log('%c LeagueTableDisplay LeagueTableDisplay ', 'color:blue', tablePairs);
+	// console.log('%c LeagueTableDisplay LeagueTableDisplay ', 'color:blue', tablePairs);
 
 	return (
 		<Box m="20px">

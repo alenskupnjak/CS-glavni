@@ -10,6 +10,7 @@ import { DayCalendarSkeleton } from '@mui/x-date-pickers/DayCalendarSkeleton';
 import { Box, createTheme, TextField, ThemeProvider, useTheme } from '@mui/material';
 import ColorSet from '@app/theme/colorSet';
 import { tokens } from '@app/theme/theme';
+import { CartIcon } from '@app/icons/icons';
 
 function getRandomNumber(min, max) {
 	return Math.round(Math.random() * (max - min) + min);
@@ -162,6 +163,7 @@ function DateCalendarServerRequest() {
 		// <LocalizationProvider dateAdapter={AdapterDayjs}>
 		// <ThemeProvider theme={theme}>
 		<Box>
+			<CartIcon />
 			<Box>
 				<DateCalendar
 					defaultValue={initialValue}

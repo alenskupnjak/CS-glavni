@@ -2,17 +2,19 @@ import { useContext } from 'react';
 import { observer } from 'mobx-react';
 import { Link, useLocation } from 'react-router-dom';
 import { Box, IconButton, useTheme, Badge } from '@mui/material';
-import { ColorModeContext, tokens } from '../theme/theme';
 import InputBase from '@mui/material/InputBase';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import ShoppingCart from '@mui/icons-material/ShoppingCart';
+import { ColorModeContext, tokens } from '../theme/theme';
 import SearchIcon from '@mui/icons-material/Search';
 import UserMenu from '@app/layout/UserMenu';
 import { useStore } from '../stores/store';
+import { useSelector } from 'react-redux';
 
 const Topbar = () => {
 	const { productStore } = useStore();
@@ -21,6 +23,7 @@ const Topbar = () => {
 	const colors = tokens(theme.palette.mode);
 	const colorMode = useContext(ColorModeContext);
 	const currentRoutePath = useLocation().pathname;
+	const { totalAmount } = useSelector(store => store.cart);
 
 	return (
 		<Box display="flex" justifyContent="space-between" p={2}>
@@ -34,6 +37,13 @@ const Topbar = () => {
 
 			{/* ICONS */}
 			<Box display="flex">
+				{currentRoutePath.includes('cart-container') && (
+					<IconButton>
+						<Badge badgeContent={totalAmount} color="secondary">
+							<ShoppingBasketIcon />
+						</Badge>
+					</IconButton>
+				)}
 				<IconButton onClick={colorMode.toggleColorMode}>
 					{theme.palette.mode === 'dark' ? <DarkModeOutlinedIcon /> : <LightModeOutlinedIcon />}
 				</IconButton>
