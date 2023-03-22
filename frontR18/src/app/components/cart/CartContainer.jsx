@@ -4,20 +4,36 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Box, Container, Typography, Modal } from '@mui/material';
 import ColorSet from '@app/theme/colorSet';
 import Button from '@mui/material/Button';
-import { clearCart, calculateTotals } from 'features/cart/cartSlice';
+import { clearCart, calculateTotals, getCartItems } from 'features/cart/cartSlice';
 import { openModal, closeModal } from 'features/modal/modalSlice';
-import { Close } from '@mui/icons-material';
 import ConfirmDialog from '@app/common/ConfirmDialog';
 
 const CartContainer = () => {
 	const dispatch = useDispatch();
-	const { cartItems, total, amount } = useSelector(store => store.cart);
+	const { cartItems, total, amount, isLoading } = useSelector(store => store.cart);
 	const { isOpen } = useSelector(store => store.modal);
 
 	useEffect(() => {
 		dispatch(calculateTotals());
 		// eslint-disable-next-line
 	}, [cartItems]);
+
+	useEffect(() => {
+		dispatch(getCartItems('random'));
+		// eslint-disable-next-line
+	}, []);
+
+	// if (isLoading) {
+	// 	return (
+	// 		<div className="loading">
+	// 			<h1>Loading...</h1>
+	// 		</div>
+	// 	);
+	// }
+
+	console.log('%c total ', 'color:green', total);
+
+	// if (!!total) return null;
 
 	if (amount < 1) {
 		return (
@@ -39,9 +55,11 @@ const CartContainer = () => {
 				})}
 			</Box>
 			<Box m="10px">
-				<Typography variant="h4" sx={{ margin: '10px' }}>
-					total ${total.toFixed(2)}
-				</Typography>
+				{!!total && (
+					<Typography variant="h4" sx={{ margin: '10px' }}>
+						total ${total.toFixed(2)}
+					</Typography>
+				)}
 				<Button
 					variant="contained"
 					onClick={() => {

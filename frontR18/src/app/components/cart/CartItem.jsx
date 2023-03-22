@@ -8,6 +8,9 @@ import ColorSet from '@app/theme/colorSet';
 
 const CartItem = ({ id, img, title, price, amount }) => {
 	const dispatch = useDispatch();
+
+	if (!price) return null;
+
 	return (
 		<Box
 			display="flex"

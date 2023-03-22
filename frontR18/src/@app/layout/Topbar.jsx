@@ -37,7 +37,7 @@ const Topbar = () => {
 
 			{/* ICONS */}
 			<Box display="flex">
-				{currentRoutePath.includes('cart-container') && (
+				{currentRoutePath.includes('cart-container') && totalAmount !== 0 && (
 					<IconButton>
 						<Badge badgeContent={totalAmount} color="secondary">
 							<ShoppingBasketIcon />
