@@ -15,8 +15,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import UserMenu from '@app/layout/UserMenu';
 import { useStore } from '../stores/store';
 import { useSelector } from 'react-redux';
+import SettingsIcon from '@mui/icons-material/Settings';
 
-const Topbar = () => {
+const Topbar = ({ setIsSidebar, toggleDrawer }) => {
 	const { productStore } = useStore();
 	const { itemCount } = productStore;
 	const theme = useTheme();
@@ -55,6 +56,9 @@ const Topbar = () => {
 				</IconButton>
 				<IconButton>
 					<PersonOutlinedIcon />
+				</IconButton>
+				<IconButton onClick={e => toggleDrawer(true, e)}>
+					<SettingsIcon />
 				</IconButton>
 				{(currentRoutePath.includes('catalog') || currentRoutePath.includes('basket')) && (
 					<IconButton component={Link} to="/basket" size="large" sx={{ color: 'inherit' }}>

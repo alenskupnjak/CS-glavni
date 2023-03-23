@@ -233,13 +233,16 @@ export const themeSettings = mode => {
 					},
 				},
 			},
+			MuiPaper: {
+				styleOverrides: {
+					root: {
+						backgroundColor: colors.primary[500],
+					},
+				},
+			},
 		},
 	};
 };
-
-// .MuiButtonBase-root.MuiPickersDay-root.Mui-selected {
-// 	border: 1px solid red;
-// }
 
 // context for color mode
 export const ColorModeContext = createContext({

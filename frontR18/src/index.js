@@ -6,6 +6,7 @@ import './index.css';
 import App from './App';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import 'react-pro-sidebar/dist/css/styles.css';
 import { storeRedux } from 'storeRedux';
 import { Provider } from 'react-redux';
 
