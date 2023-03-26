@@ -146,10 +146,16 @@ function Table({ columns, data, fetchData, loading, idTable, store, showPaging, 
 									}}
 								>
 									{row.cells.map(cell => {
+										// console.log('%c  cell tr  ==== ', 'color:green', cell.row);
+
 										return (
 											<td
 												{...cell.getCellProps({
-													style: { width: cell.column.width, height: 35 },
+													style: {
+														width: cell.column.width,
+														height: 35,
+														backgroundColor: cell.row.original.backColor ?? '',
+													},
 												})}
 											>
 												{loading ? <Skeleton containerClassName="fix-skeleton-height" /> : cell.render('Cell')}

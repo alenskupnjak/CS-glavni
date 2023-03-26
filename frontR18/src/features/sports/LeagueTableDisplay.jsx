@@ -285,7 +285,6 @@ function LeagueTableDisplay({ store, storeOdds }) {
 							data={tablePairs}
 							loading={loadingOdds}
 							idTable={idTable}
-							fetchData={loadDataOddsTable}
 							store={storeOdds}
 							showPaging={false}
 						/>

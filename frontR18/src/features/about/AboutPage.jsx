@@ -102,15 +102,11 @@ export default function AboutPage() {
 				))}
 			</Box>
 			<Box sx={{ mt: 1, border: 2 }}>
-				<Typography sx={{ background: colors.redAccent[100], fontSize: 13 }}> redAccent 100</Typography>
-				<Typography sx={{ background: colors.redAccent[200], fontSize: 13 }}> redAccent 200</Typography>
-				<Typography sx={{ background: colors.redAccent[300], fontSize: 13 }}> redAccent 300</Typography>
-				<Typography sx={{ background: colors.redAccent[400], fontSize: 13 }}> redAccent 400</Typography>
-				<Typography sx={{ background: colors.redAccent[500], fontSize: 13 }}> redAccent neutral</Typography>
-				<Typography sx={{ background: colors.redAccent[600], fontSize: 13 }}> redAccent 600</Typography>
-				<Typography sx={{ background: colors.redAccent[700], fontSize: 13 }}> redAccent 700</Typography>
-				<Typography sx={{ background: colors.redAccent[800], fontSize: 13 }}> redAccent 800</Typography>
-				<Typography sx={{ background: colors.redAccent[900], fontSize: 13 }}> redAccent 900</Typography>
+				{times(9, i => (
+					<Typography key={i} sx={{ background: colors.redAccent[(i + 1) * 100], fontSize: 13 }}>
+						redAccent {(i + 1) * 100} - {colors.redAccent[(i + 1) * 100]}
+					</Typography>
+				))}
 			</Box>
 			<Box sx={{ mt: 1, border: 2 }}>
 				{times(9, i => (

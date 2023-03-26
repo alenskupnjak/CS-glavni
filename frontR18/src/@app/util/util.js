@@ -16,3 +16,8 @@ export function parseFraction(fraction) {
 	const [numerator, denominator] = fraction.split('/').map(Number);
 	return numerator / denominator;
 }
+
+export function getColorOdds(id) {
+	const colors = ['#4cceac', '#a3a3a3', '#e99592', '#868dfb', '#FACC2E', '#FE2E9A', '#00FFFF'];
+	return colors[id];
+}

@@ -1,9 +1,9 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { map, find, head, filter, sortBy } from 'lodash-es';
+import { map, find, head, filter, sortBy, isEmpty, findIndex } from 'lodash-es';
 import dayjs from 'dayjs';
 import agent from 'app/api/agent';
 import { sportsData } from '@data/sportsData';
-import { parseFraction } from '@app/util/util';
+import { parseFraction, getColorOdds } from '@app/util/util';
 
 const removeEvent = [384];
 
@@ -29,6 +29,7 @@ export default class SportsStore {
 		this.loading = true;
 		this.dataSportTableNew = null;
 		this.dataSportTable = null;
+		this.tablePairs = null;
 		this.idTable = idTable;
 		try {
 			//  SOFA API SOFA API
@@ -52,14 +53,14 @@ export default class SportsStore {
 					this.entriesTournament = head(Object.entries(this.resLastFive.data?.tournamentTeamEvents));
 					const mapTopLeaguesData = this.mapDataTopLeagues(this.resTopLeaguec);
 					this.topLeaguesTable = mapTopLeaguesData;
+					if (this.scheduleDayAll) {
+						this.tablePairs = filter(this.scheduleDayAll, data => data.idTournament === idTable);
+					}
 					const mapedDataNew = this.mapDataForTableNew(
 						this.resTableData?.data?.standings,
 						Object.entries(this.resLastFive?.data?.tournamentTeamEvents)
 					);
 
-					if (this.scheduleDayAll) {
-						this.tablePairs = filter(this.scheduleDayAll, data => data.idTournament === idTable);
-					}
 					this.dataSportTableNew = mapedDataNew;
 				});
 				this.loading = false;
@@ -124,13 +125,19 @@ export default class SportsStore {
 		});
 		cleanScheduleDay = filter(cleanScheduleDay, data => data.odds !== null);
 
+		this.cleanScheduleDay = cleanScheduleDay;
+
 		const mapData = cleanScheduleDay.map((event, num) => {
+			// console.log('%c  MapData', 'color:red', event);
+
 			return {
 				num: num + 1,
 				id: event.id,
 				idTournament: event.tournament.uniqueTournament.id,
 				awayTeam: event.awayTeam.name,
+				idAwayTeam: event.awayTeam.id,
 				homeTeam: event.homeTeam.name,
+				idHomeTeam: event.homeTeam.id,
 				liga: event.tournament.name,
 				category: event?.tournament?.category?.name,
 				status: event.status?.code,
@@ -195,6 +202,24 @@ export default class SportsStore {
 						})
 						.reverse();
 				}
+
+				let pair, indexColor;
+				if (this.tablePairs) {
+					// console.log('%c 17', 'color:blue', this.tablePairs);
+					// console.log('%c 18 row', 'color:green', row);
+					// console.log('%c 19', 'color:gold', this.cleanScheduleDay);
+
+					pair = filter(
+						this.tablePairs,
+						data => +data.idAwayTeam === +row.team.id || +data.idHomeTeam === +row.team.id
+					);
+					if (pair[0]) {
+						indexColor = findIndex(this.tablePairs, pair[0]);
+						this.tablePairs[indexColor].backColor = getColorOdds(indexColor);
+						// console.log('%c 20', 'color:red', indexColor, pair[0]);
+					}
+				}
+
 				return {
 					position: row.position,
 					promotion: row.promotion,
@@ -210,6 +235,7 @@ export default class SportsStore {
 						homeTeam: row?.team?.name,
 					},
 					pts: row.points ?? Math.round((row.wins / row.matches) * 100) / 100,
+					backColor: !isEmpty(pair) ? getColorOdds(indexColor) : null,
 				};
 			});
 			return { mapData, groupName: Object.keys(standings).length > 1 ? data.name : null };

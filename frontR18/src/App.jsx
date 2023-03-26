@@ -77,7 +77,6 @@ function RightMenuItem({ isSidebar, toggleDrawer, menuRight }) {
 	return (
 		<React.Fragment>
 			<Drawer anchor={'right'} open={menuRight['right']} onClose={e => toggleDrawer(false, e)}>
-				{/* <Box role="presentation" onClick={e => toggleDrawer(false, e)} onKeyDown={e => toggleDrawer(false, e)}> */}
 				<Box role="presentation" onKeyDown={e => toggleDrawer(false, e)}>
 					<RightMenu isSidebar={isSidebar} />
 				</Box>
