@@ -1,11 +1,11 @@
+import { useSelector } from 'react-redux';
 import { ResponsiveLine } from '@nivo/line';
-import { useTheme } from '@mui/material';
 import { tokens } from '@app/theme/theme';
 import { mockLineData as data } from '@data/mockData';
 
 const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
-	const theme = useTheme();
-	const colors = tokens[theme.palette.mode];
+	const { pallete } = useSelector(store => store.theme);
+	const colors = tokens[pallete];
 
 	return (
 		<ResponsiveLine

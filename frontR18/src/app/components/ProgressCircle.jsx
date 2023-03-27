@@ -1,9 +1,10 @@
-import { Box, useTheme } from '@mui/material';
+import { Box } from '@mui/material';
 import { tokens } from '@app/theme/theme';
+import { useSelector } from 'react-redux';
 
 const ProgressCircle = ({ progress = '0.75', size = '40' }) => {
-	const theme = useTheme();
-	const colors = tokens[theme.palette.mode];
+	const { pallete } = useSelector(store => store.theme);
+	const colors = tokens[pallete];
 	const angle = progress * 360;
 	return (
 		<Box

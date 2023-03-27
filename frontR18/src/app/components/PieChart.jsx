@@ -1,11 +1,11 @@
 import { ResponsivePie } from '@nivo/pie';
 import { tokens } from '@app/theme/theme';
-import { useTheme } from '@mui/material';
 import { mockPieData as data } from '@data/mockData';
+import { useSelector } from 'react-redux';
 
 const PieChart = () => {
-	const theme = useTheme();
-	const colors = tokens[theme.palette.mode];
+	const { pallete } = useSelector(store => store.theme);
+	const colors = tokens[pallete];
 	return (
 		<ResponsivePie
 			data={data}

@@ -1,10 +1,12 @@
-import { Box, Typography, useTheme } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { Box, Typography } from '@mui/material';
+
 import { tokens } from '@app/theme/theme';
 import ProgressCircle from './ProgressCircle';
 
 const StatBox = ({ title, subtitle, icon, progress, increase }) => {
-	const theme = useTheme();
-	const colors = tokens[theme.palette.mode];
+	const { pallete } = useSelector(store => store.theme);
+	const colors = tokens[pallete];
 
 	return (
 		<Box width="100%" m="0 30px">

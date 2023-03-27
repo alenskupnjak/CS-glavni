@@ -1,12 +1,12 @@
-import { useTheme } from '@mui/material';
+import { useSelector } from 'react-redux';
 import { ResponsiveChoropleth } from '@nivo/geo';
 import { geoFeatures } from '@data/mockGeoFeatures';
 import { tokens } from '@app/theme/theme';
 import { mockGeographyData as data } from '@data/mockData';
 
 const GeographyChart = ({ isDashboard = false }) => {
-	const theme = useTheme();
-	const colors = tokens[theme.palette.mode];
+	const { pallete } = useSelector(store => store.theme);
+	const colors = tokens[pallete];
 	return (
 		<ResponsiveChoropleth
 			data={data}

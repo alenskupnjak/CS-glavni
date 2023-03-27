@@ -1,24 +1,16 @@
 import { Remove, Add, Delete } from '@mui/icons-material';
+import { useSelector } from 'react-redux';
 import { observer } from 'mobx-react';
 import { LoadingButton } from '@mui/lab';
-import {
-	TableContainer,
-	Paper,
-	Table,
-	TableHead,
-	TableRow,
-	TableCell,
-	TableBody,
-	Container,
-	useTheme,
-} from '@mui/material';
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Container } from '@mui/material';
 import { Box } from '@mui/system';
+
 import { useStore } from '@app/stores/store';
 import { tokens } from '@app/theme/theme';
 
 function BasketTable({ isBasket = true }) {
-	const theme = useTheme();
-	const colors = tokens[theme.palette.mode];
+	const { pallete } = useSelector(store => store.theme);
+	const colors = tokens[pallete];
 	const { productStore } = useStore();
 	const { basket, loading, productName, handleAddItem, handleRemoveItem } = productStore;
 

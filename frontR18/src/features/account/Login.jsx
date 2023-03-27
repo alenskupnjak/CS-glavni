@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-import { Avatar, TextField, Box, Paper, useTheme, Typography, Container, Grid } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { Avatar, TextField, Box, Paper, Typography, Container, Grid } from '@mui/material';
 import { LockOutlined } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 
@@ -8,11 +9,11 @@ import { useStore } from '@app/stores/store';
 import { tokens } from '@app/theme/theme';
 
 export default function Login() {
+	const { pallete } = useSelector(store => store.theme);
 	const { userStore } = useStore();
 	const { loginForm } = userStore;
 	const navigate = useNavigate();
-	const theme = useTheme();
-	const colors = tokens[theme.palette.mode];
+	const colors = tokens[pallete];
 
 	const {
 		register,

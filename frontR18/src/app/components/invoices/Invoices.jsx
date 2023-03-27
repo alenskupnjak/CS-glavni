@@ -1,12 +1,13 @@
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import { useSelector } from 'react-redux';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { tokens } from '@app/theme/theme';
 import { mockDataInvoices } from '@data/mockData';
 import Header from 'app/components/Header';
 
 const Invoices = () => {
-	const theme = useTheme();
-	const colors = tokens[theme.palette.mode];
+	const { pallete } = useSelector(store => store.theme);
+	const colors = tokens[pallete];
 	const columns = [
 		{ field: 'id', headerName: 'ID' },
 		{

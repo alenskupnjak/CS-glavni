@@ -27,6 +27,7 @@ export default class ProductStore {
 	newCheckedBrands = ['Angular', 'NetCore'];
 	newCheckedTypes = ['Boots', 'Boards', 'Hats', 'Gloves'];
 	targetProduct = null;
+	otvori = false;
 
 	constructor() {
 		makeAutoObservable(this);
@@ -290,12 +291,14 @@ export default class ProductStore {
 
 	//  promjena vrijednosti tabeli, pagiancija
 	handlePaging = async (pageNumber, page) => {
+		console.log('%c 14 pageNumber=', 'color:green', pageNumber);
+
 		try {
 			this.productParams = {
 				...this.productParams,
 				pageNumber,
 			};
-			this.filtersFind(this.productParams);
+			await this.filtersFind(this.productParams);
 		} catch (error) {
 			console.log('%c error', 'color:red', error);
 		}
@@ -317,6 +320,10 @@ export default class ProductStore {
 
 	setListaProdukata = () => {
 		return (this.listaProdukata = null);
+	};
+
+	setOtvori = () => {
+		this.otvori = true;
 	};
 
 	// prelazak na placanje

@@ -1,20 +1,21 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { observer } from 'mobx-react';
 import { useFormContext } from 'react-hook-form';
 import { CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { Checkbox, Container, useTheme } from '@mui/material';
+import { Checkbox, Container } from '@mui/material';
 import { tokens } from '@app/theme/theme';
 
 import TextField from '@mui/material/TextField';
-import AppTextInput from '../../app/components/AppTextInput';
+import AppTextInput from 'app/components/AppTextInput';
 import { StripeInput } from './StripeInput';
 
 function PaymentForm({ cardState, onCardInputChange }) {
-	const theme = useTheme();
-	const colors = tokens[theme.palette.mode];
+	const { pallete } = useSelector(store => store.theme);
+	const colors = tokens[pallete];
 	const { control } = useFormContext();
 
 	return (

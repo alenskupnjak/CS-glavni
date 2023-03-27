@@ -11,16 +11,15 @@ import {
 	TextField,
 	Typography,
 	Container,
-	useTheme,
 } from '@mui/material';
 import NotFound from '@app/errors/NotFound';
 import { useStore } from '@app/stores/store';
 import { tokens } from '@app/theme/theme';
-// import { useHistory, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 function ProductDetails() {
-	const theme = useTheme();
-	const colors = tokens[theme.palette.mode];
+	const { pallete } = useSelector(store => store.theme);
+	const colors = tokens[pallete];
 	const { productStore } = useStore();
 	const { product, handleInputChange, quantity, handleUpdateCart, item, loading } = productStore;
 

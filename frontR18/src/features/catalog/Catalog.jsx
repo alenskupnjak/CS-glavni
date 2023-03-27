@@ -1,19 +1,20 @@
 import React, { useEffect } from 'react';
-import { Grid, Paper, Typography, Container, useTheme } from '@mui/material';
-
+import { Grid, Paper, Typography, Container } from '@mui/material';
+import { useSelector } from 'react-redux';
 import { observer } from 'mobx-react';
+
 import { useStore } from '@app/stores/store';
 import ProductList from './ProductList';
 import ProductSearch from './ProductSearch';
 import RadioButtonGroup from 'app/components/RadioButtonGroup';
 import CheckboxButtons from 'app/components/CheckboxButtons';
 import AppPagination from 'app/components/AppPagination';
-import { sortOptions } from '../../app/api/constants';
+import { sortOptions } from 'app/api/constants';
 import { tokens } from '@app/theme/theme';
 
 function Catalog(props) {
-	const theme = useTheme();
-	const colors = tokens[theme.palette.mode];
+	const { pallete } = useSelector(store => store.theme);
+	const colors = tokens[pallete];
 	const { productStore } = useStore();
 	const {
 		listaProdukata,

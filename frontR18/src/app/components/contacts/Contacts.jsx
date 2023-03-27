@@ -1,13 +1,14 @@
+import { useSelector } from 'react-redux';
 import { Box } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { tokens } from '@app/theme/theme';
+
 import { mockDataContacts } from '@data/mockData';
 import Header from 'app/components/Header';
-import { useTheme } from '@mui/material';
+import { tokens } from '@app/theme/theme';
 
 const Contacts = () => {
-	const theme = useTheme();
-	const colors = tokens[theme.palette.mode];
+	const { pallete } = useSelector(store => store.theme);
+	const colors = tokens[pallete];
 
 	const columns = [
 		{ field: 'id', headerName: 'ID', flex: 0.5 },

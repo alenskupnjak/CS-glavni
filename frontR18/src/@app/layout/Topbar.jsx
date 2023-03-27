@@ -1,8 +1,7 @@
-import { useContext } from 'react';
 import { observer } from 'mobx-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, IconButton, useTheme, Badge } from '@mui/material';
+import { Box, IconButton, Badge } from '@mui/material';
 import InputBase from '@mui/material/InputBase';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
@@ -10,21 +9,21 @@ import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
-import ShoppingCart from '@mui/icons-material/ShoppingCart';
-import { ColorModeContext, tokens } from '../theme/theme';
-import SearchIcon from '@mui/icons-material/Search';
-import UserMenu from '@app/layout/UserMenu';
-import { useStore } from '../stores/store';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { openMenu } from '@app/stores/redux/themeSlice';
+import ShoppingCart from '@mui/icons-material/ShoppingCart';
+import SearchIcon from '@mui/icons-material/Search';
+
+import UserMenu from '@app/layout/UserMenu';
+import { tokens } from '../theme/theme';
+import { useStore } from '../stores/store';
+import { openMenu, changeTheme } from '@app/stores/redux/themeSlice';
 
 const Topbar = () => {
 	const dispatch = useDispatch();
+	const { pallete } = useSelector(store => store.theme);
 	const { productStore } = useStore();
 	const { itemCount } = productStore;
-	const theme = useTheme();
-	const colors = tokens[theme.palette.mode];
-	const colorMode = useContext(ColorModeContext);
+	const colors = tokens[pallete];
 	const currentRoutePath = useLocation().pathname;
 	const { totalAmount } = useSelector(store => store.cart);
 
@@ -47,8 +46,17 @@ const Topbar = () => {
 						</Badge>
 					</IconButton>
 				)}
-				<IconButton onClick={colorMode.toggleColorMode}>
-					{theme.palette.mode === 'dark' ? <DarkModeOutlinedIcon /> : <LightModeOutlinedIcon />}
+				<IconButton
+					onClick={() => {
+						if (pallete === 'dark') {
+							dispatch(changeTheme('light'));
+						} else {
+							dispatch(changeTheme('dark'));
+						}
+						// colorMode.toggleColorMode();
+					}}
+				>
+					{pallete === 'dark' ? <DarkModeOutlinedIcon /> : <LightModeOutlinedIcon />}
 				</IconButton>
 				<IconButton>
 					<NotificationsOutlinedIcon />

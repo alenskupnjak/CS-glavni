@@ -9,7 +9,7 @@ import AppDropzone from '../../app/components/AppDropzone';
 import AppSelectList from '../../app/components/AppSelectList';
 import AppTextInput from '../../app/components/AppTextInput';
 import { validationSchema } from './productValidation';
-import agent from '../../app/api/agent';
+import agent from 'app/api/agent';
 import { useStore } from '@app/stores/store';
 
 function ProductForm({ product, cancelEdit }) {
@@ -56,7 +56,7 @@ function ProductForm({ product, cancelEdit }) {
 			console.log(error);
 		}
 	}
-	console.log('%c 100 ', 'color:green', filters.brands, product);
+	console.log('%c 100 ', 'color:red', filters.brands, product);
 
 	return (
 		<Box component={Paper} sx={{ p: 4 }}>

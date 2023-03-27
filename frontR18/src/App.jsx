@@ -16,50 +16,54 @@ import 'react-toastify/dist/ReactToastify.css';
 import Topbar from '@app/layout/Topbar';
 import Sidebar from '@app/layout/Sidebar';
 import RightMenu from '@app/layout/RightMenu';
-import { ColorModeContext, useMode } from '@app/theme/theme';
+import { useMode } from '@app/theme/theme';
 import PrivateRoute from '@app/layout/PrivateRoute';
 import routes from './routes';
 
 import { closeMenu } from '@app/stores/redux/themeSlice';
 
 function App() {
-	const [theme, colorMode] = useMode();
+	const { pallete } = useSelector(store => store.theme);
+	console.log('%c 00 palette ', 'color:red', pallete);
+	const [theme] = useMode();
+
+	console.log('%c 07= ', 'color:red', theme);
 
 	return (
-		<ColorModeContext.Provider value={colorMode}>
-			<ThemeProvider theme={theme}>
-				<LocalizationProvider dateAdapter={AdapterDayjs}>
-					<ToastContainer position="bottom-right" theme="colored" />
-					<CssBaseline />
-					<div className="app">
-						<Sidebar />
-						<RightMenuItem />
-						<main className="content">
-							<Topbar />
-							<Suspense fallback={<div>Loading u APP...</div>}>
-								<Routes>
-									{routes.map(route => {
-										return (
-											<Route
-												path={route.path}
-												key={route.path}
-												element={
-													route.privateRoute ? (
-														<PrivateRoute roles={route.roles}>{route.component}</PrivateRoute>
-													) : (
-														<route.component />
-													)
-												}
-											/>
-										);
-									})}
-								</Routes>
-							</Suspense>
-						</main>
-					</div>
-				</LocalizationProvider>
-			</ThemeProvider>
-		</ColorModeContext.Provider>
+		// <ColorModeContext.Provider value={colorMode}>
+		<ThemeProvider theme={theme}>
+			<LocalizationProvider dateAdapter={AdapterDayjs}>
+				<ToastContainer position="bottom-right" theme="colored" />
+				<CssBaseline />
+				<div className="app">
+					<Sidebar />
+					<RightMenuItem />
+					<main className="content">
+						<Topbar />
+						<Suspense fallback={<div>Loading u APP...</div>}>
+							<Routes>
+								{routes.map(route => {
+									return (
+										<Route
+											path={route.path}
+											key={route.path}
+											element={
+												route.privateRoute ? (
+													<PrivateRoute roles={route.roles}>{route.component}</PrivateRoute>
+												) : (
+													<route.component />
+												)
+											}
+										/>
+									);
+								})}
+							</Routes>
+						</Suspense>
+					</main>
+				</div>
+			</LocalizationProvider>
+		</ThemeProvider>
+		// </ColorModeContext.Provider>
 	);
 }
 

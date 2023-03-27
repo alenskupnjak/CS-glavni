@@ -9,17 +9,17 @@ import {
 	ListItem,
 	ListItemText,
 	Typography,
-	useTheme,
 	Box,
 } from '@mui/material';
-import agent from '../../app/api/agent';
+import { useSelector } from 'react-redux';
+import agent from 'app/api/agent';
 import { tokens } from '@app/theme/theme';
 import { times } from 'lodash';
 
 export default function AboutPage() {
+	const { pallete } = useSelector(store => store.theme);
 	const [validationErrors, setValidationErrors] = useState([]);
-	const theme = useTheme();
-	const colors = tokens[theme.palette.mode];
+	const colors = tokens[pallete];
 
 	function getValidationError() {
 		agent.TestErrors.getValidationError()

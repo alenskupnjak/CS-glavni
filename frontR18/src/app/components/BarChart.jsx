@@ -1,11 +1,11 @@
-import { useTheme } from '@mui/material';
 import { ResponsiveBar } from '@nivo/bar';
 import { tokens } from '@app/theme/theme';
 import { mockBarData as data } from '@data/mockData';
+import { useSelector } from 'react-redux';
 
 const BarChart = ({ isDashboard = false }) => {
-	const theme = useTheme();
-	const colors = tokens[theme.palette.mode];
+	const { pallete } = useSelector(store => store.theme);
+	const colors = tokens[pallete];
 
 	return (
 		<ResponsiveBar

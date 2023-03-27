@@ -1,24 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import { observer } from 'mobx-react';
-import { Box, Button, Paper, Step, StepLabel, Stepper, Typography, useTheme, Container } from '@mui/material';
-import AddressForm from './AddressForm';
-import PaymentForm from './PaymentForm';
-import Review from './Review';
+import { FormProvider, useForm } from 'react-hook-form';
+import { Box, Button, Paper, Step, StepLabel, Stepper, Typography, Container } from '@mui/material';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { validationSchema } from './checkoutValidation';
-import agent from '../../app/api/agent';
 import { LoadingButton } from '@mui/lab';
-import { useStore } from '@app/stores/store';
 import { CardNumberElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { tokens } from '@app/theme/theme';
 import { toast } from 'react-toastify';
 
+import { validationSchema } from './checkoutValidation';
+import { useStore } from '@app/stores/store';
+import Review from './Review';
+import agent from 'app/api/agent';
+import AddressForm from './AddressForm';
+import PaymentForm from './PaymentForm';
+
 const steps = ['Shipping address', 'Review your order', 'Payment details'];
 
 function CheckoutPage() {
-	const theme = useTheme();
-	const colors = tokens[theme.palette.mode];
+	const { pallete } = useSelector(store => store.theme);
+	const colors = tokens[pallete];
 	const { productStore } = useStore();
 	const { clearBasket, basket } = productStore;
 	const [activeStep, setActiveStep] = useState(0);

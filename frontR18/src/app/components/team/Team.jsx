@@ -1,5 +1,6 @@
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
+import { useSelector } from 'react-redux';
 import { tokens } from '@app/theme/theme';
 import { mockDataTeam } from '@data/mockData';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
@@ -8,8 +9,8 @@ import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined';
 import Header from 'app/components/Header';
 
 const Team = () => {
-	const theme = useTheme();
-	const colors = tokens[theme.palette.mode];
+	const { pallete } = useSelector(store => store.theme);
+	const colors = tokens[pallete];
 	const columns = [
 		{ field: 'id', headerName: 'ID' },
 		{

@@ -1,8 +1,8 @@
-import { useTheme } from '@mui/material';
 import { tokens } from '@app/theme/theme';
+import { useSelector } from 'react-redux';
 
 export default function ColorSet() {
-	const theme = useTheme();
-	const color = tokens[theme.palette.mode];
+	const { pallete } = useSelector(store => store.theme);
+	const color = tokens[pallete];
 	return color;
 }

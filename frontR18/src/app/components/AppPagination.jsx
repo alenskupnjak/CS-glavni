@@ -5,6 +5,8 @@ import { Box } from '@mui/system';
 function AppPagination({ metaData, handlePaging }) {
 	const { currentPage, totalCount, totalPages, pageSize } = metaData;
 
+	console.log('%c 00 ', 'color:green', metaData);
+
 	if (totalCount === 0) return null;
 
 	return (

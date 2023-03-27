@@ -1,35 +1,34 @@
 import React from 'react';
-import { useState } from 'react';
 import { observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { ProSidebar, Menu, MenuItem } from 'react-pro-sidebar';
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+
 import SvgIcon from '../icons/SvgIcon';
 import { tokens } from '../theme/theme';
+import { changeTheme } from '@app/stores/redux/themeSlice';
 
-const Item = ({ title, to, icon, selected, setSelected }) => {
-	const theme = useTheme();
-	const colors = tokens[theme.palette.mode];
+const Item = ({ title, icon, selected, mainTheme }) => {
+	const dispatch = useDispatch();
+	const { pallete } = useSelector(store => store.theme);
 	return (
 		<MenuItem
 			active={selected === title}
 			style={{
-				color: colors.grey[100],
+				color: tokens[pallete].grey[100],
 			}}
-			onClick={() => setSelected(title)}
+			onClick={() => dispatch(changeTheme(mainTheme))}
 			icon={icon}
 		>
 			<Typography>{title}</Typography>
-			<Link to={to} />
 		</MenuItem>
 	);
 };
 
 const RightMenu = () => {
-	const theme = useTheme();
-	const colors = tokens[theme.palette.mode];
-	const [selected, setSelected] = useState('Dashboard');
+	const { pallete } = useSelector(store => store.theme);
+	const colors = tokens[pallete];
 
 	return (
 		<Box
@@ -54,27 +53,9 @@ const RightMenu = () => {
 			<ProSidebar collapsed={false} width="220px">
 				<Menu iconShape="square">
 					<Box>
-						<Item
-							title="Dashboard"
-							to="/dashboard"
-							icon={<HomeOutlinedIcon />}
-							selected={selected}
-							setSelected={setSelected}
-						/>
-						<Item
-							title="Example1"
-							to="/example1"
-							icon={<SvgIcon>heroicons-solid:microphone</SvgIcon>}
-							selected={selected}
-							setSelected={setSelected}
-						/>
-						<Item
-							title="Example2"
-							to="/example2"
-							icon={<SvgIcon>heroicons-solid:moon</SvgIcon>}
-							selected={selected}
-							setSelected={setSelected}
-						/>
+						<Item title="Dark" mainTheme="dark" icon={<HomeOutlinedIcon />} />
+						<Item title="Light" mainTheme="light" icon={<SvgIcon>heroicons-solid:microphone</SvgIcon>} />
+						<Item title="Pink" mainTheme="pink" icon={<SvgIcon>heroicons-solid:moon</SvgIcon>} />
 					</Box>
 				</Menu>
 			</ProSidebar>

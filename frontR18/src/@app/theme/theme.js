@@ -1,5 +1,6 @@
 import { createContext, useState, useMemo } from 'react';
 import { createTheme } from '@mui/material/styles';
+import { useDispatch, useSelector } from 'react-redux';
 
 // color design tokens export
 export const tokens = {
@@ -115,6 +116,63 @@ export const tokens = {
 			700: '#a4a9fc',
 			800: '#c3c6fd',
 			900: '#e1e2fe',
+		},
+	},
+	pink: {
+		grey: {
+			100: '#bec1c5',
+			200: '#92979f',
+			300: '#666d78',
+			400: '#464e5b',
+			500: '#252f3e',
+			600: '#212a38',
+			700: '#1b2330',
+			800: '#161d28',
+			900: '#0d121b',
+		},
+		primary: {
+			100: '#cdf5ed',
+			200: '#9aebdb',
+			300: '#68e2c8',
+			400: '#35d8b6',
+			500: '#03cea4',
+			600: '#02a583',
+			700: '#027c62',
+			800: '#015242',
+			900: '#012921',
+		},
+		greenAccent: {
+			100: '#bdf2fa',
+			200: '#91e9f7',
+			300: '#64e0f3',
+			400: '#43daf1',
+			500: '#22d3ee',
+			600: '#1eceec',
+			700: '#19c8e9',
+			800: '#14c2e7',
+			900: '#0cb7e2',
+		},
+		redAccent: {
+			100: '#bdf2fa',
+			200: '#91e9f7',
+			300: '#64e0f3',
+			400: '#43daf1',
+			500: '#22d3ee',
+			600: '#1eceec',
+			700: '#19c8e9',
+			800: '#14c2e7',
+			900: '#0cb7e2',
+		},
+		blueAccent: {
+			100: '#faf2d3',
+			200: '#f6e5a6',
+			300: '#f1d77a',
+			400: '#edca4d',
+			500: '#e8bd21',
+			600: '#ba971a',
+			700: '#8b7114',
+			800: '#5d4c0d',
+			900: '#2e2607',
 		},
 	},
 };
@@ -248,21 +306,87 @@ export const themeSettings = {
 			},
 		},
 	},
+	pink: {
+		palette: {
+			// mode: 'dark',
+			primary: {
+				main: tokens['pink'].primary[100],
+			},
+			secondary: {
+				main: tokens['pink'].greenAccent[500],
+			},
+			neutral: {
+				dark: tokens['pink'].grey[700],
+				main: tokens['pink'].grey[500],
+				pink: tokens['pink'].grey[100],
+			},
+			background: {
+				default: '#fcfcfc',
+			},
+		},
+		typography: {
+			fontFamily: ['Source Sans Pro', 'sans-serif'].join(','),
+			fontSize: 12,
+			h1: {
+				fontFamily: ['Source Sans Pro', 'sans-serif'].join(','),
+				fontSize: 40,
+			},
+			h2: {
+				fontFamily: ['Source Sans Pro', 'sans-serif'].join(','),
+				fontSize: 32,
+			},
+			h3: {
+				fontFamily: ['Source Sans Pro', 'sans-serif'].join(','),
+				fontSize: 24,
+			},
+			h4: {
+				fontFamily: ['Source Sans Pro', 'sans-serif'].join(','),
+				fontSize: 20,
+			},
+			h5: {
+				fontFamily: ['Source Sans Pro', 'sans-serif'].join(','),
+				fontSize: 16,
+			},
+			h6: {
+				fontFamily: ['Source Sans Pro', 'sans-serif'].join(','),
+				fontSize: 14,
+			},
+		},
+		components: {
+			MuiPickersDay: {
+				styleOverrides: {
+					root: {
+						backgroundColor: tokens['pink'].blueAccent[600],
+					},
+				},
+			},
+			MuiPaper: {
+				styleOverrides: {
+					root: {
+						backgroundColor: tokens['pink'].primary[500],
+					},
+				},
+			},
+		},
+	},
 };
 
 // context for color mode
-export const ColorModeContext = createContext({
-	toggleColorMode: () => {},
-});
+// export const ColorModeContext = createContext({
+// 	toggleColorMode: () => {},
+// });
 
 export const useMode = () => {
-	const [mode, setMode] = useState('dark');
-	const colorMode = useMemo(
-		() => ({
-			toggleColorMode: () => setMode(prev => (prev === 'light' ? 'dark' : 'light')),
-		}),
-		[]
-	);
-	const theme = useMemo(() => createTheme(themeSettings[mode]), [mode]);
-	return [theme, colorMode];
+	const { pallete } = useSelector(store => store.theme);
+	console.log('%c 00 palette ', 'color:red', pallete);
+
+	// const [mode, setMode] = useState('dark');
+	// const colorMode = useMemo(
+	// 	() => ({
+	// 		toggleColorMode: () => setMode(prev => (prev === 'light' ? 'dark' : 'light')),
+	// 	}),
+	// 	[]
+	// );
+	const theme = useMemo(() => createTheme(themeSettings[pallete]));
+	return [theme];
 };

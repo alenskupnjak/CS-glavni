@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
 	isOpen: false,
+	pallete: 'dark',
 };
 
 const themeSlice = createSlice({
@@ -14,9 +15,12 @@ const themeSlice = createSlice({
 		closeMenu: (state, action) => {
 			state.isOpen = false;
 		},
+		changeTheme: (state, { payload }) => {
+			state.pallete = payload;
+		},
 	},
 });
 
-export const { openMenu, closeMenu } = themeSlice.actions;
+export const { openMenu, closeMenu, changeTheme } = themeSlice.actions;
 
 export default themeSlice.reducer;

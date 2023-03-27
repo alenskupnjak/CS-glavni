@@ -1,10 +1,11 @@
-import { Box, Button, Container, Divider, Paper, Typography, useTheme } from '@mui/material';
+import { Box, Button, Container, Divider, Paper, Typography } from '@mui/material';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { tokens } from '../theme/theme';
 
 export default function UnderConstruction() {
-	const theme = useTheme();
-	const colors = tokens[theme.palette.mode];
+	const { pallete } = useSelector(store => store.theme);
+	const colors = tokens[pallete];
 	return (
 		<Container
 			component={Paper}

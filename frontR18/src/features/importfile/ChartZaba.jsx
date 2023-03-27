@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { useSelector } from 'react-redux';
 import { Doughnut } from 'react-chartjs-2';
 import Paper from '@mui/material/Paper';
 import { v4 as uuid } from 'uuid';
@@ -12,6 +13,7 @@ import { isEmpty } from 'lodash-es';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 function ChartZaba(props) {
+	const { pallete } = useSelector(store => store.theme);
 	const { loadAllData, dataLabels, dataLabelsNum, trosakUkupno, dataChart, destroy } = rootStore.chartStore;
 
 	let initialized = false;
@@ -31,11 +33,10 @@ function ChartZaba(props) {
 	}, []);
 
 	const Item = styled(Paper)(({ theme }) => ({
-		backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+		backgroundColor: pallete === 'dark' ? '#1A2027' : '#fff',
 		...theme.typography.body2,
 		padding: theme.spacing(1),
 		textAlign: 'center',
-		color: theme.palette.text.secondary,
 	}));
 
 	let data = {

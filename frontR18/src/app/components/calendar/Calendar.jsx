@@ -1,16 +1,17 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import FullCalendar, { formatDate } from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
-import { Box, List, ListItem, ListItemText, Typography, useTheme } from '@mui/material';
+import { Box, List, ListItem, ListItemText, Typography } from '@mui/material';
 import Header from 'app/components/Header';
 import { tokens } from '@app/theme/theme';
 
 const Calendar = () => {
-	const theme = useTheme();
-	const colors = tokens[theme.palette.mode];
+	const { pallete } = useSelector(store => store.theme);
+	const colors = tokens[pallete];
 	const [currentEvents, setCurrentEvents] = useState([]);
 
 	const handleDateClick = selected => {
