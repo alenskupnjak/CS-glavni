@@ -2,9 +2,9 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import cartItems from './cartItems';
 import axios from 'axios';
 
-// const url = 'https://jsonplaceholder.typicode.com/users';
+const url = 'https://jsonplaceholder.typicode.com/users';
 
-const url = 'https://course-api.com/react-useReducer-cart-project';
+// const url = 'https://course-api.com/react-useReducer-cart-project';
 
 const initialState = {
 	cartItems: cartItems,
@@ -88,5 +88,4 @@ const cartSlice = createSlice({
 });
 
 export const { clearCart, removeItem, increase, decrease, calculateTotals } = cartSlice.actions;
-
 export default cartSlice.reducer;

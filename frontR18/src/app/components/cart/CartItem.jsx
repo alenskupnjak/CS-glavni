@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
-import { removeItem, increase, decrease } from 'features/cart/cartSlice';
+import { removeItem, increase, decrease } from '@app/stores/redux/cart/cartSlice';
 import { useDispatch } from 'react-redux';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';

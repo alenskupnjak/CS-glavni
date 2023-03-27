@@ -1,16 +1,16 @@
 import { useEffect } from 'react';
 import CartItem from './CartItem';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Container, Typography, Modal } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import ColorSet from '@app/theme/colorSet';
 import Button from '@mui/material/Button';
-import { clearCart, calculateTotals, getCartItems } from 'features/cart/cartSlice';
-import { openModal, closeModal } from 'features/modal/modalSlice';
+import { clearCart, calculateTotals, getCartItems } from '@app/stores/redux/cart/cartSlice';
+import { openModal, closeModal } from '@app/stores/redux/modalSlice';
 import ConfirmDialog from '@app/common/ConfirmDialog';
 
 const CartContainer = () => {
 	const dispatch = useDispatch();
-	const { cartItems, total, amount, isLoading } = useSelector(store => store.cart);
+	const { cartItems, total, amount } = useSelector(store => store.cart);
 	const { isOpen } = useSelector(store => store.modal);
 
 	useEffect(() => {
@@ -30,8 +30,6 @@ const CartContainer = () => {
 	// 		</div>
 	// 	);
 	// }
-
-	console.log('%c total ', 'color:green', total);
 
 	// if (!!total) return null;
 

@@ -120,45 +120,25 @@ export const tokens = {
 };
 
 // mui theme settings
-export const themeSettings = mode => {
-	return {
+export const themeSettings = {
+	dark: {
 		palette: {
-			mode: mode,
-			...(mode === 'dark'
-				? {
-						// palette values for dark mode
-						primary: {
-							main: tokens[mode].primary[500],
-						},
-						secondary: {
-							main: tokens[mode].greenAccent[500],
-						},
-						neutral: {
-							dark: tokens[mode].grey[700],
-							main: tokens[mode].grey[500],
-							light: tokens[mode].grey[100],
-						},
-						background: {
-							default: tokens[mode].primary[500],
-						},
-				  }
-				: {
-						// palette values for light mode
-						primary: {
-							main: tokens[mode].primary[100],
-						},
-						secondary: {
-							main: tokens[mode].greenAccent[500],
-						},
-						neutral: {
-							dark: tokens[mode].grey[700],
-							main: tokens[mode].grey[500],
-							light: tokens[mode].grey[100],
-						},
-						background: {
-							default: '#fcfcfc',
-						},
-				  }),
+			mode: 'dark',
+			// palette values for dark mode
+			primary: {
+				main: tokens['dark'].primary[500],
+			},
+			secondary: {
+				main: tokens['dark'].greenAccent[500],
+			},
+			neutral: {
+				dark: tokens['dark'].grey[700],
+				main: tokens['dark'].grey[500],
+				light: tokens['dark'].grey[100],
+			},
+			background: {
+				default: tokens['dark'].primary[500],
+			},
 		},
 		typography: {
 			fontFamily: ['Source Sans Pro', 'sans-serif'].join(','),
@@ -192,19 +172,82 @@ export const themeSettings = mode => {
 			MuiPickersDay: {
 				styleOverrides: {
 					root: {
-						backgroundColor: tokens[mode].blueAccent[600],
+						backgroundColor: tokens['dark'].blueAccent[600],
 					},
 				},
 			},
 			MuiPaper: {
 				styleOverrides: {
 					root: {
-						backgroundColor: tokens[mode].primary[500],
+						backgroundColor: tokens['dark'].primary[500],
 					},
 				},
 			},
 		},
-	};
+	},
+	light: {
+		palette: {
+			mode: 'light',
+			primary: {
+				main: tokens['light'].primary[100],
+			},
+			secondary: {
+				main: tokens['light'].greenAccent[500],
+			},
+			neutral: {
+				dark: tokens['light'].grey[700],
+				main: tokens['light'].grey[500],
+				light: tokens['light'].grey[100],
+			},
+			background: {
+				default: '#fcfcfc',
+			},
+		},
+		typography: {
+			fontFamily: ['Source Sans Pro', 'sans-serif'].join(','),
+			fontSize: 12,
+			h1: {
+				fontFamily: ['Source Sans Pro', 'sans-serif'].join(','),
+				fontSize: 40,
+			},
+			h2: {
+				fontFamily: ['Source Sans Pro', 'sans-serif'].join(','),
+				fontSize: 32,
+			},
+			h3: {
+				fontFamily: ['Source Sans Pro', 'sans-serif'].join(','),
+				fontSize: 24,
+			},
+			h4: {
+				fontFamily: ['Source Sans Pro', 'sans-serif'].join(','),
+				fontSize: 20,
+			},
+			h5: {
+				fontFamily: ['Source Sans Pro', 'sans-serif'].join(','),
+				fontSize: 16,
+			},
+			h6: {
+				fontFamily: ['Source Sans Pro', 'sans-serif'].join(','),
+				fontSize: 14,
+			},
+		},
+		components: {
+			MuiPickersDay: {
+				styleOverrides: {
+					root: {
+						backgroundColor: tokens['light'].blueAccent[600],
+					},
+				},
+			},
+			MuiPaper: {
+				styleOverrides: {
+					root: {
+						backgroundColor: tokens['light'].primary[500],
+					},
+				},
+			},
+		},
+	},
 };
 
 // context for color mode
@@ -214,14 +257,12 @@ export const ColorModeContext = createContext({
 
 export const useMode = () => {
 	const [mode, setMode] = useState('dark');
-
 	const colorMode = useMemo(
 		() => ({
 			toggleColorMode: () => setMode(prev => (prev === 'light' ? 'dark' : 'light')),
 		}),
 		[]
 	);
-
-	const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
+	const theme = useMemo(() => createTheme(themeSettings[mode]), [mode]);
 	return [theme, colorMode];
 };

@@ -1,15 +1,17 @@
 import React from 'react';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense } from 'react';
 import { observer } from 'mobx-react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
 import { CssBaseline, ThemeProvider } from '@mui/material';
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 // react tostify have to go with CSS
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import Topbar from '@app/layout/Topbar';
 import Sidebar from '@app/layout/Sidebar';
@@ -18,22 +20,10 @@ import { ColorModeContext, useMode } from '@app/theme/theme';
 import PrivateRoute from '@app/layout/PrivateRoute';
 import routes from './routes';
 
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
+import { closeMenu } from '@app/stores/redux/themeSlice';
 
 function App() {
 	const [theme, colorMode] = useMode();
-	const [isSidebar, setIsSidebar] = useState(true);
-	const [menuRight, setMenuRight] = React.useState({
-		right: false,
-	});
-
-	const toggleDrawer = (open, event) => {
-		if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-			return;
-		}
-		setMenuRight({ ...menuRight, right: open });
-	};
 
 	return (
 		<ColorModeContext.Provider value={colorMode}>
@@ -42,10 +32,10 @@ function App() {
 					<ToastContainer position="bottom-right" theme="colored" />
 					<CssBaseline />
 					<div className="app">
-						<Sidebar isSidebar={isSidebar} />
-						<RightMenuItem isSidebar={isSidebar} toggleDrawer={toggleDrawer} menuRight={menuRight} />
+						<Sidebar />
+						<RightMenuItem />
 						<main className="content">
-							<Topbar setIsSidebar={setIsSidebar} toggleDrawer={toggleDrawer} />
+							<Topbar />
 							<Suspense fallback={<div>Loading u APP...</div>}>
 								<Routes>
 									{routes.map(route => {
@@ -73,12 +63,14 @@ function App() {
 	);
 }
 
-function RightMenuItem({ isSidebar, toggleDrawer, menuRight }) {
+function RightMenuItem() {
+	const dispatch = useDispatch();
+	const { isOpen } = useSelector(store => store.theme);
 	return (
 		<React.Fragment>
-			<Drawer anchor={'right'} open={menuRight['right']} onClose={e => toggleDrawer(false, e)}>
-				<Box role="presentation" onKeyDown={e => toggleDrawer(false, e)}>
-					<RightMenu isSidebar={isSidebar} />
+			<Drawer anchor={'right'} open={isOpen} onClose={() => dispatch(closeMenu())}>
+				<Box role="presentation" onKeyDown={() => dispatch(closeMenu())}>
+					<RightMenu />
 				</Box>
 			</Drawer>
 		</React.Fragment>

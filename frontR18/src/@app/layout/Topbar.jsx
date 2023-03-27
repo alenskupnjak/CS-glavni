@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { observer } from 'mobx-react';
 import { Link, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { Box, IconButton, useTheme, Badge } from '@mui/material';
 import InputBase from '@mui/material/InputBase';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
@@ -14,10 +15,11 @@ import { ColorModeContext, tokens } from '../theme/theme';
 import SearchIcon from '@mui/icons-material/Search';
 import UserMenu from '@app/layout/UserMenu';
 import { useStore } from '../stores/store';
-import { useSelector } from 'react-redux';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { openMenu } from '@app/stores/redux/themeSlice';
 
-const Topbar = ({ setIsSidebar, toggleDrawer }) => {
+const Topbar = () => {
+	const dispatch = useDispatch();
 	const { productStore } = useStore();
 	const { itemCount } = productStore;
 	const theme = useTheme();
@@ -57,7 +59,7 @@ const Topbar = ({ setIsSidebar, toggleDrawer }) => {
 				<IconButton>
 					<PersonOutlinedIcon />
 				</IconButton>
-				<IconButton onClick={e => toggleDrawer(true, e)}>
+				<IconButton onClick={() => dispatch(openMenu())}>
 					<SettingsIcon />
 				</IconButton>
 				{(currentRoutePath.includes('catalog') || currentRoutePath.includes('basket')) && (
