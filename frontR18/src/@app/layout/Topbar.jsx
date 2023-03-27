@@ -21,7 +21,7 @@ const Topbar = ({ setIsSidebar, toggleDrawer }) => {
 	const { productStore } = useStore();
 	const { itemCount } = productStore;
 	const theme = useTheme();
-	const colors = tokens(theme.palette.mode);
+	const colors = tokens[theme.palette.mode];
 	const colorMode = useContext(ColorModeContext);
 	const currentRoutePath = useLocation().pathname;
 	const { totalAmount } = useSelector(store => store.cart);

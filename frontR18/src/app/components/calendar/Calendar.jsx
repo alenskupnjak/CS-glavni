@@ -10,7 +10,7 @@ import { tokens } from '@app/theme/theme';
 
 const Calendar = () => {
 	const theme = useTheme();
-	const colors = tokens(theme.palette.mode);
+	const colors = tokens[theme.palette.mode];
 	const [currentEvents, setCurrentEvents] = useState([]);
 
 	const handleDateClick = selected => {

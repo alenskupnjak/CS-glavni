@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
+import { ProSidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import { Box, Typography, useTheme } from '@mui/material';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
@@ -17,7 +17,7 @@ import { tokens } from '../theme/theme';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
 	const theme = useTheme();
-	const colors = tokens(theme.palette.mode);
+	const colors = tokens[theme.palette.mode];
 	return (
 		<MenuItem
 			active={selected === title}
@@ -35,7 +35,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 
 const RightMenu = () => {
 	const theme = useTheme();
-	const colors = tokens(theme.palette.mode);
+	const colors = tokens[theme.palette.mode];
 	const [selected, setSelected] = useState('Dashboard');
 
 	return (

@@ -27,7 +27,7 @@ import { useStore } from '../stores/store';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
 	const theme = useTheme();
-	const colors = tokens(theme.palette.mode);
+	const colors = tokens[theme.palette.mode];
 	return (
 		<MenuItem
 			active={selected === title}
@@ -45,7 +45,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 
 const Sidebar = () => {
 	const theme = useTheme();
-	const colors = tokens(theme.palette.mode);
+	const colors = tokens[theme.palette.mode];
 	const { userStore } = useStore();
 	const { user } = userStore;
 	const [isCollapsed, setIsCollapsed] = useState(false);

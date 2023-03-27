@@ -14,7 +14,7 @@ import { StripeInput } from './StripeInput';
 
 function PaymentForm({ cardState, onCardInputChange }) {
 	const theme = useTheme();
-	const colors = tokens(theme.palette.mode);
+	const colors = tokens[theme.palette.mode];
 	const { control } = useFormContext();
 
 	return (

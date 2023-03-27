@@ -18,7 +18,7 @@ const steps = ['Shipping address', 'Review your order', 'Payment details'];
 
 function CheckoutPage() {
 	const theme = useTheme();
-	const colors = tokens(theme.palette.mode);
+	const colors = tokens[theme.palette.mode];
 	const { productStore } = useStore();
 	const { clearBasket, basket } = productStore;
 	const [activeStep, setActiveStep] = useState(0);

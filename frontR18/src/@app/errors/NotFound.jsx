@@ -5,7 +5,7 @@ import { tokens } from '../theme/theme';
 
 export default function NotFound() {
 	const theme = useTheme();
-	const colors = tokens(theme.palette.mode);
+	const colors = tokens[theme.palette.mode];
 	return (
 		<Container
 			component={Paper}

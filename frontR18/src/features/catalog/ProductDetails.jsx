@@ -20,7 +20,7 @@ import { tokens } from '@app/theme/theme';
 
 function ProductDetails() {
 	const theme = useTheme();
-	const colors = tokens(theme.palette.mode);
+	const colors = tokens[theme.palette.mode];
 	const { productStore } = useStore();
 	const { product, handleInputChange, quantity, handleUpdateCart, item, loading } = productStore;
 

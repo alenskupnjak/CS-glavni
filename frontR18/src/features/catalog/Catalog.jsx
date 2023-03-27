@@ -13,7 +13,7 @@ import { tokens } from '@app/theme/theme';
 
 function Catalog(props) {
 	const theme = useTheme();
-	const colors = tokens(theme.palette.mode);
+	const colors = tokens[theme.palette.mode];
 	const { productStore } = useStore();
 	const {
 		listaProdukata,

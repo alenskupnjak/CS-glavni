@@ -7,7 +7,7 @@ import { useTheme } from '@mui/material';
 
 const Contacts = () => {
 	const theme = useTheme();
-	const colors = tokens(theme.palette.mode);
+	const colors = tokens[theme.palette.mode];
 
 	const columns = [
 		{ field: 'id', headerName: 'ID', flex: 0.5 },

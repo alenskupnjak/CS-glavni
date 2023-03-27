@@ -3,6 +3,6 @@ import { tokens } from '@app/theme/theme';
 
 export default function ColorSet() {
 	const theme = useTheme();
-	const color = tokens(theme.palette.mode);
+	const color = tokens[theme.palette.mode];
 	return color;
 }

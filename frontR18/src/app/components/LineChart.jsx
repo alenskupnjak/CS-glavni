@@ -5,7 +5,7 @@ import { mockLineData as data } from '@data/mockData';
 
 const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
 	const theme = useTheme();
-	const colors = tokens(theme.palette.mode);
+	const colors = tokens[theme.palette.mode];
 
 	return (
 		<ResponsiveLine

@@ -9,7 +9,7 @@ import Header from 'app/components/Header';
 
 const Team = () => {
 	const theme = useTheme();
-	const colors = tokens(theme.palette.mode);
+	const colors = tokens[theme.palette.mode];
 	const columns = [
 		{ field: 'id', headerName: 'ID' },
 		{

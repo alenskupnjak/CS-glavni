@@ -18,7 +18,7 @@ import { tokens } from '@app/theme/theme';
 
 function BasketTable({ isBasket = true }) {
 	const theme = useTheme();
-	const colors = tokens(theme.palette.mode);
+	const colors = tokens[theme.palette.mode];
 	const { productStore } = useStore();
 	const { basket, loading, productName, handleAddItem, handleRemoveItem } = productStore;
 

@@ -19,7 +19,7 @@ import { times } from 'lodash';
 export default function AboutPage() {
 	const [validationErrors, setValidationErrors] = useState([]);
 	const theme = useTheme();
-	const colors = tokens(theme.palette.mode);
+	const colors = tokens[theme.palette.mode];
 
 	function getValidationError() {
 		agent.TestErrors.getValidationError()

@@ -12,7 +12,7 @@ export default function Login() {
 	const { loginForm } = userStore;
 	const navigate = useNavigate();
 	const theme = useTheme();
-	const colors = tokens(theme.palette.mode);
+	const colors = tokens[theme.palette.mode];
 
 	const {
 		register,

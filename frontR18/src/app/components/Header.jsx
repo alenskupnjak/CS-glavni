@@ -3,7 +3,10 @@ import { tokens } from '@app/theme/theme';
 
 const Header = ({ title, subtitle }) => {
 	const theme = useTheme();
-	const colors = tokens(theme.palette.mode);
+
+	console.log('%c 00 theme =', 'color:green', theme);
+
+	const colors = tokens[theme.palette.mode];
 	return (
 		<Box mb="30px">
 			<Typography variant="h2" color={colors.grey[100]} fontWeight="bold" sx={{ m: '0 0 5px 0' }}>
