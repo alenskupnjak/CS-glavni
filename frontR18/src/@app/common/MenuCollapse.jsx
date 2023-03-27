@@ -1,6 +1,7 @@
 import React from 'react';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { observer } from 'mobx-react';
+import { isEmpty } from 'lodash-es';
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import agent from 'app/api/agent';
 import ColorSet from '@app/theme/colorSet';
@@ -48,7 +49,7 @@ function MenuCollapse({ data }) {
 					}}
 				/>
 				<ListItemText
-					primary={`${data.eventsNum === 0 ? '' : data.eventsNum}`}
+					primary={`${data.eventsNum === 0 || data.eventsNum === undefined ? '' : data.eventsNum}`}
 					className="allignRight"
 					sx={{
 						textAlign: 'right',

@@ -31,6 +31,7 @@ export default class SportsStore {
 		this.dataSportTable = null;
 		this.tablePairs = null;
 		this.idTable = idTable;
+		this.sportCategories = null;
 		try {
 			//  SOFA API SOFA API
 			if (process.env.NODE_ENV === 'production') {
