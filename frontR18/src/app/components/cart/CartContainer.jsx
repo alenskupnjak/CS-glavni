@@ -72,7 +72,10 @@ const CartContainer = () => {
 			<ConfirmDialog
 				dataDialog={isOpen}
 				title="Naslov"
-				onClose={() => dispatch(closeModal())}
+				onClose={() => {
+					console.log('Close modal');
+					return dispatch(closeModal());
+				}}
 				text={'Želiš li obrisati zapis?'}
 				// data={this.state.modalOpenConfirmData}
 				deleteItem={() => dispatch(clearCart())}

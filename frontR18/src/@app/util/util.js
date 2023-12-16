@@ -1,5 +1,7 @@
 export function getCookie(key) {
 	const b = document.cookie.match('(^|;)\\s*' + key + '\\s*=\\s*([^;]+)');
+	console.log('%c cookie', 'color:green', b);
+
 	return b ? b.pop() : '';
 }
 

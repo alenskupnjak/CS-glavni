@@ -17,6 +17,5 @@ namespace API.DataAccessLayer
     public Task<ZabaReadResponse> ReadZaba(ZabaReadRequest request);
     public Task<DeleteZabaResponse> DeleteZabaRecord(DeleteZabaRequest request);
     public Task<UpdateZabaRecordResponse> UpdateZabaRecord(UpdateZabaRecord request);
-
   }
 }

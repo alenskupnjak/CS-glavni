@@ -16,6 +16,8 @@ function ProductForm({ product, cancelEdit }) {
 	const { productStore } = useStore();
 	const { filters, loadAllProduct } = productStore;
 
+	console.log('%c START ', 'color:red', product, cancelEdit);
+
 	const {
 		control,
 		reset,
@@ -30,6 +32,7 @@ function ProductForm({ product, cancelEdit }) {
 	const watchFile = watch('file', null);
 
 	useEffect(() => {
+		console.log('%c START ', 'color:gold');
 		// https://react-hook-form.com/api/useform/reset
 		// popunjava formu!
 		if (product && !watchFile && !isDirty) reset(product);

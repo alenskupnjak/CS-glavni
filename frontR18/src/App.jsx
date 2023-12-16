@@ -24,7 +24,7 @@ import { closeMenu } from '@app/stores/redux/themeSlice';
 
 function App() {
 	const { pallete } = useSelector(store => store.theme);
-	console.log('%c 00 palette ', 'color:red', pallete);
+	console.log('%c 00 palette ', 'color:blue', pallete);
 	const [theme] = useMode();
 
 	console.log('%c 07= ', 'color:red', theme);

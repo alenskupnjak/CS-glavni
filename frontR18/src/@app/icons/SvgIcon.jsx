@@ -23,6 +23,7 @@ const Root = styled(Box)(({ theme, ...props }) => {
 			action: theme.palette.action.active,
 			error: theme.palette.error.main,
 			disabled: theme.palette.action.disabled,
+			mojGold: '#FFD700',
 			inherit: undefined,
 		}[props.color],
 	};

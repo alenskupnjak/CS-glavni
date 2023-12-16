@@ -24,11 +24,14 @@ import ColorSet from '@app/theme/colorSet';
 
 function Inventory(props) {
 	const { productStore } = useStore();
-	const { listaProdukata, metaData, handleDeleteProduct, loading, targetProduct, handlePaging } = productStore;
+	const { listaProdukata, metaData, handleDeleteProduct, loading, targetProduct, handlePaging, loadOneItem } =
+		productStore;
 	const [editMode, setEditMode] = useState(false);
 	const [selectedProduct, setSelectedProduct] = useState(null);
 
 	function handleSelectProduct(product) {
+		console.log('%c start ', 'color:red', product.id, product);
+
 		setSelectedProduct(product);
 		setEditMode(true);
 	}
@@ -38,8 +41,14 @@ function Inventory(props) {
 		setEditMode(false);
 	}
 
+	console.log('%c 00 ', 'color:green', loading, listaProdukata, editMode);
+
 	if (loading || listaProdukata === null) return <LoadingComponent message="Loading orders..." />;
-	if (editMode) return <ProductForm product={selectedProduct} cancelEdit={cancelEdit} />;
+
+	console.log('%c 17 ', 'color:green', editMode, selectedProduct);
+	if (editMode && selectedProduct) return <ProductForm product={selectedProduct} cancelEdit={cancelEdit} />;
+
+	// if (!selectedProduct) return null;
 
 	return (
 		<Container>
@@ -87,7 +96,7 @@ function Inventory(props) {
 								<TableCell align="center">{product.quantityInStock}</TableCell>
 								<TableCell align="right">
 									<Button
-										onClick={() => handleSelectProduct(product)}
+										onClick={() => loadOneItem(product.id)}
 										startIcon={<Edit />}
 										sx={{
 											bgcolor: ColorSet().blueAccent[600],

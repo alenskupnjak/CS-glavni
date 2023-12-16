@@ -4,6 +4,7 @@ import agent from '../../app/api/agent';
 import { find, debounce, isEmpty } from 'lodash-es';
 import { store } from './store';
 import { getCookie } from '@app/util/util';
+import { history } from '../..';
 
 export default class ProductStore {
 	listaProdukata = null;
@@ -34,9 +35,8 @@ export default class ProductStore {
 
 		reaction(
 			() => this.basket,
-			basket => {
+			async basket => {
 				console.log('%c ****** BOOM BASKET ******************', 'color:red', basket);
-				// this.pagingParams = { pageNumber: 1, pageSize: 3 };
 
 				window.localStorage.setItem('Pokus', 'Provjera');
 			}
@@ -55,6 +55,7 @@ export default class ProductStore {
 			const responseFilters = await agent.Catalog.filters();
 			const response = await agent.Catalog.list(this.productParams);
 			const params = JSON.parse(response.headers.pagination);
+			const responseBasket = await agent.Basket.get();
 
 			runInAction(() => {
 				this.metaData = {
@@ -65,6 +66,11 @@ export default class ProductStore {
 				};
 				this.filters = responseFilters.data;
 				this.listaProdukata = response.data;
+
+				this.basket = responseBasket.data;
+				console.log('%c 106', 'color:gold', this.basket);
+				this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
+				console.log('%c 107 ', 'color:green', this.itemCount);
 			});
 		} catch (err) {
 			console.log('%c Greška u ProductStore ', 'color:red', err);
@@ -79,20 +85,33 @@ export default class ProductStore {
 	// LOAD ONE  ***  LOAD ONE  **  LOAD ONE **  LOAD ONE
 	loadOneItem = async (productId, navigate) => {
 		try {
+			console.log('%c 100', 'color:green', productId, navigate);
+
 			this.loadingAdd = true;
 			const response = await agent.Catalog.details(productId);
 			console.log('%c response =', 'color:green', response);
 
-			const cookie = getCookie('buyerId');
+			let cookie = null;
+			try {
+				cookie = getCookie('buyerId');
+			} catch (error) {
+				console.log('%c GREŠKA', 'color:red', error);
+			}
+			console.log('%c 101 ***************', 'color:green', cookie);
+
 			if (cookie) {
 				const responseBasket = await agent.Basket.get();
+				console.log('%c 102', 'color:gold', responseBasket);
+
 				this.basket = responseBasket.data;
+				console.log('%c 103', 'color:gold', this.basket);
 				this.item = find(this.basket.items, i => i.productId === this.product.id);
 				this.quantity = 0;
 			}
 			runInAction(() => {
 				this.product = response.data;
 				this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
+				history.push(`/catalog/:${productId}`);
 				navigate(`/catalog/:${productId}`);
 			});
 		} catch (err) {
@@ -352,6 +371,13 @@ export default class ProductStore {
 			console.log('%c error', 'color:red', error);
 		} finally {
 			this.loading = false;
+		}
+	};
+
+	setProduct = async id => {
+		try {
+		} catch (error) {
+			console.log('%c error', 'color:red', error);
 		}
 	};
 

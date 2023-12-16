@@ -114,6 +114,7 @@ function createFormData(item) {
 	console.log('%c 21 item', 'color:gold', item);
 
 	// https://developer.mozilla.org/en-US/docs/Web/API/FormData
+	debugger;
 	let formData = new FormData();
 	for (const key in item) {
 		console.log('%c 22', 'color:gold', key);
@@ -178,7 +179,7 @@ const SofaLoc = {
 	getHRConfig: sport => sofaLoc.get(`config/unique-tournaments/HR/${sport}`).then(res => res),
 	getDayScheduleEventBySport: (sport, day) =>
 		sofaLoc.get(`sport/${sport}/scheduled-events/${day}`).then(res => res.data),
-	getDayScheduleEventOddsBySport: (sport, day) => sofaLoc.get(`sport/${sport}/odds/9/${day}`).then(res => res.data),
+	getDayScheduleEventOddsBySport: (sport, day) => sofaLoc.get(`sport/${sport}/odds/226/${day}`).then(res => res.data),
 	getSportCategories: sport => sofaLoc.get(`sport/${sport}/categories`).then(res => res.data),
 	getSportCategoriesDay: (sport, day) => sofaLoc.get(`sport/${sport}/${day}/3600/categories`).then(res => res.data),
 	getUniqueTournaments: id => sofaLoc.get(`category/${id}/unique-tournaments`).then(res => res.data),

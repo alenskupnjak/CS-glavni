@@ -12,7 +12,8 @@ import LastFiveResults from '@app/common/LastFiveResults';
 import Sorting from '@app/common/Sorting';
 import PromotionTeam from '@app/common/PromotionTeam';
 import SportsHeader from './SportsHeader';
-import MenuCollapse from '@app/common/MenuCollapse';
+// import MenuCollapse from '@app/common/MenuCollapse';
+import MenuCollapse from '../../@app/common/MenuCollapse';
 
 function LeagueTableDisplay({ store, storeOdds }) {
 	const columns = [

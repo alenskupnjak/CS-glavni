@@ -262,9 +262,13 @@ const Sidebar = () => {
 							Products
 						</Typography>
 						<Item
-							title="Catalog"
+							title="Catalog BASKET"
 							to="/catalog"
-							icon={<SvgIcon>heroicons-outline:newspaper</SvgIcon>}
+							icon={
+								<SvgIcon fill="currentColor" color="mojGold">
+									heroicons-outline:newspaper
+								</SvgIcon>
+							}
 							selected={selected}
 							setSelected={setSelected}
 						/>

@@ -36,6 +36,7 @@ namespace BasketPrj.Data
           Email = "admin@test.com"
         };
         await userManager.CreateAsync(admin, "Pa$$w0rd");
+        // dodaje Admina u Role
         await userManager.AddToRolesAsync(admin, new[] { "Member", "Admin" });
       }
     }
