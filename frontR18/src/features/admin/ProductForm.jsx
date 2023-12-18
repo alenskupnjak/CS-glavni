@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { Typography, Grid, Paper, Box, Button } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useNavigate } from 'react-router-dom';
 
 import AppDropzone from '../../app/components/AppDropzone';
 import AppSelectList from '../../app/components/AppSelectList';
@@ -11,12 +12,13 @@ import AppTextInput from '../../app/components/AppTextInput';
 import { validationSchema } from './productValidation';
 import agent from 'app/api/agent';
 import { useStore } from '@app/stores/store';
+import { useParams } from 'react-router-dom';
 
-function ProductForm({ product, cancelEdit }) {
+function ProductForm() {
+	const navigate = useNavigate();
 	const { productStore } = useStore();
-	const { filters, loadAllProduct } = productStore;
-
-	console.log('%c START ProductForm ', 'color:red', product, cancelEdit);
+	const { filters, loadOneItem, productForm, loadAllProduct, loading } = productStore;
+	const { id } = useParams();
 
 	const {
 		control,
@@ -31,35 +33,41 @@ function ProductForm({ product, cancelEdit }) {
 
 	const watchFile = watch('file', null);
 
+	let initialized = false;
 	useEffect(() => {
-		console.log('%c START ', 'color:gold');
+		if (!initialized) {
+			loadOneItem(id, null, reset);
+			console.log('%c START 02 ', 'color:gold', id, productForm?.id, productForm);
+			// reset(productForm);
+		}
 		// https://react-hook-form.com/api/useform/reset
 		// popunjava formu!
-		if (product && !watchFile && !isDirty) reset(product);
 
 		// ovaj return se okida kada je komponenta destroyed
 		return () => {
 			// Call this method when you've finished using an object URL to let the browser know not to keep the reference to the file any longer.
 			if (watchFile) URL.revokeObjectURL(watchFile.preview);
+			initialized = true;
+			console.log('%c BOOM= ', 'color:green', id, productForm);
 		};
-	}, [product, reset, watchFile, isDirty]);
+	}, []);
 
 	async function handleSubmitData(data) {
 		try {
 			if (isDirty) {
-				if (product) {
+				if (productForm) {
 					await agent.Admin.updateProduct(data);
 				} else {
 					await agent.Admin.createProduct(data);
 				}
 				loadAllProduct();
 			}
-			cancelEdit();
 		} catch (error) {
 			console.log(error);
+		} finally {
+			navigate('/inventory');
 		}
 	}
-	console.log('%c 100 *************', 'color:red', filters.brands, product);
 
 	return (
 		<Box component={Paper} sx={{ p: 4 }}>
@@ -92,13 +100,13 @@ function ProductForm({ product, cancelEdit }) {
 							{watchFile ? (
 								<img src={watchFile.preview} alt="preview" style={{ maxHeight: 200 }} />
 							) : (
-								<img src={product?.pictureUrl} alt={product?.name} style={{ maxHeight: 200 }} />
+								<img src={productForm?.pictureUrl} alt={productForm?.name} style={{ maxHeight: 200 }} />
 							)}
 						</Box>
 					</Grid>
 				</Grid>
 				<Box display="flex" justifyContent="space-between" sx={{ mt: 3 }}>
-					<Button onClick={cancelEdit} variant="contained" color="inherit">
+					<Button onClick={() => navigate('/inventory')} variant="contained" color="inherit">
 						Cancel
 					</Button>
 					<LoadingButton loading={isSubmitting} type="submit" variant="contained" color="success">

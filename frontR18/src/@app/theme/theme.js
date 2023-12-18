@@ -378,7 +378,6 @@ export const themeSettings = {
 
 export const useMode = () => {
 	const { pallete } = useSelector(store => store.theme);
-	console.log('%c 00 palette ', 'color:red', pallete);
 
 	// const [mode, setMode] = useState('dark');
 	// const colorMode = useMemo(
@@ -387,6 +386,8 @@ export const useMode = () => {
 	// 	}),
 	// 	[]
 	// );
-	const theme = useMemo(() => createTheme(themeSettings[pallete]));
-	return [theme];
+	// const theme = useMemo(() => createTheme(themeSettings[pallete]));
+	// return [theme];
+
+	return [createTheme(themeSettings[pallete])];
 };

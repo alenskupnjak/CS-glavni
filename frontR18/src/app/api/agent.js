@@ -107,17 +107,12 @@ const requests = {
 
 function createFormData(item) {
 	console.log('%c 21 item', 'color:gold', item);
-
 	// https://developer.mozilla.org/en-US/docs/Web/API/FormData
-	debugger;
 	let formData = new FormData();
 	for (const key in item) {
-		console.log('%c 22', 'color:gold', key);
-
 		formData.append(key, item[key]);
 	}
 	console.log('%c 23', 'color:red', formData.getAll('name'));
-	console.log('%c 24', 'color:red', formData);
 	return formData;
 }
 

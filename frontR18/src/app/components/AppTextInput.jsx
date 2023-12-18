@@ -3,6 +3,7 @@ import { useController } from 'react-hook-form';
 
 export default function AppTextInput(props) {
 	const { fieldState, field } = useController({ ...props, defaultValue: '' });
+
 	return (
 		<TextField
 			{...props}

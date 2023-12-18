@@ -3,7 +3,9 @@ import React from 'react';
 const Catalog = React.lazy(() => import('./features/catalog/Catalog'));
 const ContactPage = React.lazy(() => import('./features/contact/ContactPage'));
 const ProductDetails = React.lazy(() => import('./features/catalog/ProductDetails'));
+const ProductForm = React.lazy(() => import('./features/admin/ProductForm'));
 const AboutPage = React.lazy(() => import('./features/about/AboutPage'));
+const AboutPageChild = React.lazy(() => import('./features/about/AboutPageChild'));
 const ServerError = React.lazy(() => import('@app/errors/ServerError'));
 const BasketPage = React.lazy(() => import('./features/basket/BasketPage'));
 const Login = React.lazy(() => import('./features/account/Login'));
@@ -117,8 +119,30 @@ const routes = [
 	},
 	{
 		enabled: true,
+		path: '/product/:id',
+		component: ProductForm,
+		child: null,
+		exact: true,
+	},
+	{
+		enabled: true,
 		path: '/about',
 		component: AboutPage,
+		child: [
+			{
+				enabled: false,
+				path: '/about/pokus',
+				component: AboutPageChild,
+				child: null,
+				exact: true,
+			},
+		],
+		exact: false,
+	},
+	{
+		enabled: true,
+		path: '/about/pokus1',
+		component: AboutPageChild,
 		child: null,
 		exact: true,
 	},

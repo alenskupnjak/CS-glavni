@@ -52,6 +52,14 @@ export default class ProductStore {
 			}
 		);
 
+		reaction(
+			() => this.productForm,
+			productForm => {
+				console.log('%c ****** BOOM 02 productForm ******************', 'color:gold', productForm);
+				window.localStorage.setItem('Pokus', 'Provjera');
+			}
+		);
+
 		this.filtersFind = debounce(this.fildFilteredItems, 100);
 
 		//Init application
@@ -94,13 +102,12 @@ export default class ProductStore {
 	};
 
 	// LOAD ONE  ***  LOAD ONE  **  LOAD ONE **  LOAD ONE
-	loadOneItem = async (productId, navigate) => {
+	loadOneItem = async (productId, navigate, reset) => {
+		this.productForm = null;
 		try {
-			console.log('%c 100', 'color:green', productId, navigate);
-
+			console.log('%c 12121', 'color:blue', productId, navigate, typeof reset);
 			this.loadingAdd = true;
 			const response = await agent.Catalog.details(productId);
-			console.log('%c response =', 'color:green', response);
 
 			let cookie = null;
 			try {
@@ -122,15 +129,12 @@ export default class ProductStore {
 				this.quantity = 0;
 			}
 			runInAction(() => {
-				console.log('%c 104', 'color:gold', this.basket);
 				this.product = response.data;
+				this.productForm = response.data;
+				console.log('%c 1044', 'color:gold', this.productForm);
+				reset && reset(this.productForm);
 				this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
-
-				// history.push({
-				// 	pathname: `/catalog/:${productId}`,
-				// 	// state: { error: data },
-				// });
-				navigate(`/catalog/:${productId}`);
+				navigate && navigate(`/catalog/${productId}`);
 			});
 		} catch (err) {
 			console.log('%c error', 'color:red', err);
@@ -397,13 +401,6 @@ export default class ProductStore {
 		} catch (error) {
 			console.log('%c error', 'color:red', error);
 		}
-	};
-
-	setproductForm = (porductForm, mode) => {
-		console.log('%c 00', 'color:green', porductForm, mode);
-
-		this.productForm = porductForm;
-		this.editMode = mode;
 	};
 
 	goTo = (page, navigate) => {

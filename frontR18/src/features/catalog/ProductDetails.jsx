@@ -16,16 +16,21 @@ import NotFound from '@app/errors/NotFound';
 import { useStore } from '@app/stores/store';
 import { tokens } from '@app/theme/theme';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 function ProductDetails() {
+	const { id } = useParams();
 	const { pallete } = useSelector(store => store.theme);
 	const colors = tokens[pallete];
 	const { productStore } = useStore();
 	const { product, handleInputChange, quantity, handleUpdateCart, item, loading } = productStore;
 
+	console.log('%c 555 ', 'color:green', loading, product, id);
+
 	if (!product) return <NotFound />;
 	return (
 		<Container sx={{ mt: 6, background: colors.grey[500] }}>
+			<h1>{id}</h1>
 			<Grid container spacing={6}>
 				<Grid item xs={6}>
 					<img src={product.pictureUrl} alt={product.name} style={{ width: '100%' }} />

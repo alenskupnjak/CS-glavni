@@ -42,6 +42,7 @@ function App() {
 									{routes.map(route => {
 										return (
 											<Route
+												exact={route.exact}
 												path={route.path}
 												key={route.path}
 												element={
@@ -51,7 +52,22 @@ function App() {
 														<route.component />
 													)
 												}
-											/>
+											>
+												{route.child?.map(child => (
+													<Route
+														exact={child.exact}
+														path={child.path}
+														key={child.path}
+														element={
+															child.privateRoute ? (
+																<PrivateRoute roles={child.roles}>{child.component}</PrivateRoute>
+															) : (
+																<route.component />
+															)
+														}
+													></Route>
+												))}
+											</Route>
 										);
 									})}
 								</Routes>

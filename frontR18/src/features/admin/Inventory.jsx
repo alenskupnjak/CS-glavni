@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
+import { useNavigate } from 'react-router-dom';
 import {
 	Typography,
 	Button,
@@ -17,30 +18,21 @@ import { LoadingButton } from '@mui/lab';
 import { Edit, Delete } from '@mui/icons-material';
 import { currencyFormat } from '../../@app/util/util';
 import AppPagination from '../../app/components/AppPagination';
-import ProductForm from './ProductForm';
 import { useStore } from '@app/stores/store';
 import LoadingComponent from '@app/layout/LoadingComponent';
 import ColorSet from '@app/theme/colorSet';
 
 function Inventory() {
 	const { productStore } = useStore();
-	const {
-		listaProdukata,
-		metaData,
-		handleDeleteProduct,
-		loading,
-		targetProduct,
-		handlePaging,
-		productForm,
-		setproductForm,
-		editMode,
-		destroy,
-	} = productStore;
+	const navigate = useNavigate();
+	const color1 = ColorSet().blueAccent[600];
+	const color2 = ColorSet().grey[500];
+	const { listaProdukata, metaData, handleDeleteProduct, loading, targetProduct, handlePaging, destroy } = productStore;
 
 	let initialized = false;
 	useEffect(() => {
 		if (!initialized) {
-			setproductForm(null, false);
+			console.log('%c 00 ', 'color:green');
 		}
 
 		// ovaj return se okida kada je komponenta destroyed
@@ -53,19 +45,7 @@ function Inventory() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	function handleSelectProduct(product) {
-		setproductForm(product, true);
-	}
-
-	function cancelEdit() {
-		console.log('%c 00 ', 'color:green');
-	}
-
-	console.log('%c PROLAZ ', 'color:green', productForm, editMode, initialized);
-
 	if (loading || listaProdukata === null) return <LoadingComponent message="Loading orders..." />;
-
-	if (editMode) return <ProductForm product={productForm} cancelEdit={cancelEdit} />;
 
 	return (
 		<Container>
@@ -74,11 +54,8 @@ function Inventory() {
 					Inventory
 				</Typography>
 				<Button
-					onClick={e => {
-						console.log('%c 00 ', 'color:green', e);
-						setproductForm(null);
-					}}
-					sx={{ m: 2, bgcolor: ColorSet().blueAccent[600] }}
+					onClick={() => navigate('/product/new')}
+					sx={{ m: 2, bgcolor: color1 }}
 					size="large"
 					variant="contained"
 				>
@@ -116,12 +93,12 @@ function Inventory() {
 								<TableCell align="center">{product.quantityInStock}</TableCell>
 								<TableCell align="right">
 									<Button
-										onClick={() => handleSelectProduct(product)}
+										onClick={() => navigate(`/product/${product.id}`)}
 										startIcon={<Edit />}
 										sx={{
-											bgcolor: ColorSet().blueAccent[600],
+											bgcolor: color1,
 											':hover': {
-												bgcolor: ColorSet().grey[500],
+												bgcolor: color2,
 											},
 										}}
 									/>
