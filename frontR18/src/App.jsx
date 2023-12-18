@@ -2,7 +2,7 @@ import React from 'react';
 import { Suspense } from 'react';
 import { observer } from 'mobx-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -24,43 +24,41 @@ import { closeMenu } from '@app/stores/redux/themeSlice';
 
 function App() {
 	const { pallete } = useSelector(store => store.theme);
-	console.log('%c 00 palette ', 'color:blue', pallete);
 	const [theme] = useMode();
-
-	console.log('%c 07= ', 'color:red', theme);
-
 	return (
 		// <ColorModeContext.Provider value={colorMode}>
 		<ThemeProvider theme={theme}>
 			<LocalizationProvider dateAdapter={AdapterDayjs}>
 				<ToastContainer position="bottom-right" theme="colored" />
 				<CssBaseline />
-				<div className="app">
-					<Sidebar />
-					<RightMenuItem />
-					<main className="content">
-						<Topbar />
-						<Suspense fallback={<div>Loading u APP...</div>}>
-							<Routes>
-								{routes.map(route => {
-									return (
-										<Route
-											path={route.path}
-											key={route.path}
-											element={
-												route.privateRoute ? (
-													<PrivateRoute roles={route.roles}>{route.component}</PrivateRoute>
-												) : (
-													<route.component />
-												)
-											}
-										/>
-									);
-								})}
-							</Routes>
-						</Suspense>
-					</main>
-				</div>
+				<BrowserRouter>
+					<div className="app">
+						<Sidebar />
+						<RightMenuItem />
+						<main className="content">
+							<Topbar />
+							<Suspense fallback={<div>Loading u APP...</div>}>
+								<Routes>
+									{routes.map(route => {
+										return (
+											<Route
+												path={route.path}
+												key={route.path}
+												element={
+													route.privateRoute ? (
+														<PrivateRoute roles={route.roles}>{route.component}</PrivateRoute>
+													) : (
+														<route.component />
+													)
+												}
+											/>
+										);
+									})}
+								</Routes>
+							</Suspense>
+						</main>
+					</div>
+				</BrowserRouter>
 			</LocalizationProvider>
 		</ThemeProvider>
 		// </ColorModeContext.Provider>

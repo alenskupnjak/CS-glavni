@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+
 import './index.css';
 import App from './App';
 import 'slick-carousel/slick/slick.css';
@@ -27,9 +27,7 @@ root.render(
 	<React.StrictMode>
 		<Provider store={storeRedux}>
 			<StoreContext.Provider value={store}>
-				<BrowserRouter>
-					<App />
-				</BrowserRouter>
+				<App />
 			</StoreContext.Provider>
 		</Provider>
 	</React.StrictMode>
