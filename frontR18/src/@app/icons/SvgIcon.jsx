@@ -80,6 +80,7 @@ SvgIcon.propTypes = {
 		'info',
 		'success',
 		'warning',
+		'mojGold',
 	]),
 };
 

@@ -16,7 +16,7 @@ function ProductForm({ product, cancelEdit }) {
 	const { productStore } = useStore();
 	const { filters, loadAllProduct } = productStore;
 
-	console.log('%c START ', 'color:red', product, cancelEdit);
+	console.log('%c START ProductForm ', 'color:red', product, cancelEdit);
 
 	const {
 		control,
@@ -59,7 +59,7 @@ function ProductForm({ product, cancelEdit }) {
 			console.log(error);
 		}
 	}
-	console.log('%c 100 ', 'color:red', filters.brands, product);
+	console.log('%c 100 *************', 'color:red', filters.brands, product);
 
 	return (
 		<Box component={Paper} sx={{ p: 4 }}>

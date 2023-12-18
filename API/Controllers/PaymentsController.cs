@@ -13,7 +13,9 @@ using Stripe;
 
 namespace API.Controllers
 {
-  public class PaymentsController : BaseApiController
+  [ApiController]
+  [Route("api/[controller]")]
+  public class PaymentsController : ControllerBase
   {
     private readonly PaymentService _paymentService;
     private readonly StoreContext _context;

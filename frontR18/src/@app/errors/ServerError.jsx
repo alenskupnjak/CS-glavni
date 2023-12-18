@@ -1,5 +1,5 @@
-import { Button, Container, Divider, Paper, Typography } from '@mui/material';
 import React from 'react';
+import { Button, Container, Divider, Paper, Typography } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router';
 
 export default function ServerError() {
@@ -17,11 +17,13 @@ export default function ServerError() {
 					<Typography>{state.error.detail || 'Internal server error'}</Typography>
 				</React.Fragment>
 			) : (
-				<Typography variant="h5" gutterBottom>
+				<Typography variant="h1" gutterBottom>
 					Server Error
 				</Typography>
 			)}
-			<Button onClick={() => navigate('/')}>Go back to the store</Button>
+			<Button variant="contained" style={{ color: 'yellow', fontSize: '20px' }} onClick={() => navigate('/')}>
+				Go back to the store
+			</Button>
 		</Container>
 	);
 }

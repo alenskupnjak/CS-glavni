@@ -9,8 +9,8 @@ using BasketPrj.Data;
 
 namespace API.Controllers
 {
-	[Route("api/[controller]")]
 	[ApiController]
+	[Route("api/[controller]")]
 	public class UploadFileController : ControllerBase
 	{
 		public readonly IUploadFileDL _uploadFileDL;

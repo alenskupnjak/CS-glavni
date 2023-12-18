@@ -127,7 +127,7 @@ const routes = [
 		path: '/server-error',
 		component: ServerError,
 		child: null,
-		exact: false,
+		exact: true,
 	},
 	{
 		enabled: true,

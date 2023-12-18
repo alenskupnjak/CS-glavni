@@ -14,7 +14,9 @@ using BasketPrj.Services;
 
 namespace API.Controllers
 {
-  public class ProductsController : BaseApiController
+  [ApiController]
+  [Route("api/[controller]")]
+  public class ProductsController : ControllerBase
   {
     private readonly StoreContext _context;
     private readonly IMapper _mapper;

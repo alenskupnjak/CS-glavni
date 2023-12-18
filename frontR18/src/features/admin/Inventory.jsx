@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import {
 	Typography,
@@ -22,33 +22,50 @@ import { useStore } from '@app/stores/store';
 import LoadingComponent from '@app/layout/LoadingComponent';
 import ColorSet from '@app/theme/colorSet';
 
-function Inventory(props) {
+function Inventory() {
 	const { productStore } = useStore();
-	const { listaProdukata, metaData, handleDeleteProduct, loading, targetProduct, handlePaging, loadOneItem } =
-		productStore;
-	const [editMode, setEditMode] = useState(false);
-	const [selectedProduct, setSelectedProduct] = useState(null);
+	const {
+		listaProdukata,
+		metaData,
+		handleDeleteProduct,
+		loading,
+		targetProduct,
+		handlePaging,
+		productForm,
+		setproductForm,
+		editMode,
+		destroy,
+	} = productStore;
+
+	let initialized = false;
+	useEffect(() => {
+		if (!initialized) {
+			setproductForm(null, false);
+		}
+
+		// ovaj return se okida kada je komponenta destroyed
+		return () => {
+			if (initialized) destroy();
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+			initialized = true;
+			// Call this method when you've finished using an object URL to let the browser know not to keep the reference to the file any longer.
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	function handleSelectProduct(product) {
-		console.log('%c start ', 'color:red', product.id, product);
-
-		setSelectedProduct(product);
-		setEditMode(true);
+		setproductForm(product, true);
 	}
 
 	function cancelEdit() {
-		if (selectedProduct) setSelectedProduct(null);
-		setEditMode(false);
+		console.log('%c 00 ', 'color:green');
 	}
 
-	console.log('%c 00 ', 'color:green', loading, listaProdukata, editMode);
+	console.log('%c PROLAZ ', 'color:green', productForm, editMode, initialized);
 
 	if (loading || listaProdukata === null) return <LoadingComponent message="Loading orders..." />;
 
-	console.log('%c 17 ', 'color:green', editMode, selectedProduct);
-	if (editMode && selectedProduct) return <ProductForm product={selectedProduct} cancelEdit={cancelEdit} />;
-
-	// if (!selectedProduct) return null;
+	if (editMode) return <ProductForm product={productForm} cancelEdit={cancelEdit} />;
 
 	return (
 		<Container>
@@ -57,7 +74,10 @@ function Inventory(props) {
 					Inventory
 				</Typography>
 				<Button
-					onClick={() => setEditMode(true)}
+					onClick={e => {
+						console.log('%c 00 ', 'color:green', e);
+						setproductForm(null);
+					}}
 					sx={{ m: 2, bgcolor: ColorSet().blueAccent[600] }}
 					size="large"
 					variant="contained"
@@ -96,7 +116,7 @@ function Inventory(props) {
 								<TableCell align="center">{product.quantityInStock}</TableCell>
 								<TableCell align="right">
 									<Button
-										onClick={() => loadOneItem(product.id)}
+										onClick={() => handleSelectProduct(product)}
 										startIcon={<Edit />}
 										sx={{
 											bgcolor: ColorSet().blueAccent[600],

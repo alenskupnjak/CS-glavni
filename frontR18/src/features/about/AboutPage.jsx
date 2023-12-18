@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { observer } from 'mobx-react';
 import {
 	Alert,
 	AlertTitle,
@@ -11,19 +12,21 @@ import {
 	Typography,
 	Box,
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import agent from 'app/api/agent';
 import { tokens } from '@app/theme/theme';
 import { times } from 'lodash';
 
-export default function AboutPage() {
+function AboutPage() {
 	const { pallete } = useSelector(store => store.theme);
 	const [validationErrors, setValidationErrors] = useState([]);
 	const colors = tokens[pallete];
+	const navigate = useNavigate();
 
 	function getValidationError() {
 		agent.TestErrors.getValidationError()
-			.then(() => console.log('should not see this'))
+			.then(() => console.log('Should not see this'))
 			.catch(error => setValidationErrors(error));
 	}
 
@@ -60,6 +63,7 @@ export default function AboutPage() {
 					onClick={() => {
 						setValidationErrors([]);
 						agent.TestErrors.get500Error().catch(error => console.log(error));
+						navigate('/server-error');
 					}}
 				>
 					Test 500 Error
@@ -115,6 +119,11 @@ export default function AboutPage() {
 					</Typography>
 				))}
 			</Box>
+			<Button variant="contained" style={{ color: 'yellow', fontSize: '20px' }} onClick={() => navigate('/')}>
+				Go back to the store
+			</Button>
 		</Container>
 	);
 }
+
+export default observer(AboutPage);

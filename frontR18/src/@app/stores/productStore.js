@@ -4,13 +4,15 @@ import agent from '../../app/api/agent';
 import { find, debounce, isEmpty } from 'lodash-es';
 import { store } from './store';
 import { getCookie } from '@app/util/util';
-import { history } from '../..';
+// import { history } from '../..';
 
 export default class ProductStore {
 	listaProdukata = null;
 	loading = false;
 	loadingAdd = false;
 	product = null;
+	editMode = false;
+	productForm = null;
 	productName = null;
 	basket = { buyerId: null, id: null, items: [], clientSecret: null, paymentIntentId: null };
 	quantity = 0;
@@ -35,12 +37,21 @@ export default class ProductStore {
 
 		reaction(
 			() => this.basket,
-			async basket => {
+			basket => {
 				console.log('%c ****** BOOM BASKET ******************', 'color:red', basket);
 
 				window.localStorage.setItem('Pokus', 'Provjera');
 			}
 		);
+
+		reaction(
+			() => this.editMode,
+			editMode => {
+				console.log('%c ****** BOOM productForm ******************', 'color:gold', editMode);
+				window.localStorage.setItem('Pokus', 'Provjera');
+			}
+		);
+
 		this.filtersFind = debounce(this.fildFilteredItems, 100);
 
 		//Init application
@@ -56,6 +67,7 @@ export default class ProductStore {
 			const response = await agent.Catalog.list(this.productParams);
 			const params = JSON.parse(response.headers.pagination);
 			const responseBasket = await agent.Basket.get();
+			console.log('%c 00', 'color:green', responseBasket);
 
 			runInAction(() => {
 				this.metaData = {
@@ -66,11 +78,10 @@ export default class ProductStore {
 				};
 				this.filters = responseFilters.data;
 				this.listaProdukata = response.data;
-
 				this.basket = responseBasket.data;
-				console.log('%c 106', 'color:gold', this.basket);
-				this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
-				console.log('%c 107 ', 'color:green', this.itemCount);
+				if (this.basket) {
+					this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
+				}
 			});
 		} catch (err) {
 			console.log('%c Greška u ProductStore ', 'color:red', err);
@@ -105,13 +116,20 @@ export default class ProductStore {
 
 				this.basket = responseBasket.data;
 				console.log('%c 103', 'color:gold', this.basket);
-				this.item = find(this.basket.items, i => i.productId === this.product.id);
+				if (this.basket) {
+					this.item = find(this.basket.items, i => i.productId === this.product.id);
+				}
 				this.quantity = 0;
 			}
 			runInAction(() => {
+				console.log('%c 104', 'color:gold', this.basket);
 				this.product = response.data;
 				this.itemCount = this.basket?.items.reduce((sum, item) => sum + item.quantity, 0);
-				history.push(`/catalog/:${productId}`);
+
+				// history.push({
+				// 	pathname: `/catalog/:${productId}`,
+				// 	// state: { error: data },
+				// });
 				navigate(`/catalog/:${productId}`);
 			});
 		} catch (err) {
@@ -381,6 +399,13 @@ export default class ProductStore {
 		}
 	};
 
+	setproductForm = (porductForm, mode) => {
+		console.log('%c 00', 'color:green', porductForm, mode);
+
+		this.productForm = porductForm;
+		this.editMode = mode;
+	};
+
 	goTo = (page, navigate) => {
 		if (page === 'Inventory') {
 			this.listaProdukata = null;
@@ -397,5 +422,10 @@ export default class ProductStore {
 			this.filtersFind(this.productParams);
 			navigate(`/inventory`);
 		}
+	};
+
+	destroy = () => {
+		console.log('%c 008 ODLAZIM iz class INVENTORY ', 'color:red', this.editMode);
+		this.editMode = false;
 	};
 }

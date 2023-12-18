@@ -7,9 +7,11 @@ namespace BasketPrj.Entities
   {
     public int Id { get; set; }
     public string BuyerId { get; set; }
-    public List<BasketItem> Items { get; set; } = new();
     public string PaymentIntentId { get; set; }
     public string ClientSecret { get; set; }
+
+    // ne kreira se tabela u bazi podataka
+    public List<BasketItem> Items { get; set; } = new();
 
     public void AddItem(Product product, int quantity)
     {
